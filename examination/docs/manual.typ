@@ -1,11 +1,27 @@
 #import "@preview/tidy:0.2.0"
 
-#import "docs/template.typ": *
+#import "template.typ": *
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
 
-#let package-meta = toml("typst.toml").package
+#let package-meta = toml("../typst.toml").package
+
+#show: project.with(
+  title: "Examination",
+  // subtitle: "...",
+  authors: package-meta.authors.map(a => a.split("<").at(0).trim()),
+  abstract: [
+    _Examination_ is a library for building exams, tests, etc. with Typst.
+    It provides utilities for common question types and supports creating grading keys and sample solutions.
+  ],
+  // date: "December 22, 2023",
+  version: package-meta.version,
+  url: package-meta.repository
+)
+
+#pad(x: 10%, outline(depth: 1))
+#pagebreak()
 
 #let example(markup, lines: none, cheat: none) = [
   #if lines == none {
@@ -31,24 +47,6 @@
 
 #let ref-fn(name) = link(label(name), raw(name))
 
-#show: project.with(
-  title: "Examination",
-  // subtitle: "...",
-  authors: (
-    "SillyFreak",
-  ),
-  abstract: [
-    _Examination_ is a library for building exams, tests, etc. with Typst.
-    It provides utilities for common question types and supports creating grading keys and sample solutions.
-  ],
-  // date: "December 22, 2023",
-  version: package-meta.version,
-  url: package-meta.repository
-)
-
-#pad(x: 10%, outline(depth: 1))
-#pagebreak()
-
 = Introduction
 
 _Examination_ has three general areas of focus:
@@ -64,7 +62,7 @@ Right now, providing a styled template is not part of this package's scope.
 Let's start with a really basic example that doesn't really show any of the benefits of this library yet:
 
 #example(```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -87,7 +85,7 @@ The two former fields are not used unless you explicitly do so; let's look at ho
 #pagebreak(weak: true)
 
 #example(lines: (6, 9), ```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -113,7 +111,7 @@ The final puzzle piece is grading. There are many different possibilities to gra
 The first step in creating a grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). Let's at the same time also look at question categories as a way to get subtotals:
 
 #example(lines: (13, 26), ```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -146,7 +144,7 @@ The first step in creating a grading scheme is determining how many points can b
   #lorem(20)
 ]
 ```, cheat: ```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -183,7 +181,7 @@ The first step in creating a grading scheme is determining how many points can b
 Once we have the total points of the text figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
 #example(lines: (13, 19), ```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -215,7 +213,7 @@ Once we have the total points of the text figured out, we need to define the gra
   #lorem(20)
 ]
 ```, cheat: ```typ
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // you usually want to alias this, as you'll need it often
 #let q = question.q
@@ -260,7 +258,7 @@ TODO
 
 = Module reference
 
-#import "src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question
 
 // == `examination`
 
@@ -280,7 +278,7 @@ TODO
 
 #{
   let module = tidy.parse-module(
-    read("src/question.typ"),
+    read("../src/question.typ"),
     label-prefix: "question.",
     scope: (grading: grading, question: question),
   )
@@ -295,7 +293,7 @@ TODO
 
 #{
   let module = tidy.parse-module(
-    read("src/grading.typ"),
+    read("../src/grading.typ"),
     label-prefix: "grading.",
     scope: (grading: grading, question: question),
   )
