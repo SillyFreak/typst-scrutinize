@@ -197,7 +197,7 @@ The first step in creating a typical grading scheme is determining how many poin
 
 Once we have the total points of the text figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
-#example(lines: (13, 19), ```typ
+#example(lines: (13, 21), ```typ
 // you usually want to alias this, as you'll need it often
 #import question: q
 
@@ -211,7 +211,9 @@ Once we have the total points of the text figured out, we need to define the gra
 #question.all(qs => [
   #let total = grading.total-points(qs)
 
-  #let grades = grading.grades([bad], total * 2/4, [okay], total * 3/4, [good])
+  #let grades = grading.grades(
+    [bad], total * 2/4, [okay], total * 3/4, [good]
+  )
 
   #grades
 ])
@@ -241,7 +243,9 @@ Once we have the total points of the text figured out, we need to define the gra
 #question.all(qs => [
   #let total = 8
 
-  #let grades = grading.grades([bad], total * 2/4, [okay], total * 3/4, [good])
+  #let grades = grading.grades(
+    [bad], total * 2/4, [okay], total * 3/4, [good]
+  )
 
   #grades
 ])
