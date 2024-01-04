@@ -50,8 +50,8 @@
 /// })
 /// ```
 ///
-/// - func-or-loc (function/location): either a function that receives metadata and returns content, or the location at which to locate the question
-/// -> content | any
+/// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
+/// -> content, dictionary
 #let current(func-or-loc) = {
   let inner(loc) = {
     let q = query(selector(_label).before(loc), loc).last()
@@ -91,8 +91,8 @@
 /// })
 /// ```
 ///
-/// - func-or-loc (function/location): either a function that receives metadata and returns content, or the location at which to locate the question
-/// -> content | any
+/// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
+/// -> content, array
 #let all(func-or-loc) = {
   let inner(loc) = {
     let qs = query(_label, loc)
