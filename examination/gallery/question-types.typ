@@ -33,6 +33,7 @@ Which of these is the fourth answer?
     [Answer 4],
     [Answer 5],
   ),
+  // 0-based indexing
   3,
 )
 

@@ -2,7 +2,7 @@
 
 #import "template.typ": *
 
-#import "../src/lib.typ": grading, question
+#import "../src/lib.typ": grading, question, questions
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -26,21 +26,21 @@
 #pagebreak()
 
 // the scope for evaluating expressions and documentation
-#let scope = (grading: grading, question: question)
+#let scope = (grading: grading, question: question, questions: questions)
+
+#let transform-raw-lines(original, func) = {
+  let (text, ..fields) = original.fields()
+  text = text.split("\n")
+  text = func(text)
+  text = text.join("\n")
+  raw(text, ..fields)
+}
 
 #let example(code, lines: none, cheat: none) = {
-  let transform-raw-lines(original, func) = {
-    let (text, ..fields) = original.fields()
-    text = text.split("\n")
-    text = func(text)
-    text = text.join("\n")
-    raw(text, ..fields)
-  }
-
   // eval can't access the filesystem, so no imports.
   // for displaying, we add the imports ...
   let preamble = ```typ
-  #import "../src/lib.typ": grading, question
+  #import "../src/lib.typ": grading, question, questions
 
   ```
   // ... and for running, we have the imported entries in `scope`
@@ -69,6 +69,35 @@
 
     #tidy-output-figure(eval(code-to-run, mode: "markup", scope: scope))
   ]
+}
+
+#let question-example(question, lines: none) = {
+  let preamble = ```typ
+  #import questions: set-solution, unset-solution
+
+  #let q = [
+  ```
+  let epilog = ```typ
+  ]
+
+  #grid(
+    columns: (1fr, 1fr),
+    [
+      #unset-solution()
+      #q
+    ],
+    [
+      #set-solution()
+      #q
+    ],
+  )
+  ```
+
+  let cheat = transform-raw-lines(question, l => {
+    preamble.text.split("\n") + l + epilog.text.split("\n")
+  })
+
+  example(question, lines: lines, cheat: cheat)
 }
 
 #let ref-fn(name) = link(label(name), raw(name))
@@ -265,13 +294,89 @@ Once we have the total points of the text figured out, we need to define the gra
 
 Obviously we would not want to render this representation as-is, but #ref-fn("grading.grades()") gives us a convenient way to have all the necessary information, without assuming things like inclusive or exclusive point ranges. The `test.typ` example in the gallery has a more complete demonstration of a grading key.
 
-= Question templates
+#pagebreak(weak: true)
 
-TODO
+= Question templates and sample solutions
 
-= Sample solutions
+With the test structure out of the way, the next step is to actually write questions. There are endless ways of formulating questions, but some recurring formats come up regularly.
 
-TODO
+#pad(x: 5%)[
+  _Note:_ customizing the styles is currently very limited/not possible. I would be interested in changing this, so if you have ideas on how to achieve this, contact me and/or open a pull request. Until then, feel free to "customize using copy/paste".
+]
+
+Each question naturally has an answer, and producing sample solutions can be made very convenient if they are stored with the question right away. To facilitate this, this package provides three basic functions:
+
+- #ref-fn("questions.set-solution()") and #ref-fn("questions.unset-solution()"): these can be used to toggle display of solutions. The latter may be useful to render answered example questions in the beginning, then proper questions. (It's also useful for this documentation!)
+- #ref-fn("questions.is-solution()"): This function is used by question templates, or custom questions not using a template, to decide whether to render a solution.
+
+Let's look at a free text question as a simple example:
+
+== Free text questions
+
+In free text questions, the student simply has some free space in which to put their answer:
+
+#example(```typ
+#import questions: set-solution, free-text-answer
+
+// toggle this comment to produce a sample solution
+// #set-solution()
+
+Write an answer.
+
+#free-text-answer[
+  An answer
+]
+
+Next question
+```, cheat: ```typ
+#import questions: set-solution, unset-solution, free-text-answer
+
+#let q = [
+  Write an answer.
+
+  #free-text-answer[
+    An answer
+  ]
+
+  Next question
+]
+
+#grid(
+  columns: (1fr, 1fr),
+  [
+    #unset-solution()
+    #q
+  ],
+  [
+    #set-solution()
+    #q
+  ],
+)
+```)
+
+Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("questions.free-text-answer()"). The content of the answer is of course not limited to text.
+
+== single and multiple choice questions
+
+These question types allow making a mark next to one or multiple choices. See #ref-fn("questions.single-choice()") and #ref-fn("questions.multiple-choice()") for details.
+
+#question-example(```typ
+#import questions: single-choice, multiple-choice
+
+Which of these is the fourth answer?
+
+#single-choice(
+  range(1, 6).map(i => [Answer #i]),
+  // 0-based indexing
+  3,
+)
+
+Which of these answers are even?
+
+#multiple-choice(
+  range(1, 6).map(i => ([Answer #i], calc.even(i))),
+)
+```)
 
 = Module reference
 
@@ -310,6 +415,21 @@ TODO
   let module = tidy.parse-module(
     read("../src/grading.typ"),
     label-prefix: "grading.",
+    scope: scope,
+  )
+  tidy.show-module(
+    module,
+    sort-functions: none,
+    style: tidy.styles.minimal,
+  )
+}
+
+== `examination.questions`
+
+#{
+  let module = tidy.parse-module(
+    read("../src/questions.typ"),
+    label-prefix: "questions.",
     scope: scope,
   )
   tidy.show-module(
