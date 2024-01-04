@@ -18,6 +18,14 @@
   }
 }
 
+#let free-text-answer(answer, height: auto) = is-solution(solution => {
+  let answer = block(inset: (x: 2em, y: 1em), height: height, answer)
+  if (not solution) {
+    answer = hide(answer)
+  }
+  answer
+})
+
 #let checkbox(correct) = is-solution(solution => {
   if (solution and correct) { sym.ballot.x } else { sym.ballot }
 })

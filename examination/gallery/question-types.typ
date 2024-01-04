@@ -3,7 +3,7 @@
 
 // you usually want to alias this, as you'll need it often
 #import question: q
-#import questions: single-choice, multiple-choice, set-solution
+#import questions: free-text-answer, single-choice, multiple-choice, set-solution
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -12,6 +12,14 @@
 // #set-solution()
 
 #set table(stroke: 0.5pt)
+
+= Question
+
+Write an answer.
+
+#free-text-answer[
+  An answer
+]
 
 = Question
 
