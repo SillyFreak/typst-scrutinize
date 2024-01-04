@@ -102,7 +102,7 @@ After importing the library's modules and aliasing an important function, we sim
 - `points`: a number specifying how many points can be reached in that question
 - additionally `body`: the complete content that was rendered as the question
 
-The two former fields are not used unless you explicitly do so; let's look at how to do that. Let's say we want to show the points in each question's header:
+The body is rendered as-is, but the two former fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
 
 #pagebreak(weak: true)
 
@@ -126,9 +126,9 @@ Here we're using the #ref-fn("question.current()") function to access the metada
 
 = Grading
 
-The final puzzle piece is grading. There are many different possibilities to grade a test; right now Examination does not try to depend on a specific convention, but it does assume that in the end, a test has a final score and that the grade is derived by looking how high that score is. If your test does not fit that schema, you can simply use less of the related features.
+The final puzzle piece is grading. There are many different possibilities to grade a test; Examination tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
 
-The first step in creating a grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). Let's at the same time also look at question categories as a way to get subtotals:
+The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document. Let's at the same time also look at question categories as a way to get subtotals:
 
 #example(lines: (13, 26), ```typ
 // you usually want to alias this, as you'll need it often
@@ -143,11 +143,11 @@ The first step in creating a grading scheme is determining how many points can b
 
 #question.all(qs => [
   #let total = grading.total-points(qs)
+  #let hard = grading.total-points(qs, filter: q => q.category == "hard")
 
   Total points: #total
 
-  Points from hard questions:
-  #grading.total-points(qs, filter: q => q.category == "hard")
+  Points from hard questions: #hard
 ])
 
 #q(category: "hard", points: 6)[
@@ -174,11 +174,11 @@ The first step in creating a grading scheme is determining how many points can b
 
 #question.all(qs => [
   #let total = 8
+  #let hard = 6
 
   Total points: #total
 
-  Points from hard questions:
-  #grading.total-points(qs, filter: q => q.category == "hard")
+  Points from hard questions: #hard
 ])
 
 #q(category: "hard", points: 6)[

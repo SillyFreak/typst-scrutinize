@@ -19,6 +19,8 @@
 // for grading, we need to consider all questions
 #question.all(qs => [
   #let total = grading.total-points(qs)
+  // the total-points function can also accept a filter function
+  #let hard = grading.total-points(qs, filter: q => q.category == "hard")
 
   // create a grading key
   #let grades = grading.grades([bad], total * 2/4, [okay], total * 3/4, [good])
@@ -55,9 +57,7 @@
     ..grades.map(g => g.body),
   )
 
-  // the total-points function can also accept a filter function
-  Points from hard questions:
-  #grading.total-points(qs, filter: q => q.category == "hard")
+  Points from hard questions: #hard
 ])
 
 // the q function adds metadata to a question
