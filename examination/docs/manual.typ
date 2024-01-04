@@ -2,6 +2,8 @@
 
 #import "template.typ": *
 
+#import "../src/lib.typ": grading, question
+
 // make the PDF reproducible to ease version control
 #set document(date: none)
 
@@ -23,27 +25,49 @@
 #pad(x: 10%, outline(depth: 1))
 #pagebreak()
 
-#let example(markup, lines: none, cheat: none) = [
-  #if lines == none {
-    markup
-  } else {
-    let (text, ..fields) = markup.fields()
+#let example(code, lines: none, cheat: none) = {
+  let transform-raw-lines(original, func) = {
+    let (text, ..fields) = original.fields()
     text = text.split("\n")
-    text = text.slice(lines.at(0) - 1, lines.at(1))
+    text = func(text)
     text = text.join("\n")
-
     raw(text, ..fields)
   }
 
-  #let source = if cheat == none {
-    markup.text
+  // eval can't access the filesystem, so no imports.
+  // for displaying, we add the imports ...
+  let preamble = ```typ
+  #import "../src/lib.typ": grading, question
+
+  ```
+  // ... and for running, we supply the imported entries
+  let scope = (grading: grading, question: question)
+
+  let code-to-display = transform-raw-lines(code, l => {
+    // the code to display should contain imports including a blank line
+    let l = preamble.text.split("\n") + l
+
+    // if there is a line selection, apply it (the preamble counts)
+    if lines != none {
+      l = l.slice(lines.at(0) - 1, lines.at(1))
+    }
+
+    l
+  })
+
+  let code-to-run = if cheat == none {
+    code.text
   } else {
     // for when just executing the code as-is doesn't work in the docs
     cheat.text
   }
 
-  #tidy-output-figure(eval(source, mode: "markup"))
-]
+  [
+    #code-to-display
+
+    #tidy-output-figure(eval(code-to-run, mode: "markup", scope: scope))
+  ]
+}
 
 #let ref-fn(name) = link(label(name), raw(name))
 
@@ -62,8 +86,6 @@ Right now, providing a styled template is not part of this package's scope.
 Let's start with a really basic example that doesn't really show any of the benefits of this library yet:
 
 #example(```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -85,8 +107,6 @@ The two former fields are not used unless you explicitly do so; let's look at ho
 #pagebreak(weak: true)
 
 #example(lines: (6, 9), ```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -111,8 +131,6 @@ The final puzzle piece is grading. There are many different possibilities to gra
 The first step in creating a grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). Let's at the same time also look at question categories as a way to get subtotals:
 
 #example(lines: (13, 26), ```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -144,8 +162,6 @@ The first step in creating a grading scheme is determining how many points can b
   #lorem(20)
 ]
 ```, cheat: ```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -181,8 +197,6 @@ The first step in creating a grading scheme is determining how many points can b
 Once we have the total points of the text figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
 #example(lines: (13, 19), ```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -213,8 +227,6 @@ Once we have the total points of the text figured out, we need to define the gra
   #lorem(20)
 ]
 ```, cheat: ```typ
-#import "../src/lib.typ": grading, question
-
 // you usually want to alias this, as you'll need it often
 #let q = question.q
 
@@ -257,8 +269,6 @@ TODO
 TODO
 
 = Module reference
-
-#import "../src/lib.typ": grading, question
 
 // == `examination`
 
