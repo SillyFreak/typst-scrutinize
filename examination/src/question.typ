@@ -82,7 +82,7 @@
 /// #question.all(qs => [There are #qs.len() questions.])
 ///
 /// #locate(loc => {
-///   let qs = question.all(loc: loc, qs => qs.map(q => q.value))
+///   let qs = question.all(loc: loc, qs => qs)
 ///   // note that `qs` is an array, not a content!
 ///   // but eventually, `locate()` will convert to content
 ///   [The first question is worth #qs.first().points points!]
