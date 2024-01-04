@@ -25,6 +25,9 @@
 #pad(x: 10%, outline(depth: 1))
 #pagebreak()
 
+// the scope for evaluating expressions and documentation
+#let scope = (grading: grading, question: question)
+
 #let example(code, lines: none, cheat: none) = {
   let transform-raw-lines(original, func) = {
     let (text, ..fields) = original.fields()
@@ -40,8 +43,7 @@
   #import "../src/lib.typ": grading, question
 
   ```
-  // ... and for running, we supply the imported entries
-  let scope = (grading: grading, question: question)
+  // ... and for running, we have the imported entries in `scope`
 
   let code-to-display = transform-raw-lines(code, l => {
     // the code to display should contain imports including a blank line
@@ -278,7 +280,7 @@ TODO
 // #{
 //   let module = tidy.parse-module(
 //     read("src/lib.typ"),
-//     scope: (grading: grading, question: question),
+//     scope: scope,
 //   )
 //   tidy.show-module(
 //     module,
@@ -293,7 +295,7 @@ TODO
   let module = tidy.parse-module(
     read("../src/question.typ"),
     label-prefix: "question.",
-    scope: (grading: grading, question: question),
+    scope: scope,
   )
   tidy.show-module(
     module,
@@ -308,7 +310,7 @@ TODO
   let module = tidy.parse-module(
     read("../src/grading.typ"),
     label-prefix: "grading.",
-    scope: (grading: grading, question: question),
+    scope: scope,
   )
   tidy.show-module(
     module,
