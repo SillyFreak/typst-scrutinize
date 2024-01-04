@@ -1,12 +1,14 @@
 #let _label = label("examination-question")
 #let _builtin_counter = counter
 
+#let _metadata_to_dict(m) = (..m.value, location: m.location())
+
 /// The question counter
 ///
 /// Example:
 ///
 /// ```typ
-/// #show heading.where(level: 2): it => [Question #question.counter.display()]
+/// #show heading: it => [Question #question.counter.display()]
 /// ```
 ///
 /// -> counter
@@ -30,7 +32,7 @@
 
 /// Locates the most recently defined question;
 /// within a @@q() call, that is the question _currently_ being defined.
-/// The located question's metadata (a dictionary) is used to call the provided function.
+/// The located question's metadata is used to call the provided function.
 ///
 /// If the optional `loc` is provided, that location is used and the function's result is returned directly;
 /// otherwise, the result will be converted to a `content` by the necessary call to `locate`.
@@ -49,7 +51,7 @@
 /// })
 /// ```
 ///
-/// - func (function): a function that receives a metadata dictionary
+/// - func (function): a function that receives metadata and returns content or a value
 /// - loc (location): if given, this is used to find the current question instead of `locate()`
 /// -> content | any
 #let current(
@@ -57,8 +59,8 @@
   loc: none,
 ) = {
   let inner(loc) = {
-    let q = query(selector(_label).before(loc), loc).last().value
-    func(q)
+    let q = query(selector(_label).before(loc), loc).last()
+    func(_metadata_to_dict(q))
   }
 
   if loc != none {
@@ -69,11 +71,7 @@
 }
 
 /// Locates all questions in the document, which can then be used to create grading keys etc.
-/// The array of located `metadata` objects is used to call the provided function;
-/// note that this is different from @@current(), where only the metadata dictionary is returned!
-/// The reasoning is that the locations of different questions may be useful for further queries,
-/// whereas for the current question having access to that location is not that useful.
-/// Use `map(q => q.value)` to only access the dictionaries.
+/// The array of question metadata is used to call the provided function.
 ///
 /// If the optional `loc` is provided, that location is used and the function's result is returned directly;
 /// otherwise, the result will be converted to a `content` by the necessary call to `locate`.
@@ -91,13 +89,13 @@
 /// })
 /// ```
 ///
-/// - func (function): a function that receives an array of `metadata` objects
+/// - func (function): a function that receives an array of metadata and returns content or a value
 /// - loc (location): if given, this is used to find the current question instead of `locate()`
 /// -> content | any
 #let all(func, loc: none) = {
   let inner(loc) = {
     let qs = query(_label, loc)
-    func(qs)
+    func(qs.map(_metadata_to_dict))
   }
 
   if loc != none {

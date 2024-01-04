@@ -96,13 +96,14 @@ Let's start with a really basic example that doesn't really show any of the bene
 ]
 ```)
 
-After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc points: 2```: this adds some metadata to the question. Right now, the following metadata fields are available:
+After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc points: 2```: this adds some metadata to the question. Right now, the following metadata fields are available as a dictionary:
 
 - `category`: an arbitrary category identifier (string) that can be used to group questions during further processing
 - `points`: a number specifying how many points can be reached in that question
-- additionally `body`: the complete content that was rendered as the question
+- `body`: the complete content that was rendered as the question
+- `location`: the location where the question started and the Typst `metadata` element was inserted
 
-The body is rendered as-is, but the two former fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
+The body is rendered as-is, but the other fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
 
 #pagebreak(weak: true)
 
