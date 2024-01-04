@@ -3,10 +3,13 @@
 
 // you usually want to alias this, as you'll need it often
 #import question: q
-#import questions: multiple-choice
+#import questions: multiple-choice, set-solution
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
+
+// toggle this comment to produce a sample solution
+// #set-solution()
 
 #set table(stroke: 0.5pt)
 
