@@ -11,8 +11,7 @@ repository = "https://github.com/SillyFreak/typst-packages/examination"
 keywords = []
 # compiler = ""
 exclude = [
-  # manual and gallery are not needed in the final package
-  "manual.typ",
-  "manual.pdf",
+  # docs and gallery are not needed in the final package
+  "docs/*",
   "gallery/*",
 ]
