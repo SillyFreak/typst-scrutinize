@@ -60,6 +60,13 @@
   Points from hard questions: #hard
 ])
 
+#locate(loc => {
+  let qs = question.all(loc)
+  // note that `qs` is an array, not a content!
+  // but eventually, `locate()` will convert to content
+  [The first question is worth #qs.first().points points!]
+})
+
 // the q function adds metadata to a question
 #q(points: 6)[
   = Hard Question
@@ -68,6 +75,16 @@
 ]
 
 #v(1fr)
+
+#question.current(q => [This question is worth #q.points points.])
+
+#locate(loc => {
+  let points = question.current(loc).points
+  // note that `points` is an integer, not a content!
+  let points-with-extra = points + 1
+  // but eventually, `locate()` will convert to content
+  [I may award up to #points-with-extra points for great answers!]
+})
 
 #q(points: 2)[
   = Question

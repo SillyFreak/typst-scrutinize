@@ -31,10 +31,10 @@
 
 /// Locates the most recently defined question;
 /// within a @@q() call, that is the question _currently_ being defined.
-/// The located question's metadata is used to call the provided function.
 ///
-/// If the optional `loc` is provided, that location is used and the function's result is returned directly;
-/// otherwise, the result will be converted to a `content` by the necessary call to `locate`.
+/// If a function is provided as a parameter, the located question's metadata is used
+/// to call it and content is returned.
+/// If a location is provided instead, the question's metadata is located there and returned directly.
 ///
 /// Example:
 ///
@@ -42,7 +42,7 @@
 /// #question.current(q => [This question is worth #q.points points.])
 ///
 /// #locate(loc => {
-///   let points = question.current(loc: loc, q => q.points)
+///   let points = question.current(loc).points
 ///   // note that `points` is an integer, not a content!
 ///   let points-with-extra = points + 1
 ///   // but eventually, `locate()` will convert to content
@@ -50,30 +50,33 @@
 /// })
 /// ```
 ///
-/// - func (function): a function that receives metadata and returns content or a value
-/// - loc (location): if given, this is used to find the current question instead of `locate()`
+/// - func-or-loc (function/location): either a function that receives metadata and returns content, or the location at which to locate the question
 /// -> content | any
-#let current(
-  func,
-  loc: none,
-) = {
+#let current(func-or-loc) = {
   let inner(loc) = {
     let q = query(selector(_label).before(loc), loc).last()
-    func(_metadata_to_dict(q))
+    _metadata_to_dict(q)
   }
 
-  if loc != none {
+  if type(func-or-loc) == function {
+    let func = func-or-loc
+    // find value, transform it into content
+    locate(loc => func(inner(loc)))
+  } else if type(func-or-loc) == location {
+    let loc = func-or-loc
+    // find value, return it
     inner(loc)
   } else {
-    locate(inner)
+    panic("function or location expected")
   }
 }
 
 /// Locates all questions in the document, which can then be used to create grading keys etc.
 /// The array of question metadata is used to call the provided function.
 ///
-/// If the optional `loc` is provided, that location is used and the function's result is returned directly;
-/// otherwise, the result will be converted to a `content` by the necessary call to `locate`.
+/// If a function is provided as a parameter, the array of located questions' metadata is used
+/// to call it and content is returned.
+/// If a location is provided instead, it is used to retrieve the metadata and they are returned directly.
 ///
 /// Example:
 ///
@@ -81,25 +84,30 @@
 /// #question.all(qs => [There are #qs.len() questions.])
 ///
 /// #locate(loc => {
-///   let qs = question.all(loc: loc, qs => qs)
+///   let qs = question.all(loc)
 ///   // note that `qs` is an array, not a content!
 ///   // but eventually, `locate()` will convert to content
 ///   [The first question is worth #qs.first().points points!]
 /// })
 /// ```
 ///
-/// - func (function): a function that receives an array of metadata and returns content or a value
-/// - loc (location): if given, this is used to find the current question instead of `locate()`
+/// - func-or-loc (function/location): either a function that receives metadata and returns content, or the location at which to locate the question
 /// -> content | any
-#let all(func, loc: none) = {
+#let all(func-or-loc) = {
   let inner(loc) = {
     let qs = query(_label, loc)
-    func(qs.map(_metadata_to_dict))
+    qs.map(_metadata_to_dict)
   }
 
-  if loc != none {
+  if type(func-or-loc) == function {
+    let func = func-or-loc
+    // find value, transform it into content
+    locate(loc => func(inner(loc)))
+  } else if type(func-or-loc) == location {
+    let loc = func-or-loc
+    // find value, return it
     inner(loc)
   } else {
-    locate(inner)
+    panic("function or location expected")
   }
 }
