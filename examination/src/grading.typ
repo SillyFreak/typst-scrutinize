@@ -12,7 +12,7 @@
   if filter != none {
     questions = questions.filter(filter)
   }
-  questions.map(q => q.points).sum()
+  questions.map(q => q.points).sum(default: 0)
 }
 
 /// A utility function for generating grades with upper and lower point limits.
