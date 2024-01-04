@@ -106,8 +106,8 @@
 
 _Examination_ has three general areas of focus:
 
-- It provides a selection of question writing utilities, such as multiple choice or true/false questions.
 - It helps with grading information: record the points that can be reached for each question and make them available for creating grading keys.
+- It provides a selection of question writing utilities, such as multiple choice or true/false questions.
 - It supports the creation of sample solutions by allowing to switch between the normal and "pre-filled" exam.
 
 Right now, providing a styled template is not part of this package's scope.

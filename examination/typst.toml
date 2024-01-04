@@ -8,7 +8,7 @@ authors = [
 license = "MIT"
 description = "A library for building exams, tests, etc. with Typst"
 repository = "https://github.com/SillyFreak/typst-packages/examination"
-keywords = []
+keywords = ["exam", "test", "school", "teaching"]
 # compiler = ""
 exclude = [
   # docs and gallery are not needed in the final package
