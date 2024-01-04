@@ -18,15 +18,14 @@
 /// The questions can later be accessed using the other functions in this module.
 ///
 /// - body (content): the content to be displayed for this question
-/// - category (string): an optional category to be added to the question's metadata
-/// - points (integer): an optional point score to be added to the question's metadata
+/// - ..args (string): only named parameters: values to be added to the question's metadata
 /// -> content
 #let q(
   body,
-  category: none,
-  points: none,
+  ..args,
 ) = {
-  [#metadata((category: category, points: points, body: body)) #_label]
+  assert(args.pos().len() == 0)
+  [#metadata((body: body, ..args.named())) #_label]
   body
 }
 

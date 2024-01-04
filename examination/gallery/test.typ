@@ -20,7 +20,7 @@
 #question.all(qs => [
   #let total = grading.total-points(qs)
   // the total-points function can also accept a filter function
-  #let hard = grading.total-points(qs, filter: q => q.category == "hard")
+  #let hard = grading.total-points(qs, filter: q => q.points >= 5)
 
   // create a grading key
   #let grades = grading.grades([bad], total * 2/4, [okay], total * 3/4, [good])
@@ -61,7 +61,7 @@
 ])
 
 // the q function adds metadata to a question
-#q(category: "hard", points: 6)[
+#q(points: 6)[
   = Hard Question
 
   #lorem(20)

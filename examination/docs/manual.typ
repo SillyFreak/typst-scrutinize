@@ -96,14 +96,12 @@ Let's start with a really basic example that doesn't really show any of the bene
 ]
 ```)
 
-After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc points: 2```: this adds some metadata to the question. Right now, the following metadata fields are available as a dictionary:
+After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc points: 2```: this adds some metadata to the question. Any metadata can be specified, but `points` is special insofar as it is used by the `grading` module. There are two additional pieces of metadata that are automatically available:
 
-- `category`: an arbitrary category identifier (string) that can be used to group questions during further processing
-- `points`: a number specifying how many points can be reached in that question
 - `body`: the complete content that was rendered as the question
 - `location`: the location where the question started and the Typst `metadata` element was inserted
 
-The body is rendered as-is, but the other fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
+The body is rendered as-is, but the location and custom fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
 
 #pagebreak(weak: true)
 
@@ -129,7 +127,7 @@ Here we're using the #ref-fn("question.current()") function to access the metada
 
 The final puzzle piece is grading. There are many different possibilities to grade a test; Examination tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
 
-The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document. Let's at the same time also look at question categories as a way to get subtotals:
+The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document:
 
 #example(lines: (13, 26), ```typ
 // you usually want to alias this, as you'll need it often
@@ -144,14 +142,14 @@ The first step in creating a typical grading scheme is determining how many poin
 
 #question.all(qs => [
   #let total = grading.total-points(qs)
-  #let hard = grading.total-points(qs, filter: q => q.category == "hard")
+  #let hard = grading.total-points(qs, filter: q => q.points >= 5)
 
   Total points: #total
 
   Points from hard questions: #hard
 ])
 
-#q(category: "hard", points: 6)[
+#q(points: 6)[
   == Hard Question
 
   #lorem(20)
