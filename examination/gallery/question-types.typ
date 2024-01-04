@@ -3,7 +3,7 @@
 
 // you usually want to alias this, as you'll need it often
 #import question: q
-#import questions: multiple-choice, set-solution
+#import questions: single-choice, multiple-choice, set-solution
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -17,7 +17,7 @@
 
 Which of these is the fourth answer?
 
-#multiple-choice(
+#single-choice(
   (
     [Answer 1],
     [Answer 2],
@@ -26,4 +26,18 @@ Which of these is the fourth answer?
     [Answer 5],
   ),
   3,
+)
+
+= Question
+
+Which of these answers are even?
+
+#multiple-choice(
+  (
+    ([Answer 1], false),
+    ([Answer 2], true),
+    ([Answer 3], false),
+    ([Answer 4], true),
+    ([Answer 5], false),
+  )
 )

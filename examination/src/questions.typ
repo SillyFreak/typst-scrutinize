@@ -22,14 +22,18 @@
   if (solution and correct) { sym.ballot.x } else { sym.ballot }
 })
 
-#let multiple-choice(options, answer) = {
+#let multiple-choice(options) = {
   table(
     columns: (auto, auto),
     align: (col, row) => (left, center).at(col) + horizon,
 
-    ..options.enumerate().map(((i, option)) => (
+    ..options.map(((option, correct)) => (
       option,
-      checkbox(i == answer),
+      checkbox(correct),
     )).flatten()
   )
+}
+
+#let single-choice(options, answer) = {
+  multiple-choice(options.enumerate().map(((i, option)) => (option, i == answer)))
 }
