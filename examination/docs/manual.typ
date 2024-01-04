@@ -87,7 +87,7 @@ Let's start with a really basic example that doesn't really show any of the bene
 
 #example(```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 #q(points: 2)[
   == Question
@@ -109,7 +109,7 @@ The body is rendered as-is, but the other fields are not used unless you explici
 
 #example(lines: (6, 9), ```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 #show heading: it => {
   // here, we need to access the current question's metadata
@@ -133,7 +133,7 @@ The first step in creating a typical grading scheme is determining how many poin
 
 #example(lines: (13, 26), ```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 // let's show the available points to the right of each
 // question's title and give the grader a space to put points
@@ -164,7 +164,7 @@ The first step in creating a typical grading scheme is determining how many poin
 ]
 ```, cheat: ```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 // let's show the available points to the right of each
 // question's title and give the grader a space to put points
@@ -199,7 +199,7 @@ Once we have the total points of the text figured out, we need to define the gra
 
 #example(lines: (13, 19), ```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 // let's show the available points to the right of each
 // question's title and give the grader a space to put points
@@ -229,7 +229,7 @@ Once we have the total points of the text figured out, we need to define the gra
 ]
 ```, cheat: ```typ
 // you usually want to alias this, as you'll need it often
-#let q = question.q
+#import question: q
 
 // let's show the available points to the right of each
 // question's title and give the grader a space to put points

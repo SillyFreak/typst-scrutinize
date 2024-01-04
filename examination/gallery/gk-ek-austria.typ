@@ -1,12 +1,11 @@
 #import "../src/lib.typ": grading, question
 // #import "@local/examination:0.0.1": grading, question
+#import question: q
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
 
 #let title = "Praktische Leistungsfeststellung"
-
-#let q = question.q
 
 #set document(title: title)
 #set text(lang: "de")

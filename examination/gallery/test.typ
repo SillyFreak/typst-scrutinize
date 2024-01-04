@@ -1,11 +1,11 @@
 #import "../src/lib.typ": grading, question
 // #import "@local/examination:0.0.1": grading, question
 
+// you usually want to alias this, as you'll need it often
+#import question: q
+
 // make the PDF reproducible to ease version control
 #set document(date: none)
-
-// you usually want to alias this, as you'll need it often
-#let q = question.q
 
 #set table(stroke: 0.5pt)
 
