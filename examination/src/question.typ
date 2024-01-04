@@ -1,3 +1,4 @@
+#let _label = label("examination-question")
 #let _builtin_counter = counter
 
 /// The question counter
@@ -9,7 +10,7 @@
 /// ```
 ///
 /// -> counter
-#let counter = _builtin_counter(<examination-question>)
+#let counter = _builtin_counter(_label)
 
 /// Adds a question with its metadata, and renders it.
 /// The questions can later be accessed using the other functions in this module.
@@ -23,7 +24,7 @@
   category: none,
   points: none,
 ) = {
-  [#metadata((category: category, points: points, body: body)) <examination-question>]
+  [#metadata((category: category, points: points, body: body)) #_label]
   body
 }
 
@@ -56,7 +57,7 @@
   loc: none,
 ) = {
   let inner(loc) = {
-    let q = query(selector(<examination-question>).before(loc), loc).last().value
+    let q = query(selector(_label).before(loc), loc).last().value
     func(q)
   }
 
@@ -95,7 +96,7 @@
 /// -> content | any
 #let all(func, loc: none) = {
   let inner(loc) = {
-    let qs = query(<examination-question>, loc)
+    let qs = query(_label, loc)
     func(qs)
   }
 
