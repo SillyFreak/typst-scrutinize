@@ -4,10 +4,12 @@
 
 #import "../src/lib.typ": grading, question, questions
 
-// make the PDF reproducible to ease version control
-#set document(date: none)
-
 #let package-meta = toml("../typst.toml").package
+#let date = none
+// #let date = datetime(year: 2024, month: 1, day: 4)
+
+// make the PDF reproducible to ease version control
+#set document(date: date)
 
 #show: project.with(
   title: "Examination",
@@ -17,7 +19,9 @@
     _Examination_ is a library for building exams, tests, etc. with Typst.
     It provides utilities for common question types and supports creating grading keys and sample solutions.
   ],
-  // date: "December 22, 2023",
+  ..if date != none {
+    (date: date.display("[month repr:long] [day], [year]"))
+  },
   version: package-meta.version,
   url: package-meta.repository
 )
