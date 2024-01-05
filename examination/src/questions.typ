@@ -73,7 +73,7 @@
   )
 }
 
-/// A table with multiple options of which one can be true or false
+/// A table with multiple options of which one can be true or false.
 /// Each option is a content, and a second parameter specifies which option is correct.
 ///
 /// - options (array): an array of contents
