@@ -5,8 +5,8 @@
 #import "../src/lib.typ": grading, question, questions
 
 #let package-meta = toml("../typst.toml").package
-// #let date = none
-#let date = datetime(year: 2024, month: 1, day: 4)
+#let date = none
+// #let date = datetime(year: 2024, month: 1, day: 4)
 
 // make the PDF reproducible to ease version control
 #set document(date: date)
@@ -319,7 +319,7 @@ Let's look at a free text question as a simple example:
 
 In free text questions, the student simply has some free space in which to put their answer:
 
-#example(```typ
+#question-example(```typ
 #import questions: set-solution, free-text-answer
 
 // toggle this comment to produce a sample solution
@@ -332,30 +332,6 @@ Write an answer.
 ]
 
 Next question
-```, cheat: ```typ
-#import questions: set-solution, unset-solution, free-text-answer
-
-#let q = [
-  Write an answer.
-
-  #free-text-answer[
-    An answer
-  ]
-
-  Next question
-]
-
-#grid(
-  columns: (1fr, 1fr),
-  [
-    #unset-solution()
-    #q
-  ],
-  [
-    #set-solution()
-    #q
-  ],
-)
 ```)
 
 Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("questions.free-text-answer()"). The content of the answer is of course not limited to text.
