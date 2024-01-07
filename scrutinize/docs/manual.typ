@@ -43,10 +43,12 @@
 #let example(code, lines: none, cheat: none) = {
   // eval can't access the filesystem, so no imports.
   // for displaying, we add the imports ...
-  let preamble = ```typ
-  #import "../src/lib.typ": grading, question, questions
-
-  ```
+  let preamble = raw(
+    "#import \"@preview/" + package-meta.name + ":" + package-meta.version + "\"" +
+    ": grading, question, questions\n",
+    lang: "typ",
+    block: true,
+  )
   // ... and for running, we have the imported entries in `scope`
 
   let code-to-display = transform-raw-lines(code, l => {
@@ -357,6 +359,8 @@ Which of these answers are even?
   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 )
 ```)
+
+#pagebreak(weak: true)
 
 = Module reference
 

@@ -1,6 +1,6 @@
-// #import "@preview/scrutinize:0.1.0": grading, question, questions
-#import "../src/lib.typ": grading, question, questions
-
+#import "@preview/scrutinize:0.1.0": grading, question, questions
+// #import "@local/scrutinize:0.1.0": grading, question, questions
+// #import "../src/lib.typ" as scrutinize: grading, question, questions
 #import question: q
 #import questions: free-text-answer, single-choice, multiple-choice, set-solution, unset-solution
 

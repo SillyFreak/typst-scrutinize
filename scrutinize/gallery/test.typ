@@ -1,5 +1,6 @@
-#import "../src/lib.typ": grading, question
-// #import "@local/scrutinize:0.0.1": grading, question
+#import "@preview/scrutinize:0.1.0": grading, question, questions
+// #import "@local/scrutinize:0.1.0": grading, question, questions
+// #import "../src/lib.typ" as scrutinize: grading, question, questions
 
 // you usually want to alias this, as you'll need it often
 #import question: q
