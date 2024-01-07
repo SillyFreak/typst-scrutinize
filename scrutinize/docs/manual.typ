@@ -5,8 +5,8 @@
 #import "../src/lib.typ": grading, question, questions
 
 #let package-meta = toml("../typst.toml").package
-#let date = none
-// #let date = datetime(year: 2024, month: 1, day: 4)
+// #let date = none
+#let date = datetime(year: 2024, month: 1, day: 7)
 
 // make the PDF reproducible to ease version control
 #set document(date: date)
