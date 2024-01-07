@@ -1,4 +1,4 @@
-#let solution = state("examination-solution", false)
+#let solution = state("scrutinize-solution", false)
 
 /// Shows solutions in the document.
 ///

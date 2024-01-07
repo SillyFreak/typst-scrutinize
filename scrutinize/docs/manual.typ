@@ -12,11 +12,11 @@
 #set document(date: date)
 
 #show: project.with(
-  title: "Examination",
+  title: "Scrutinize",
   // subtitle: "...",
   authors: package-meta.authors.map(a => a.split("<").at(0).trim()),
   abstract: [
-    _Examination_ is a library for building exams, tests, etc. with Typst.
+    _Scrutinize_ is a library for building exams, tests, etc. with Typst.
     It provides utilities for common question types and supports creating grading keys and sample solutions.
   ],
   ..if date != none {
@@ -108,7 +108,7 @@
 
 = Introduction
 
-_Examination_ has three general areas of focus:
+_Scrutinize_ has three general areas of focus:
 
 - It helps with grading information: record the points that can be reached for each question and make them available for creating grading keys.
 - It provides a selection of question writing utilities, such as multiple choice or true/false questions.
@@ -160,7 +160,7 @@ Here we're using the #ref-fn("question.current()") function to access the metada
 
 = Grading
 
-The final puzzle piece is grading. There are many different possibilities to grade a test; Examination tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
+The final puzzle piece is grading. There are many different possibilities to grade a test; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document:
 
@@ -360,7 +360,7 @@ Which of these answers are even?
 
 = Module reference
 
-// == `examination`
+// == `scrutinize`
 
 // #{
 //   let module = tidy.parse-module(
@@ -374,7 +374,7 @@ Which of these answers are even?
 //   )
 // }
 
-== `examination.question`
+== `scrutinize.question`
 
 #{
   let module = tidy.parse-module(
@@ -389,7 +389,7 @@ Which of these answers are even?
   )
 }
 
-== `examination.grading`
+== `scrutinize.grading`
 
 #{
   let module = tidy.parse-module(
@@ -404,7 +404,7 @@ Which of these answers are even?
   )
 }
 
-== `examination.questions`
+== `scrutinize.questions`
 
 #{
   let module = tidy.parse-module(

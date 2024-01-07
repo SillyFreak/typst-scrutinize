@@ -1,5 +1,5 @@
 #import "../src/lib.typ": grading, question
-// #import "@local/examination:0.0.1": grading, question
+// #import "@local/scrutinize:0.0.1": grading, question
 #import question: q
 
 // make the PDF reproducible to ease version control

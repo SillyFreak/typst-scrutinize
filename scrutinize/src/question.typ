@@ -1,4 +1,4 @@
-#let _label = <examination-question>
+#let _label = <scrutinize-question>
 #let _builtin_counter = counter
 
 #let _metadata_to_dict(m) = (..m.value, location: m.location())
