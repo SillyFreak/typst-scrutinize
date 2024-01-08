@@ -7,7 +7,7 @@ authors = [
 ]
 license = "MIT"
 description = "A library for building exams, tests, etc. with Typst"
-repository = "https://github.com/SillyFreak/typst-packages/scrutinize"
+repository = "https://github.com/SillyFreak/typst-packages/tree/main/scrutinize"
 keywords = ["exam", "test", "school", "teaching"]
 # compiler = ""
 exclude = [
