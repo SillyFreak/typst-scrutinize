@@ -11,6 +11,11 @@
 #set document(title: title)
 #set text(lang: "de")
 
+#let categories = (
+  (id: "mt", body: [Anwendungsentwicklung -- Multithreading]),
+  (id: "sock", body: [Anwendungsentwicklung -- Sockets]),
+)
+
 #set page(
   paper: "a4",
   margin: (x: 1.5cm, y: 2cm, top: 4cm),
@@ -49,7 +54,7 @@
     if q.points != none {
       [#h(1fr) #none / #q.points P.]
     }
-    if q.category != none and "ek" in q.category {
+    if q.at("extended", default: false) {
       [ EK]
     }
   })
@@ -58,10 +63,17 @@
 #question.all(qs => {
   set text(size: 10pt)
 
+  let points(category, extended) = {
+    grading.total-points(qs, filter: q => q.category == category and q.at("extended", default: false) == extended)
+  }
   let category-points(category) = grading.total-points(qs, filter: q => q.category == category)
 
-  let mt = (category-points("gk-mt"), category-points("ek-mt"))
-  let sock = (category-points("gk-sock"), category-points("ek-sock"))
+  let categories = categories.map((category) => {
+    let gk = points(category.id, false)
+    let ek = points(category.id, true)
+    (..category, gk: gk, ek: ek)
+  })
+
   let total = grading.total-points(qs)
 
   let grades = grading.grades(
@@ -96,8 +108,9 @@
         else { right + horizon },
 
       [*Kompetenzbereich*], [*Punkte GK*], [*Punkte EK*], [*Punkte Gesamt*],
-      [Anwendungsentwicklung -- Multithreading], ..(..mt, mt.sum()).map(m => [#none / #m]),
-      [Anwendungsentwicklung -- Sockets], ..(..sock, sock.sum()).map(m => [#none / #m]),
+      ..categories.map(((id, body, gk, ek)) => {
+        (body, [#none / #gk], [#none / #ek], [#none / #(gk + ek)])
+      }).flatten(),
       [Gesamt], [], [], [#none / #total],
     )
 
