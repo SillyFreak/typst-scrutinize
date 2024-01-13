@@ -135,25 +135,25 @@
 
 #lorem(50)
 
-#q(category: "gk-mt", points: 2)[
+#q(category: "mt", points: 2)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points: 2)[
+#q(category: "mt", points: 2)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points:2)[
+#q(category: "mt", points:2)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points:3)[
+#q(category: "mt", points:3)[
   ==
 
   #lorem(40)
@@ -163,13 +163,13 @@
 
 #lorem(50)
 
-#q(category: "gk-sock", points:6)[
+#q(category: "sock", points:6)[
   ==
 
   #lorem(50)
 ]
 
-#q(category: "gk-sock", points:2)[
+#q(category: "sock", points:2)[
   ==
 
   #lorem(30)
@@ -179,37 +179,37 @@
 
 #lorem(80)
 
-#q(category: "gk-mt", points:4)[
+#q(category: "mt", points:4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points:3)[
+#q(category: "mt", points:3)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points:4)[
+#q(category: "mt", points:4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-mt", points:4)[
+#q(category: "mt", points:4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "ek-mt", points:5)[
+#q(category: "mt", points:5, extended: true)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "ek-mt", points:3)[
+#q(category: "mt", points:3, extended: true)[
   ==
 
   #lorem(40)
@@ -219,31 +219,31 @@
 
 #lorem(80)
 
-#q(category: "gk-sock", points:6)[
+#q(category: "sock", points:6)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-sock", points:4)[
+#q(category: "sock", points:4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "gk-sock", points:6)[
+#q(category: "sock", points:6)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "ek-sock", points:3)[
+#q(category: "sock", points:3, extended: true)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "ek-sock", points:5)[
+#q(category: "sock", points:5, extended: true)[
   ==
 
   #lorem(40)
