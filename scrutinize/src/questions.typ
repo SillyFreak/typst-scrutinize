@@ -66,10 +66,9 @@
     columns: (auto, auto),
     align: (col, row) => (left, center).at(col) + horizon,
 
-    ..options.map(((option, correct)) => (
-      option,
-      checkbox(correct),
-    )).flatten()
+    ..for (option, correct) in options {
+      (option, checkbox(correct))
+    }
   )
 }
 

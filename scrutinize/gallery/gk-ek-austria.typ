@@ -108,9 +108,9 @@
         else { right + horizon },
 
       [*Kompetenzbereich*], [*Punkte GK*], [*Punkte EK*], [*Punkte Gesamt*],
-      ..categories.map(((id, body, gk, ek)) => {
+      ..for (id, body, gk, ek) in categories {
         (body, [#none / #gk], [#none / #ek], [#none / #(gk + ek)])
-      }).flatten(),
+      },
       [Gesamt], [], [], [#none / #total],
     )
 
