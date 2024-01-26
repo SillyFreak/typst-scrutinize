@@ -17,7 +17,9 @@
 
 = Instructions
 
-#set-solution()
+// I use sed to switch set-solution automatically, but this should always be set,
+// thus I obfuscate this ocurrence
+#set-solution(/* */)
 
 Use a pen. For multiple choice questions, make a cross in the box, such as in this example:
 
@@ -29,8 +31,10 @@ Use a pen. For multiple choice questions, make a cross in the box, such as in th
   )
 ]
 
-// comment this line to produce a sample solution
 #unset-solution()
+
+// comment this line to produce a sample solution
+// #set-solution()
 
 #show heading: it => {
   question.current(q => [#it.body #h(1fr) / #q.points])

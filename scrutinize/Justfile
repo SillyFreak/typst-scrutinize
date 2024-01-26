@@ -1,0 +1,14 @@
+alias all := compile-all
+alias c := compile
+
+compile-all: (compile "question-types") (compile "small-example")
+
+compile-exam exam:
+	sed -i 's_#set-solution()_// #set-solution()_' "gallery/{{exam}}.typ"
+	typst c "gallery/{{exam}}.typ" "gallery/{{exam}}.pdf"
+
+compile-solution exam:
+	sed -i 's_// #set-solution()_#set-solution()_' "gallery/{{exam}}.typ"
+	typst c "gallery/{{exam}}.typ" "gallery/{{exam}}-solved.pdf"
+
+compile exam: (compile-solution exam) (compile-exam exam)
