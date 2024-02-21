@@ -1,7 +1,7 @@
 // adapted from https://github.com/Mc-Zen/tidy/blob/98612b847da41ffb0d1dc26fa250df5c17d50054/docs/template.typ
 // licensed under the MIT license
 
-#import "@preview/codly:0.1.0": *
+#import "@preview/codly:0.2.0": *
 
 // The project function defines how your document looks.
 // It takes your content and some metadata and formats it.
@@ -9,15 +9,15 @@
 #let project(
   title: "",
   subtitle: "",
-  abstract: [],
   authors: (),
+  abstract: [],
   url: none,
-  date: none,
   version: none,
+  date: none,
   body,
 ) = {
   // Set the document's basic properties.
-  set document(author: authors, title: title)
+  set document(author: authors, title: title, date: date)
   set page(numbering: "1", number-align: center)
   set text(font: "Linux Libertine", lang: "en")
 
@@ -33,14 +33,20 @@
   v(4em)
 
   // Title row.
-  align(center)[
-    #block(text(weight: 700, 1.75em, title))
-    #block(text(1.0em, subtitle))
-    #v(4em, weak: true)
-    v#version #h(1.2cm) #date
-    #block(link(url))
-    #v(1.5em, weak: true)
-  ]
+  align(center, {
+    block(text(weight: 700, 1.75em, title))
+    block(text(1.0em, subtitle))
+    v(4em, weak: true)
+    if date == none [
+      v#version
+    ] else [
+      v#version
+      #h(1.2cm)
+      #date.display("[month repr:long] [day], [year]")
+    ]
+    block(link(url))
+    v(1.5em, weak: true)
+  })
 
   // Author information.
   pad(
@@ -70,11 +76,15 @@
     ],
   )
 
-  // Main body.
   set par(justify: true)
   v(10em)
 
+  // Outline.
+  pad(x: 10%, outline(depth: 1))
+  pagebreak()
 
+
+  // Main body.
   show: codly-init
   codly(
     languages: (
@@ -86,6 +96,9 @@
 
   body
 }
+
+
+#let ref-fn(name) = link(label(name), raw(name))
 
 
 #let file-code(filename, code) = pad(x: 4%, block(

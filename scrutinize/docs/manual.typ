@@ -8,9 +8,6 @@
 // #let date = none
 #let date = datetime(year: 2024, month: 1, day: 7)
 
-// make the PDF reproducible to ease version control
-#set document(date: date)
-
 #show: project.with(
   title: "Scrutinize",
   // subtitle: "...",
@@ -19,15 +16,10 @@
     _Scrutinize_ is a library for building exams, tests, etc. with Typst.
     It provides utilities for common question types and supports creating grading keys and sample solutions.
   ],
-  ..if date != none {
-    (date: date.display("[month repr:long] [day], [year]"))
-  },
+  url: package-meta.repository,
   version: package-meta.version,
-  url: package-meta.repository
+  date: date,
 )
-
-#pad(x: 10%, outline(depth: 1))
-#pagebreak()
 
 // the scope for evaluating expressions and documentation
 #let scope = (grading: grading, question: question, questions: questions)
@@ -105,8 +97,6 @@
 
   example(question, lines: lines, cheat: cheat)
 }
-
-#let ref-fn(name) = link(label(name), raw(name))
 
 = Introduction
 
