@@ -1,6 +1,6 @@
 [package]
 name = "scrutinize"
-version = "0.1.0"
+version = "0.2.0"
 entrypoint = "src/lib.typ"
 authors = [
   "Clemens Koza <https://github.com/SillyFreak/>"
@@ -9,7 +9,7 @@ license = "MIT"
 description = "A library for building exams, tests, etc. with Typst"
 repository = "https://github.com/SillyFreak/typst-packages/tree/main/scrutinize"
 keywords = ["exam", "test", "school", "teaching"]
-# compiler = ""
+compiler = "0.11.0"
 exclude = [
   # docs and gallery are not needed in the final package
   "docs/*",

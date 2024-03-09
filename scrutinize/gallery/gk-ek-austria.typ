@@ -1,5 +1,4 @@
-#import "@preview/scrutinize:0.1.0": grading, question, questions
-// #import "@local/scrutinize:0.1.0": grading, question, questions
+#import "@preview/scrutinize:0.2.0": grading, question, questions
 // #import "../src/lib.typ" as scrutinize: grading, question, questions
 #import question: q
 
@@ -46,21 +45,21 @@
 #set table(stroke: 0.5pt)
 
 #show heading.where(level: 2): it => {
-  question.current(q => {
-    [Frage #question.counter.display()]
-    if it.body != [] {
-      [: #it.body]
-    }
-    if q.points != none {
-      [#h(1fr) #none / #q.points P.]
-    }
-    if q.at("extended", default: false) {
-      [ EK]
-    }
-  })
+  let q = question.current()
+  [Frage #question.counter.display()]
+  if it.body != [] {
+    [: #it.body]
+  }
+  if q.points != none {
+    [#h(1fr) #none / #q.points P.]
+  }
+  if q.at("extended", default: false) {
+    [ EK]
+  }
 }
 
-#question.all(qs => {
+#context {
+  let qs = question.all()
   set text(size: 10pt)
 
   let points(category, extended) = {
@@ -129,7 +128,7 @@
       ..grades.map(g => g.body),
     )
   ]
-})
+}
 
 = Grundkompetenzen -- Theorieteil Multithreading
 
@@ -147,13 +146,13 @@
   #lorem(40)
 ]
 
-#q(category: "mt", points:2)[
+#q(category: "mt", points: 2)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:3)[
+#q(category: "mt", points: 3)[
   ==
 
   #lorem(40)
@@ -163,13 +162,13 @@
 
 #lorem(50)
 
-#q(category: "sock", points:6)[
+#q(category: "sock", points: 6)[
   ==
 
   #lorem(50)
 ]
 
-#q(category: "sock", points:2)[
+#q(category: "sock", points: 2)[
   ==
 
   #lorem(30)
@@ -179,37 +178,37 @@
 
 #lorem(80)
 
-#q(category: "mt", points:4)[
+#q(category: "mt", points: 4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:3)[
+#q(category: "mt", points: 3)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:4)[
+#q(category: "mt", points: 4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:4)[
+#q(category: "mt", points: 4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:5, extended: true)[
+#q(category: "mt", points: 5, extended: true)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "mt", points:3, extended: true)[
+#q(category: "mt", points: 3, extended: true)[
   ==
 
   #lorem(40)
@@ -219,31 +218,31 @@
 
 #lorem(80)
 
-#q(category: "sock", points:6)[
+#q(category: "sock", points: 6)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "sock", points:4)[
+#q(category: "sock", points: 4)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "sock", points:6)[
+#q(category: "sock", points: 6)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "sock", points:3, extended: true)[
+#q(category: "sock", points: 3, extended: true)[
   ==
 
   #lorem(40)
 ]
 
-#q(category: "sock", points:5, extended: true)[
+#q(category: "sock", points: 5, extended: true)[
   ==
 
   #lorem(40)

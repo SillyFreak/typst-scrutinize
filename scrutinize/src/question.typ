@@ -52,23 +52,9 @@
 ///
 /// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
 /// -> content, dictionary
-#let current(func-or-loc) = {
-  let inner(loc) = {
-    let q = query(selector(_label).before(loc), loc).last()
-    _metadata_to_dict(q)
-  }
-
-  if type(func-or-loc) == function {
-    let func = func-or-loc
-    // find value, transform it into content
-    locate(loc => func(inner(loc)))
-  } else if type(func-or-loc) == location {
-    let loc = func-or-loc
-    // find value, return it
-    inner(loc)
-  } else {
-    panic("function or location expected")
-  }
+#let current() = {
+  let q = query(selector(_label).before(here())).last()
+  _metadata_to_dict(q)
 }
 
 /// Locates all questions in the document, which can then be used to create grading keys etc.
@@ -93,21 +79,7 @@
 ///
 /// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
 /// -> content, array
-#let all(func-or-loc) = {
-  let inner(loc) = {
-    let qs = query(_label, loc)
-    qs.map(_metadata_to_dict)
-  }
-
-  if type(func-or-loc) == function {
-    let func = func-or-loc
-    // find value, transform it into content
-    locate(loc => func(inner(loc)))
-  } else if type(func-or-loc) == location {
-    let loc = func-or-loc
-    // find value, return it
-    inner(loc)
-  } else {
-    panic("function or location expected")
-  }
+#let all() = {
+  let qs = query(_label)
+  qs.map(_metadata_to_dict)
 }

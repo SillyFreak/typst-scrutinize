@@ -1,14 +1,13 @@
-#import "@preview/scrutinize:0.1.0": grading, question, questions
-// #import "@local/scrutinize:0.1.0": grading, question, questions
+#import "@preview/scrutinize:0.2.0": grading, question, questions
 // #import "../src/lib.typ" as scrutinize: grading, question, questions
 #import question: q
-#import questions: free-text-answer, single-choice, multiple-choice, set-solution
+#import questions: free-text-answer, single-choice, multiple-choice
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
 
-// toggle this comment to produce a sample solution
-// #set-solution()
+// toggle this comment or pass `--input solution=true` to produce a sample solution
+// #questions.solution.update(true)
 
 #set table(stroke: 0.5pt)
 
