@@ -1,11 +1,11 @@
-/// Takes an array of question `metadata` objects (not dictionaries) and returns the sum of their points.
+/// Takes an array of question `metadata` dictionaries and returns the sum of their points.
 /// Note that the points metadata is optional and may therefore be `none`;
 /// if your test may contain questions without points, you have to take care of that.
 ///
 /// This function also optionally takes a filter function.
 /// If given, the function will get the metadata of each question and must return a boolean.
 ///
-/// - questions (array): an array of question `metadata` objects
+/// - questions (array): an array of question `metadata` dictionaries
 /// - filter (function): an optional filter function for determining which questions to sum up
 /// -> integer
 #let total-points(questions, filter: none) = {
@@ -17,7 +17,7 @@
 
 /// A utility function for generating grades with upper and lower point limits.
 /// The parameters must alternate between grade names and threshold scores, with grades in ascending order.
-/// these will be combined in dictionaries for each grade with keys `body`, `lower-limit`, and `upper-limit`.
+/// These will be combined in dictionaries for each grade with keys `body`, `lower-limit`, and `upper-limit`.
 /// The first (lowest) grade will have a `lower-limit` of `none`;
 /// the last (highest) grade will have an `upper-limit` of `none`.
 ///

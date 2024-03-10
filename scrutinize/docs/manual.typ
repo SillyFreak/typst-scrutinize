@@ -207,7 +207,7 @@ The first step in creating a typical grading scheme is determining how many poin
   Points from hard questions: #hard
 ])
 
-#q(category: "hard", points: 6)[
+#q(points: 6)[
   == Hard Question
 
   #lorem(20)
@@ -243,7 +243,7 @@ Once we have the total points of the text figured out, we need to define the gra
   #grades
 ])
 
-#q(category: "hard", points: 6)[
+#q(points: 6)[
   == Hard Question
 
   #lorem(20)
@@ -275,7 +275,7 @@ Once we have the total points of the text figured out, we need to define the gra
   #grades
 ])
 
-#q(category: "hard", points: 6)[
+#q(points: 6)[
   == Hard Question
 
   #lorem(20)
