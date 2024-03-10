@@ -32,53 +32,41 @@
 /// Locates the most recently defined question;
 /// within a @@q() call, that is the question _currently_ being defined.
 ///
-/// If a function is provided as a parameter, the located question's metadata is used
-/// to call it and content is returned.
-/// If a location is provided instead, the question's metadata is located there and returned directly.
+/// This function is contextual and must appear within a ```typ context``` expression.
 ///
 /// Example:
 ///
 /// ```typ
-/// #question.current(q => [This question is worth #q.points points.])
+/// #context [
+///   #let points = question.current().points
+///   This question is worth #points points.
 ///
-/// #locate(loc => {
-///   let points = question.current(loc).points
-///   // note that `points` is an integer, not a content!
-///   let points-with-extra = points + 1
-///   // but eventually, `locate()` will convert to content
-///   [I may award up to #points-with-extra points for great answers!]
-/// })
+///   I may award up to #(points + 1) points for great answers!
+/// ]
 /// ```
 ///
-/// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
-/// -> content, dictionary
+/// -> dictionary
 #let current() = {
   let q = query(selector(_label).before(here())).last()
   _metadata_to_dict(q)
 }
 
 /// Locates all questions in the document, which can then be used to create grading keys etc.
-/// The array of question metadata is used to call the provided function.
 ///
-/// If a function is provided as a parameter, the array of located questions' metadata is used
-/// to call it and content is returned.
-/// If a location is provided instead, it is used to retrieve the metadata and they are returned directly.
+/// This function is contextual and must appear within a ```typ context``` expression.
 ///
 /// Example:
 ///
 /// ```typ
-/// #question.all(qs => [There are #qs.len() questions.])
+/// #context [
+///   #let qs = question.all()
+///   There are #qs.len() questions.
 ///
-/// #locate(loc => {
-///   let qs = question.all(loc)
-///   // note that `qs` is an array, not a content!
-///   // but eventually, `locate()` will convert to content
-///   [The first question is worth #qs.first().points points!]
-/// })
+///   The first question is worth #qs.first().points points!
+/// ]
 /// ```
 ///
-/// - func-or-loc (function, location): either a function that receives metadata and returns content, or the location at which to locate the question
-/// -> content, array
+/// -> array
 #let all() = {
   let qs = query(_label)
   qs.map(_metadata_to_dict)

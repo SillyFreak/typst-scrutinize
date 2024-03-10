@@ -5,8 +5,8 @@
 #import "../src/lib.typ": grading, question, questions
 
 #let package-meta = toml("../typst.toml").package
-// #let date = none
-#let date = datetime(year: 2024, month: 1, day: 7)
+#let date = none
+// #let date = datetime(year: 2024, month: 1, day: 7)
 
 #show: project.with(
   title: "Scrutinize",
@@ -71,7 +71,7 @@
 
 #let question-example(question, lines: none) = {
   let preamble = ```typ
-  #import questions: set-solution, unset-solution
+  #import questions: with-solution
 
   #let q = [
   ```
@@ -80,14 +80,8 @@
 
   #grid(
     columns: (1fr, 1fr),
-    [
-      #unset-solution()
-      #q
-    ],
-    [
-      #set-solution()
-      #q
-    ],
+    with-solution(false, q),
+    with-solution(true, q),
   )
   ```
 
@@ -130,15 +124,13 @@ After importing the library's modules and aliasing an important function, we sim
 
 The body is rendered as-is, but the location and custom fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
 
-#pagebreak(weak: true)
-
 #example(lines: (6, 9), ```typ
 // you usually want to alias this, as you'll need it often
 #import question: q
 
 #show heading: it => {
   // here, we need to access the current question's metadata
-  question.current(q => [#it.body #h(1fr) / #q.points])
+  [#it.body #h(1fr) / #question.current().points]
 }
 
 #q(points: 2)[
@@ -148,7 +140,7 @@ The body is rendered as-is, but the location and custom fields are not used unle
 ]
 ```)
 
-Here we're using the #ref-fn("question.current()") function to access the metadata of the current question. Like Typst's `locate()` function, ordinarily, any computation has to happen inside as it can only return content -- however, see the function's documentation for an escape hatch.
+Here we're using the #ref-fn("question.current()") function to access the metadata of the current question. This function requires #link("https://typst.app/docs/reference/context/")[context] to know where in the document it is called, which a show rule already provides.
 
 = Grading
 
@@ -156,7 +148,7 @@ The final puzzle piece is grading. There are many different possibilities to gra
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document:
 
-#example(lines: (13, 26), ```typ
+#example(lines: (13, 27), ```typ
 // you usually want to alias this, as you'll need it often
 #import question: q
 
@@ -164,17 +156,18 @@ The first step in creating a typical grading scheme is determining how many poin
 // question's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current question's metadata
-  question.current(q => [#it.body #h(1fr) / #q.points])
+  [#it.body #h(1fr) / #question.current().points]
 }
 
-#question.all(qs => [
+#context [
+  #let qs = question.all()
   #let total = grading.total-points(qs)
   #let hard = grading.total-points(qs, filter: q => q.points >= 5)
 
   Total points: #total
 
   Points from hard questions: #hard
-])
+]
 
 #q(points: 6)[
   == Hard Question
@@ -195,17 +188,18 @@ The first step in creating a typical grading scheme is determining how many poin
 // question's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current question's metadata
-  question.current(q => [#it.body #h(1fr) / #q.points])
+  [#it.body #h(1fr) / #question.current().points]
 }
 
-#question.all(qs => [
-  #let total = 8
-  #let hard = 6
+#context [
+  #let qs = question.all().slice(2, 4)
+  #let total = grading.total-points(qs)
+  #let hard = grading.total-points(qs, filter: q => q.points >= 5)
 
   Total points: #total
 
   Points from hard questions: #hard
-])
+]
 
 #q(points: 6)[
   == Hard Question
@@ -220,9 +214,11 @@ The first step in creating a typical grading scheme is determining how many poin
 ]
 ```)
 
+#pagebreak(weak: true)
+
 Once we have the total points of the text figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
-#example(lines: (13, 21), ```typ
+#example(lines: (13, 22), ```typ
 // you usually want to alias this, as you'll need it often
 #import question: q
 
@@ -230,10 +226,11 @@ Once we have the total points of the text figured out, we need to define the gra
 // question's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current question's metadata
-  question.current(q => [#it.body #h(1fr) / #q.points])
+  [#it.body #h(1fr) / #question.current().points]
 }
 
-#question.all(qs => [
+#context [
+  #let qs = question.all()
   #let total = grading.total-points(qs)
 
   #let grades = grading.grades(
@@ -241,7 +238,7 @@ Once we have the total points of the text figured out, we need to define the gra
   )
 
   #grades
-])
+]
 
 #q(points: 6)[
   == Hard Question
@@ -262,18 +259,19 @@ Once we have the total points of the text figured out, we need to define the gra
 // question's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current question's metadata
-  question.current(q => [#it.body #h(1fr) / #q.points])
+  [#it.body #h(1fr) / #question.current().points]
 }
 
-#question.all(qs => [
-  #let total = 8
+#context [
+  #let qs = question.all().slice(4, 6)
+  #let total = grading.total-points(qs)
 
   #let grades = grading.grades(
     [bad], total * 2/4, [okay], total * 3/4, [good]
   )
 
   #grades
-])
+]
 
 #q(points: 6)[
   == Hard Question
@@ -300,10 +298,12 @@ With the test structure out of the way, the next step is to actually write quest
   _Note:_ customizing the styles is currently very limited/not possible. I would be interested in changing this, so if you have ideas on how to achieve this, contact me and/or open a pull request. Until then, feel free to "customize using copy/paste".
 ]
 
-Each question naturally has an answer, and producing sample solutions can be made very convenient if they are stored with the question right away. To facilitate this, this package provides three basic functions:
+Each question naturally has an answer, and producing sample solutions can be made very convenient if they are stored with the question right away. To facilitate this, this package provides
 
-- #ref-fn("questions.set-solution()") and #ref-fn("questions.unset-solution()"): these can be used to toggle display of solutions. The latter may be useful to render answered example questions in the beginning, then proper questions. (It's also useful for this documentation!)
-- #ref-fn("questions.is-solution()"): This function is used by question templates, or custom questions not using a template, to decide whether to render a solution.
+- #ref-fn("questions.solution"): this boolean state controls whether solutions are currently shown in the document.
+- #ref-fn("questions.with-solution()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show an answered example question at the beginning of the document.
+
+Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use `questions.solution.get()` to find out whether solutions are shown. This is also used by Scrutinize's question templates.
 
 Let's look at a free text question as a simple example:
 
@@ -312,16 +312,15 @@ Let's look at a free text question as a simple example:
 In free text questions, the student simply has some free space in which to put their answer:
 
 #question-example(```typ
-#import questions: set-solution, free-text-answer
+#import questions: free-text-answer
 
-// toggle this comment to produce a sample solution
-// #set-solution()
+// toggle the following comment or pass `--input solution=true`
+// to produce a sample solution
+// #questions.solution.update(true)
 
 Write an answer.
 
-#free-text-answer[
-  An answer
-]
+#free-text-answer[An answer]
 
 Next question
 ```)

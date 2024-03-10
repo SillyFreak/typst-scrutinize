@@ -1,3 +1,14 @@
+/// A boolean state storing whether solutions should currently be shown in the document.
+/// This can be set using the Typst CLI using `--input solution=true` (or `false`, which is already
+/// the default) or by updating the state:
+///
+/// ```typ
+/// #questions.solution.update(true)
+/// ```
+///
+/// Additionally, @@with-solution() can be used to change the solution state temporarily.
+///
+/// -> state
 #let solution = state("scrutinize-solution", {
   let bools = ("true": true, "false": false)
 
