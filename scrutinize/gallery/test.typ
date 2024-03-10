@@ -31,8 +31,7 @@
   // - for the second lowest grade, both limits are inclusive, we render as "limit - limit"
   // - for the other grades, lower limit is exclusive, upper inclusive, we render as "limit - limit"
   //   for exclusivity, we add half a point to the limit and for the highest grade we use total points
-  let grades = grades.enumerate().map(((i, grade)) => {
-    let (body, lower-limit, upper-limit) = grade
+  let grades = grades.enumerate().map(((i, (body, lower-limit, upper-limit))) => {
     if lower-limit == none {
       (body: body, range: [< #upper-limit P.])
     } else if i == 1 {
