@@ -144,7 +144,7 @@ Here we're using the #ref-fn("question.current()") function to access the metada
 
 = Grading
 
-The final puzzle piece is grading. There are many different possibilities to grade a test; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
+The next puzzle piece is grading. There are many different possibilities to grade a test; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document:
 
