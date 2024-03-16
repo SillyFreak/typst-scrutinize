@@ -10,11 +10,8 @@
 ///
 /// -> state
 #let solution = state("scrutinize-solution", {
-  let bools = ("true": true, "false": false)
-
-  let solution = sys.inputs.at("solution", default: "false")
-  assert(solution in bools, message: "--input solution=... must be set to true or false if present")
-  bools.at(solution)
+  import "utils.typ": boolean-input
+  boolean-input("solution")
 })
 
 #let _solution = solution
