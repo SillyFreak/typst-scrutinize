@@ -17,39 +17,39 @@ See the [manual](docs/manual.pdf) for details.
 A rendered version of this example can be found in the [gallery](gallery/).
 
 ```typ
-#import "@preview/scrutinize:0.1.0": grading, question, questions
+#import "@preview/scrutinize:0.2.0": grading, question, questions
 
 #import question: q
 #import questions: free-text-answer, single-choice, multiple-choice, set-solution, unset-solution
 
+// toggle this comment or pass `--input solution=true` to produce a sample solution
+// #questions.solution.update(true)
+
 #set table(stroke: 0.5pt)
 
-#question.all(qs => {
-  let total = grading.total-points(qs)
+#context [
+  #let total = grading.total-points(question.all())
 
-  [The candidate achieved #h(3em) out of #total points.]
-})
+  The candidate achieved #h(3em) out of #total points.
+]
 
 = Instructions
 
-#set-solution()
+#with-solution(true)[
+  Use a pen. For multiple choice questions, make a cross in the box, such as in this example:
 
-Use a pen. For multiple choice questions, make a cross in the box, such as in this example:
+  #pad(x: 5%)[
+    Which of these numbers are prime?
 
-#pad(x: 5%)[
-  Which of these numbers are prime?
-
-  #multiple-choice(
-    (([1], false), ([2], true), ([3], true), ([4], false), ([5], true)),
-  )
+    #multiple-choice(
+      (([1], false), ([2], true), ([3], true), ([4], false), ([5], true)),
+    )
+  ]
 ]
 
-// comment this line to produce a sample solution
-#unset-solution()
-
-#show heading: it => {
-  question.current(q => [#it.body #h(1fr) / #q.points])
-}
+#show heading: it => [
+  #it.body #h(1fr) / #question.current().points
+]
 
 #q(points: 2)[
   = Question 1
