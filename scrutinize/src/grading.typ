@@ -41,15 +41,9 @@
   let args = args.pos()
   assert(calc.odd(args.len()))
 
-  let result = ()
-
-  for i in range(0, args.len(), step: 2) {
-    result.push((
-      body: args.at(i),
-      lower-limit: if i > 0 { args.at(i - 1) },
-      upper-limit: if i < args.len() - 1 { args.at(i + 1) },
-    ))
-  }
-
-  result
+  range(0, args.len(), step: 2).map((i) => (
+    body: args.at(i),
+    lower-limit: if i > 0 { args.at(i - 1) },
+    upper-limit: if i < args.len() - 1 { args.at(i + 1) },
+  ))
 }
