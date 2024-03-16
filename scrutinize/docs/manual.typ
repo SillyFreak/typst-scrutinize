@@ -5,8 +5,8 @@
 #import "../src/lib.typ": grading, question, questions
 
 #let package-meta = toml("../typst.toml").package
-#let date = none
-// #let date = datetime(year: 2024, month: 1, day: 7)
+// #let date = none
+#let date = datetime(year: 2024, month: 3, day: 16)
 
 #show: project.with(
   title: "Scrutinize",

@@ -12,6 +12,6 @@ keywords = ["exam", "test", "school", "teaching"]
 compiler = "0.11.0"
 exclude = [
   # docs and gallery are not needed in the final package
-  "docs/*",
-  "gallery/*",
+  "docs",
+  "gallery",
 ]
