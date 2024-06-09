@@ -1,26 +1,10 @@
-# Scrutinize
-
-Scrutinize is a library for building exams, tests, etc. with Typst.
-It has three general areas of focus:
-
-- It helps with grading information: record the points that can be reached for each question and make them available for creating grading keys.
-- It provides a selection of question writing utilities, such as multiple choice or true/false questions.
-- It supports the creation of sample solutions by allowing to switch between the normal and "pre-filled" exam.
-
-Right now, providing a styled template is not part of this package's scope.
-Also, visual customization of the provided question templates is currently nonexistent.
-
-See the [manual](docs/manual.pdf) for details.
-
-## Example
-
-A rendered version of this example can be found in the [gallery](gallery/).
-
-```typ
 #import "@preview/scrutinize:0.2.0": grading, question, questions
-
+// #import "../src/lib.typ" as scrutinize: grading, question, questions
 #import question: q
-#import questions: free-text-answer, single-choice, multiple-choice, set-solution, unset-solution
+#import questions: free-text-answer, single-choice, multiple-choice, with-solution
+
+// make the PDF reproducible to ease version control
+#set document(date: none)
 
 // toggle this comment or pass `--input solution=true` to produce a sample solution
 // #questions.solution.update(true)
@@ -72,4 +56,3 @@ A rendered version of this example can be found in the [gallery](gallery/).
     2, // 0-based index
   )
 ]
-```

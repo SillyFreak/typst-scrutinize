@@ -1,3 +1,1 @@
-#import "/src/lib.typ": *
-
-#id[Hello World]
+Hello World
