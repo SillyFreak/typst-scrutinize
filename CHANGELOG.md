@@ -1,4 +1,4 @@
-# [unreleased](https://github.com/SillyFreak/typst-scrutinize/releases/tags/)
+# [unreleased](https://github.com/SillyFreak/typst-scrutinize/releases/tag/)
 ## Added
 
 ## Removed
@@ -9,7 +9,7 @@
 
 ---
 
-# [v0.2.0](https://github.com/SillyFreak/typst-scrutinize/releases/tags/v0.2.0)
+# [v0.2.0](https://github.com/SillyFreak/typst-scrutinize/releases/tag/v0.2.0)
 Scrutinize 0.2.0 updates it to Typst 0.11.0, using context to simplify the API and --input to more easily specify if a sample solution is to be generated. Some documentation and metadata errors in the 0.1.0 submission were also corrected.
 
 ## Added
@@ -20,5 +20,5 @@ Scrutinize 0.2.0 updates it to Typst 0.11.0, using context to simplify the API a
 
 ---
 
-# [v0.1.0](https://github.com/SillyFreak/typst-scrutinize/releases/tags/v0.1.0)
+# [v0.1.0](https://github.com/SillyFreak/typst-scrutinize/releases/tag/v0.1.0)
 Initial Release
