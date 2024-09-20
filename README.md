@@ -20,7 +20,7 @@ A rendered version of this example can be found in the [gallery](gallery/).
 #import "@preview/scrutinize:0.2.0": grading, question, questions
 
 #import question: q
-#import questions: free-text-answer, single-choice, multiple-choice, set-solution, unset-solution
+#import questions: free-text-answer, single-choice, multiple-choice, with-solution
 
 // toggle this comment or pass `--input solution=true` to produce a sample solution
 // #questions.solution.update(true)
