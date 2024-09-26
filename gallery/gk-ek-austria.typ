@@ -1,6 +1,6 @@
-#import "@preview/scrutinize:0.2.0": grading, question, questions
-// #import "../src/lib.typ" as scrutinize: grading, question, questions
-#import question: q
+// #import "@preview/scrutinize:0.2.0": grading, question, questions
+#import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
+#import task: t
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -44,28 +44,35 @@
 
 #set table(stroke: 0.5pt)
 
+#show heading.where(level: 2): set heading(
+  supplement: [Frage],
+  numbering: (..nums) => numbering("1", ..nums.pos().slice(1)),
+)
 #show heading.where(level: 2): it => {
-  let q = question.current()
-  [Frage #question.counter.display()]
+  show: block
+  let t = task.current(level: 2).data
+  [#it.supplement #counter(heading).display()]
   if it.body != [] {
     [: #it.body]
   }
-  if q.points != none {
-    [#h(1fr) #none / #q.points P.]
+  if t.points != none {
+    [#h(1fr) #none / #t.points P.]
   }
-  if q.at("extended", default: false) {
+  if t.at("extended", default: false) {
     [ EK]
   }
 }
 
 #context {
-  let qs = question.all()
+  let ts = task.all(level: 2)
   set text(size: 10pt)
 
   let points(category, extended) = {
-    grading.total-points(qs, filter: q => q.category == category and q.at("extended", default: false) == extended)
+    grading.total-points(ts, filter: t => {
+      t.data.category == category and t.data.at("extended", default: false) == extended
+    })
   }
-  let category-points(category) = grading.total-points(qs, filter: q => q.category == category)
+  let category-points(category) = grading.total-points(ts, filter: t => t.data.category == category)
 
   let categories = categories.map((category) => {
     let gk = points(category.id, false)
@@ -73,7 +80,7 @@
     (..category, gk: gk, ek: ek)
   })
 
-  let total = grading.total-points(qs)
+  let total = grading.total-points(ts)
 
   let grades = grading.grades(
     [Nicht Genügend (5)],
@@ -134,43 +141,33 @@
 
 #lorem(50)
 
-#q(category: "mt", points: 2)[
-  ==
+==
+#t(category: "mt", points: 2)
+#lorem(40)
 
-  #lorem(40)
-]
+==
+#t(category: "mt", points: 2)
+#lorem(40)
 
-#q(category: "mt", points: 2)[
-  ==
+==
+#t(category: "mt", points: 2)
+#lorem(40)
 
-  #lorem(40)
-]
-
-#q(category: "mt", points: 2)[
-  ==
-
-  #lorem(40)
-]
-
-#q(category: "mt", points: 3)[
-  ==
-
-  #lorem(40)
-]
+==
+#t(category: "mt", points: 3)
+#lorem(40)
 
 = Grundkompetenzen -- Theorieteil Sockets
 
 #lorem(50)
 
-#q(category: "sock", points: 6)[
-  ==
-
+==
+#t(category: "sock", points: 6)
   #lorem(50)
 ]
 
-#q(category: "sock", points: 2)[
-  ==
-
+==
+#t(category: "sock", points: 2)
   #lorem(30)
 ]
 
@@ -178,72 +175,50 @@
 
 #lorem(80)
 
-#q(category: "mt", points: 4)[
-  ==
+==
+#t(category: "mt", points: 4)
+#lorem(40)
 
-  #lorem(40)
-]
+==
+#t(category: "mt", points: 3)
+#lorem(40)
 
-#q(category: "mt", points: 3)[
-  ==
+==
+#t(category: "mt", points: 4)
+#lorem(40)
 
-  #lorem(40)
-]
+==
+#t(category: "mt", points: 4)
+#lorem(40)
 
-#q(category: "mt", points: 4)[
-  ==
+==
+#t(category: "mt", points: 5, extended: true)
+#lorem(40)
 
-  #lorem(40)
-]
-
-#q(category: "mt", points: 4)[
-  ==
-
-  #lorem(40)
-]
-
-#q(category: "mt", points: 5, extended: true)[
-  ==
-
-  #lorem(40)
-]
-
-#q(category: "mt", points: 3, extended: true)[
-  ==
-
-  #lorem(40)
-]
+==
+#t(category: "mt", points: 3, extended: true)
+#lorem(40)
 
 = Grund- und erweiterte Kompetenzen -- Praktischer Teil Sockets
 
 #lorem(80)
 
-#q(category: "sock", points: 6)[
-  ==
+==
+#t(category: "sock", points: 6)
+#lorem(40)
 
-  #lorem(40)
-]
+==
+#t(category: "sock", points: 4)
+#lorem(40)
 
-#q(category: "sock", points: 4)[
-  ==
+==
+#t(category: "sock", points: 6)
+#lorem(40)
 
-  #lorem(40)
-]
+==
+#t(category: "sock", points: 3, extended: true)
+#lorem(40)
 
-#q(category: "sock", points: 6)[
-  ==
-
-  #lorem(40)
-]
-
-#q(category: "sock", points: 3, extended: true)[
-  ==
-
-  #lorem(40)
-]
-
-#q(category: "sock", points: 5, extended: true)[
-  ==
-
-  #lorem(40)
-]
+==
+#t(category: "sock", points: 5, extended: true)
+#lorem(40)

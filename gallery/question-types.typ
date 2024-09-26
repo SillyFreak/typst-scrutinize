@@ -1,7 +1,7 @@
-#import "@preview/scrutinize:0.2.0": grading, question, questions
-// #import "../src/lib.typ" as scrutinize: grading, question, questions
-#import question: q
-#import questions: free-text-answer, single-choice, multiple-choice
+// #import "@preview/scrutinize:0.2.0": grading, question, questions
+#import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
+#import task: t
+#import task-kinds: free-text-answer, single-choice, multiple-choice
 
 // make the PDF reproducible to ease version control
 #set document(date: none)

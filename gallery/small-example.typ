@@ -1,7 +1,7 @@
-#import "@preview/scrutinize:0.2.0": grading, question, questions
-// #import "../src/lib.typ" as scrutinize: grading, question, questions
-#import question: q
-#import questions: free-text-answer, single-choice, multiple-choice, with-solution
+// #import "@preview/scrutinize:0.2.0": grading, question, questions
+#import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
+#import task: t
+#import task-kinds: free-text-answer, single-choice, multiple-choice
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -11,15 +11,17 @@
 
 #set table(stroke: 0.5pt)
 
-#context [
-  #let total = grading.total-points(question.all())
+#context {
+  // There is a level 1 heading before the actual exam questions; ignore that
+  let ts = task.all(from: <begin-exam>)
+  let total = grading.total-points(ts)
 
-  The candidate achieved #h(3em) out of #total points.
-]
+  [The candidate achieved #h(3em) out of #total points.]
+}
 
 = Instructions
 
-#with-solution(true)[
+#solution.with(true)[
   Use a pen. For multiple choice questions, make a cross in the box, such as in this example:
 
   #pad(x: 5%)[
@@ -31,28 +33,28 @@
   ]
 ]
 
+#metadata(none) <begin-exam>
+
 #show heading: it => [
-  #it.body #h(1fr) / #question.current().points
+  #it.body #h(1fr) / #task.current().data.points
 ]
 
-#q(points: 2)[
-  = Question 1
+= Question 1
+#t(points: 2)
 
-  Write an answer.
+Write an answer.
 
-  #free-text-answer(height: 4cm)[
-    An answer
-  ]
+#free-text-answer(height: 4cm)[
+  An answer
 ]
 
-#q(points: 1)[
-  = Question 2
+= Question 2
+#t(points: 1)
 
-  Select the largest number:
+Select the largest number:
 
 
-  #single-choice(
-    ([5], [20], [25], [10], [15]),
-    2, // 0-based index
-  )
-]
+#single-choice(
+  ([5], [20], [25], [10], [15]),
+  2, // 0-based index
+)
