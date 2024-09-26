@@ -116,7 +116,6 @@ Let's start with a really basic example that doesn't really show any of the bene
 
 = Task
 #t(points: 2)
-
 #lorem(20)
 ```)
 
@@ -136,12 +135,11 @@ Let's now look at how to retrieve metadata. Let's say we want to show the points
 
 #show heading: it => {
   // here, we need to access the current task's metadata
-  [#it.body #h(1fr) / #task.current().data.points P.]
+  block[#it.body #h(1fr) / #task.current().data.points P.]
 }
 
 = Task
 #t(points: 2)
-
 #lorem(20)
 ```)
 
@@ -153,7 +151,7 @@ The next puzzle piece is grading. There are many different possibilities to grad
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
 
-#example(lines: (13, 28), ```typ
+#example(lines: (13, 26), ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -161,7 +159,7 @@ The first step in creating a typical grading scheme is determining how many poin
 // task's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current task's metadata
-  [#it.body #h(1fr) / #task.current().data.points]
+  block[#it.body #h(1fr) / #task.current().data.points]
 }
 
 #context [
@@ -173,18 +171,16 @@ The first step in creating a typical grading scheme is determining how many poin
 
 = Hard Task
 #t(points: 6)
-
 #lorem(20)
 
 = Task
 #t(points: 2)
-
 #lorem(20)
 ```)
 
-#pagebreak(weak: true)
-
 Once we have the total points of the exam figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
+
+#pagebreak(weak: true)
 
 #example(lines: (13, 20), ```typ
 // you usually want to alias this, as you'll need it often
@@ -194,28 +190,24 @@ Once we have the total points of the exam figured out, we need to define the gra
 // task's title and give the grader a space to put points
 #show heading: it => {
   // here, we need to access the current task's metadata
-  [#it.body #h(1fr) / #task.current().data.points]
+  block[#it.body #h(1fr) / #task.current().data.points]
 }
 
 #context [
-  #let ts = task.all()
-  #let total = grading.total-points(ts)
-  #let grades = grading.grades(
+  #let total = grading.total-points(task.all())
+  #grading.grades(
     [bad],
     total * 2/4, [okay],
     total * 3/4, [good],
   )
-  #grades
 ]
 
 = Hard Task
 #t(points: 6)
-
 #lorem(20)
 
 = Task
 #t(points: 2)
-
 #lorem(20)
 ```)
 
@@ -223,13 +215,14 @@ Obviously we would not want to render this representation as-is, but #ref-fn("gr
 
 One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
 
-```typ
-#let grades = grading.grades(
+#example(lines: (4, 8), ```typ
+#let total = 8
+#grading.grades(
   [bad],
   (points: total * 2/4, percent: 50%), [okay],
   (points: total * 3/4, percent: 75%), [good],
 )
-```
+```)
 
 #pagebreak(weak: true)
 
