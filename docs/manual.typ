@@ -3,7 +3,7 @@
 
 #import "template.typ": *
 
-#import "/src/lib.typ": grading, question, questions
+#import "/src/lib.typ": grading, task, questions
 
 #let package-meta = toml("/typst.toml").package
 // #let date = none
@@ -23,7 +23,7 @@
 )
 
 // the scope for evaluating expressions and documentation
-#let scope = (grading: grading, question: question, questions: questions)
+#let scope = (grading: grading, task: task, questions: questions)
 
 #let transform-raw-lines(original, func) = {
   let (text, ..fields) = original.fields()
@@ -38,7 +38,7 @@
   // for displaying, we add the imports ...
   let preamble = raw(
     "#import \"@preview/" + package-meta.name + ":" + package-meta.version + "\"" +
-    ": grading, question, questions\n",
+    ": grading, task, questions\n",
     lang: "typ",
     block: true,
   )
@@ -63,6 +63,9 @@
     cheat.text
   }
 
+  set heading(numbering: none, outlined: false)
+  show: task.scope
+
   [
     #code-to-display
 
@@ -70,7 +73,7 @@
   ]
 }
 
-#let question-example(question, lines: none) = {
+#let task-example(task, lines: none) = {
   let preamble = ```typ
   #import questions: with-solution
 
@@ -86,208 +89,147 @@
   )
   ```
 
-  let cheat = transform-raw-lines(question, l => {
+  let cheat = transform-raw-lines(task, l => {
     preamble.text.split("\n") + l + epilog.text.split("\n")
   })
 
-  example(question, lines: lines, cheat: cheat)
+  example(task, lines: lines, cheat: cheat)
 }
 
 = Introduction
 
 _Scrutinize_ has three general areas of focus:
 
-- It helps with grading information: record the points that can be reached for each question and make them available for creating grading keys.
+- It helps with grading information: record the points that can be reached for each task and make them available for creating grading keys.
 - It provides a selection of question writing utilities, such as multiple choice or true/false questions.
 - It supports the creation of sample solutions by allowing to switch between the normal and "pre-filled" exam.
 
 Right now, providing a styled template is not part of this package's scope.
 
-= Questions and question metadata
+= Tasks and task metadata
 
 Let's start with a really basic example that doesn't really show any of the benefits of this library yet:
 
 #example(```typ
 // you usually want to alias this, as you'll need it often
-#import question: q
+#import task: t
 
-#q(points: 2)[
-  == Question
+= Task
+#t(points: 2)
 
-  #lorem(20)
-]
+#lorem(20)
 ```)
 
-After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc points: 2```: this adds some metadata to the question. Any metadata can be specified, but `points` is special insofar as it is used by the `grading` module. There are two additional pieces of metadata that are automatically available:
+After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc t(points: 2)```: this adds some metadata to the task. Any metadata can be specified, but `points` is special insofar as it is used by the `grading` module.
 
-- `body`: the complete content that was rendered as the question
-- `location`: the location where the question started and the Typst `metadata` element was inserted
+A lot of scrutinize's features revolve around using that metadata, and we'll soon see how. A task's metadata is a dictionary with the following fields:
 
-The body is rendered as-is, but the location and custom fields are not used unless you explicitly do; let's look at how to do that. Let's say we want to show the points in each question's header:
+- `data`: he explicitly given metadata of the task, such as ```typc (points: 2)```.
+- `heading`: the heading that identifies the task, such as ```typ = Task```.
+- `subtasks`: an array of nested tasks, identified by nested headings. When getting task metadata, you can limit the depth; this is only present as long as the depth is not exceeded.
+
+Let's now look at how to retrieve metadata. Let's say we want to show the points in each task's header:
 
 #example(lines: (6, 9), ```typ
 // you usually want to alias this, as you'll need it often
-#import question: q
+#import task: t
 
 #show heading: it => {
-  // here, we need to access the current question's metadata
-  [#it.body #h(1fr) / #question.current().points]
+  // here, we need to access the current task's metadata
+  [#it.body #h(1fr) / #task.current().data.points P.]
 }
 
-#q(points: 2)[
-  == Question
+= Task
+#t(points: 2)
 
-  #lorem(20)
-]
+#lorem(20)
 ```)
 
-Here we're using the #ref-fn("question.current()") function to access the metadata of the current question. This function requires #link("https://typst.app/docs/reference/context/")[context] to know where in the document it is called, which a show rule already provides.
+Here we're using the #ref-fn("task.current()") function to access the metadata of the current task. This function requires #link("https://typst.app/docs/reference/context/")[context] to know where in the document it is called, which a show rule already provides. The function documentation contains more details on how task metadata can be retrieved.
 
 = Grading
 
-The next puzzle piece is grading. There are many different possibilities to grade a test; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each question gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
+The next puzzle piece is grading. There are many different possibilities to grade an exam; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each task gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
 
-The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("question.all()") to get access to the metadata distributed throughout the document:
+The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
 
-#example(lines: (13, 27), ```typ
+#example(lines: (13, 28), ```typ
 // you usually want to alias this, as you'll need it often
-#import question: q
+#import task: t
 
 // let's show the available points to the right of each
-// question's title and give the grader a space to put points
+// task's title and give the grader a space to put points
 #show heading: it => {
-  // here, we need to access the current question's metadata
-  [#it.body #h(1fr) / #question.current().points]
+  // here, we need to access the current task's metadata
+  [#it.body #h(1fr) / #task.current().data.points]
 }
 
 #context [
-  #let qs = question.all()
-  #let total = grading.total-points(qs)
-  #let hard = grading.total-points(qs, filter: q => q.points >= 5)
-
-  Total points: #total
-
-  Points from hard questions: #hard
+  #let ts = task.all()
+  #let total = grading.total-points(ts)
+  #let hard = grading.total-points(ts, filter: t => t.data.points >= 5)
+  Total points: #total \ Points from hard tasks: #hard
 ]
 
-#q(points: 6)[
-  == Hard Question
+= Hard Task
+#t(points: 6)
 
-  #lorem(20)
-]
+#lorem(20)
 
-#q(points: 2)[
-  == Question
+= Task
+#t(points: 2)
 
-  #lorem(20)
-]
-```, cheat: ```typ
-// you usually want to alias this, as you'll need it often
-#import question: q
-
-// let's show the available points to the right of each
-// question's title and give the grader a space to put points
-#show heading: it => {
-  // here, we need to access the current question's metadata
-  [#it.body #h(1fr) / #question.current().points]
-}
-
-#context [
-  #let qs = question.all().slice(2, 4)
-  #let total = grading.total-points(qs)
-  #let hard = grading.total-points(qs, filter: q => q.points >= 5)
-
-  Total points: #total
-
-  Points from hard questions: #hard
-]
-
-#q(points: 6)[
-  == Hard Question
-
-  #lorem(20)
-]
-
-#q(points: 2)[
-  == Question
-
-  #lorem(20)
-]
+#lorem(20)
 ```)
 
 #pagebreak(weak: true)
 
-Once we have the total points of the text figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
+Once we have the total points of the exam figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
-#example(lines: (13, 22), ```typ
+#example(lines: (13, 20), ```typ
 // you usually want to alias this, as you'll need it often
-#import question: q
+#import task: t
 
 // let's show the available points to the right of each
-// question's title and give the grader a space to put points
+// task's title and give the grader a space to put points
 #show heading: it => {
-  // here, we need to access the current question's metadata
-  [#it.body #h(1fr) / #question.current().points]
+  // here, we need to access the current task's metadata
+  [#it.body #h(1fr) / #task.current().data.points]
 }
 
 #context [
-  #let qs = question.all()
-  #let total = grading.total-points(qs)
-
+  #let ts = task.all()
+  #let total = grading.total-points(ts)
   #let grades = grading.grades(
-    [bad], total * 2/4, [okay], total * 3/4, [good]
+    [bad],
+    total * 2/4, [okay],
+    total * 3/4, [good],
   )
-
   #grades
 ]
 
-#q(points: 6)[
-  == Hard Question
+= Hard Task
+#t(points: 6)
 
-  #lorem(20)
-]
+#lorem(20)
 
-#q(points: 2)[
-  == Question
+= Task
+#t(points: 2)
 
-  #lorem(20)
-]
-```, cheat: ```typ
-// you usually want to alias this, as you'll need it often
-#import question: q
-
-// let's show the available points to the right of each
-// question's title and give the grader a space to put points
-#show heading: it => {
-  // here, we need to access the current question's metadata
-  [#it.body #h(1fr) / #question.current().points]
-}
-
-#context [
-  #let qs = question.all().slice(4, 6)
-  #let total = grading.total-points(qs)
-
-  #let grades = grading.grades(
-    [bad], total * 2/4, [okay], total * 3/4, [good]
-  )
-
-  #grades
-]
-
-#q(points: 6)[
-  == Hard Question
-
-  #lorem(20)
-]
-
-#q(points: 2)[
-  == Question
-
-  #lorem(20)
-]
+#lorem(20)
 ```)
 
 Obviously we would not want to render this representation as-is, but #ref-fn("grading.grades()") gives us a convenient way to have all the necessary information, without assuming things like inclusive or exclusive point ranges. The `test.typ` example in the gallery has a more complete demonstration of a grading key.
+
+One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
+
+```typ
+#let grades = grading.grades(
+  [bad],
+  (points: total * 2/4, percent: 50%), [okay],
+  (points: total * 3/4, percent: 75%), [good],
+)
+```
 
 #pagebreak(weak: true)
 
@@ -312,7 +254,7 @@ Let's look at a free text question as a simple example:
 
 In free text questions, the student simply has some free space in which to put their answer:
 
-#question-example(```typ
+#task-example(```typ
 #import questions: free-text-answer
 
 // toggle the following comment or pass `--input solution=true`
@@ -332,7 +274,7 @@ Left is the unanswered version, right the answered one. Note that the answer occ
 
 These question types allow making a mark next to one or multiple choices. See #ref-fn("questions.single-choice()") and #ref-fn("questions.multiple-choice()") for details.
 
-#question-example(```typ
+#task-example(```typ
 #import questions: single-choice, multiple-choice
 
 Which of these is the fourth answer?
@@ -368,12 +310,12 @@ Which of these answers are even?
 //   )
 // }
 
-== `scrutinize.question`
+== `scrutinize.task`
 
 #{
   let module = tidy.parse-module(
-    read("/src/question.typ"),
-    label-prefix: "question.",
+    read("/src/task.typ"),
+    label-prefix: "task.",
     scope: scope,
   )
   tidy.show-module(

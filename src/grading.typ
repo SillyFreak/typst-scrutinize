@@ -1,38 +1,42 @@
-/// Takes an array of question `metadata` dictionaries and returns the sum of their points.
-/// Note that the points metadata is optional and may therefore be `none`;
-/// if your test may contain questions without points, you have to take care of that.
+/// Takes an array of task metadata and returns the sum of their points, recursivly including
+/// subtasks. Tasks without points count as zero points.
 ///
-/// This function also optionally takes a filter function.
-/// If given, the function will get the metadata of each question and must return a boolean.
-///
-/// - questions (array): an array of question `metadata` dictionaries
-/// - filter (function): an optional filter function for determining which questions to sum up
-/// -> integer
-#let total-points(questions, filter: none) = {
-  if filter != none {
-    questions = questions.filter(filter)
-  }
-  questions.map(q => q.points).sum(default: 0)
+/// - tasks (array): an array of task metadata dictionaries
+/// - filter (function): an optional filter function for determining which tasks to sum up. Subtasks
+///   of tasks that didn't match are ignored.
+/// -> integer, float
+#let total-points(tasks, filter: none) = {
+  tasks.map(t => {
+    let points = 0
+    if filter == none or filter(t) {
+      points += t.at("data", default: (:)).at("points", default: 0)
+      points += total-points(t.at("subtasks", default: ()))
+    }
+    points
+  }).sum(default: 0)
 }
 
-/// A utility function for generating grades with upper and lower point limits.
-/// The parameters must alternate between grade names and threshold scores, with grades in ascending order.
-/// These will be combined in dictionaries for each grade with keys `body`, `lower-limit`, and `upper-limit`.
-/// The first (lowest) grade will have a `lower-limit` of `none`;
-/// the last (highest) grade will have an `upper-limit` of `none`.
+/// A utility function for generating grades with upper and lower point limits. The parameters must
+/// alternate between grade names and threshold scores, with grades in ascending order. These will
+/// be combined into dictionaries for each grade with keys `body`, `lower-limit`, and `upper-limit`.
+/// The first (lowest) grade will have a `lower-limit` of `none`; the last (highest) grade will have
+/// an `upper-limit` of `none`.
 ///
 /// Example:
 ///
-/// ```typ
-/// #let total = 8
-/// #let (bad, okay, good) = grading.grades(
-///   [bad], total * 2/4, [okay], total * 3/4, [good]
-/// )
-/// [
+/// #example(
+///   mode: "markup",
+///   ratio: 1.8,
+///   scale-preview: 100%,
+///   ```typ
+///   #let total = 8
+///   #let (bad, okay, good) = grading.grades(
+///     [bad], total * 2/4, [okay], total * 3/4, [good]
+///   )
 ///   You will need #okay.lower-limit points to pass,
-///   everything below is a #bad.body grade.
-/// ]
-/// ```
+///   everything below is a _#(bad.body)_ grade.
+///   ```
+/// )
 ///
 /// - ..args (any): only positional: any number of grade names interspersed with scores
 /// -> array
