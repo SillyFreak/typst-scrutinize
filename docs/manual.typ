@@ -3,7 +3,7 @@
 
 #import "template.typ": *
 
-#import "/src/lib.typ": grading, task, questions
+#import "/src/lib.typ": grading, task, task-kinds
 
 #let package-meta = toml("/typst.toml").package
 // #let date = none
@@ -15,7 +15,7 @@
   authors: package-meta.authors.map(a => a.split("<").at(0).trim()),
   abstract: [
     _Scrutinize_ is a library for building exams, tests, etc. with Typst.
-    It provides utilities for common question types and supports creating grading keys and sample solutions.
+    It provides utilities for common task types and supports creating grading keys and sample solutions.
   ],
   url: package-meta.repository,
   version: package-meta.version,
@@ -23,7 +23,7 @@
 )
 
 // the scope for evaluating expressions and documentation
-#let scope = (grading: grading, task: task, questions: questions)
+#let scope = (grading: grading, task: task, task-kinds: task-kinds)
 
 #let transform-raw-lines(original, func) = {
   let (text, ..fields) = original.fields()
@@ -38,7 +38,7 @@
   // for displaying, we add the imports ...
   let preamble = raw(
     "#import \"@preview/" + package-meta.name + ":" + package-meta.version + "\"" +
-    ": grading, task, questions\n",
+    ": grading, task, task-kinds\n",
     lang: "typ",
     block: true,
   )
@@ -75,7 +75,7 @@
 
 #let task-example(task, lines: none) = {
   let preamble = ```typ
-  #import questions: with-solution
+  #import task-kinds: with-solution
 
   #let q = [
   ```
@@ -96,12 +96,14 @@
   example(task, lines: lines, cheat: cheat)
 }
 
+#(scope.task-example = task-example)
+
 = Introduction
 
 _Scrutinize_ has three general areas of focus:
 
 - It helps with grading information: record the points that can be reached for each task and make them available for creating grading keys.
-- It provides a selection of question writing utilities, such as multiple choice or true/false questions.
+- It provides a selection of task authoring tools, such as multiple choice or true/false questions.
 - It supports the creation of sample solutions by allowing to switch between the normal and "pre-filled" exam.
 
 Right now, providing a styled template is not part of this package's scope.
@@ -233,20 +235,20 @@ One thing to note is that #ref-fn("grading.grades()") does not process the limit
 
 #pagebreak(weak: true)
 
-= Question templates and sample solutions
+= Task templates and sample solutions
 
-With the test structure out of the way, the next step is to actually write questions. There are endless ways of formulating questions, but some recurring formats come up regularly.
+With the test structure out of the way, the next step is to actually define tasks. There are endless ways of posing tasks, but some recurring formats come up regularly.
 
 #pad(x: 5%)[
   _Note:_ customizing the styles is currently very limited/not possible. I would be interested in changing this, so if you have ideas on how to achieve this, contact me and/or open a pull request. Until then, feel free to "customize using copy/paste".
 ]
 
-Each question naturally has an answer, and producing sample solutions can be made very convenient if they are stored with the question right away. To facilitate this, this package provides
+Tasks have a desired response, and producing sample solutions can be made very convenient if they are stored with the task right away. To facilitate this, this package provides
 
-- #ref-fn("questions.solution"): this boolean state controls whether solutions are currently shown in the document.
-- #ref-fn("questions.with-solution()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show an answered example question at the beginning of the document.
+- #ref-fn("task-kinds.solution"): this boolean state controls whether solutions are currently shown in the document.
+- #ref-fn("task-kinds.with-solution()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
 
-Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use `questions.solution.get()` to find out whether solutions are shown. This is also used by Scrutinize's question templates.
+Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #task-kinds.solution.get()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
 
 Let's look at a free text question as a simple example:
 
@@ -255,11 +257,11 @@ Let's look at a free text question as a simple example:
 In free text questions, the student simply has some free space in which to put their answer:
 
 #task-example(```typ
-#import questions: free-text-answer
+#import task-kinds: free-text-answer
 
 // toggle the following comment or pass `--input solution=true`
 // to produce a sample solution
-// #questions.solution.update(true)
+// #task-kinds.solution.update(true)
 
 Write an answer.
 
@@ -268,14 +270,14 @@ Write an answer.
 Next question
 ```)
 
-Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("questions.free-text-answer()"). The content of the answer is of course not limited to text.
+Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("task-kinds.free-text-answer()"). The content of the answer is of course not limited to text.
 
 == single and multiple choice questions
 
-These question types allow making a mark next to one or multiple choices. See #ref-fn("questions.single-choice()") and #ref-fn("questions.multiple-choice()") for details.
+These taks types allow making a mark next to one or multiple choices. See #ref-fn("task-kinds.single-choice()") and #ref-fn("task-kinds.multiple-choice()") for details.
 
 #task-example(```typ
-#import questions: single-choice, multiple-choice
+#import task-kinds: single-choice, multiple-choice
 
 Which of these is the fourth answer?
 
@@ -340,12 +342,12 @@ Which of these answers are even?
   )
 }
 
-== `scrutinize.questions`
+== `scrutinize.task-kinds`
 
 #{
   let module = tidy.parse-module(
-    read("/src/questions.typ"),
-    label-prefix: "questions.",
+    read("/src/task-kinds/mod.typ"),
+    label-prefix: "task-kinds.",
     scope: scope,
   )
   tidy.show-module(
