@@ -3,7 +3,7 @@
 
 #import "template.typ": *
 
-#import "/src/lib.typ": grading, task, task-kinds
+#import "/src/lib.typ": grading, task, solution, task-kinds
 
 #let package-meta = toml("/typst.toml").package
 // #let date = none
@@ -23,7 +23,7 @@
 )
 
 // the scope for evaluating expressions and documentation
-#let scope = (grading: grading, task: task, task-kinds: task-kinds)
+#let scope = (grading: grading, task: task, solution: solution, task-kinds: task-kinds)
 
 #let transform-raw-lines(original, func) = {
   let (text, ..fields) = original.fields()
@@ -38,7 +38,7 @@
   // for displaying, we add the imports ...
   let preamble = raw(
     "#import \"@preview/" + package-meta.name + ":" + package-meta.version + "\"" +
-    ": grading, task, task-kinds\n",
+    ": grading, task, solution, task-kinds\n",
     lang: "typ",
     block: true,
   )
@@ -75,8 +75,6 @@
 
 #let task-example(task, lines: none) = {
   let preamble = ```typ
-  #import task-kinds: with-solution
-
   #let q = [
   ```
   let epilog = ```typ
@@ -84,8 +82,8 @@
 
   #grid(
     columns: (1fr, 1fr),
-    with-solution(false, q),
-    with-solution(true, q),
+    solution.with(false, q),
+    solution.with(true, q),
   )
   ```
 
@@ -245,10 +243,10 @@ With the test structure out of the way, the next step is to actually define task
 
 Tasks have a desired response, and producing sample solutions can be made very convenient if they are stored with the task right away. To facilitate this, this package provides
 
-- #ref-fn("task-kinds.solution"): this boolean state controls whether solutions are currently shown in the document.
-- #ref-fn("task-kinds.with-solution()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
+- #ref-fn("solution._state"): this boolean state controls whether solutions are currently shown in the document. Some methods have convenience functions on the module level to make accessing them easier: #ref-fn("solution.get()"), #ref-fn("solution.update()").
+- #ref-fn("solution.with()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
 
-Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #task-kinds.solution.get()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
+Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #solution.get()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
 
 Let's look at a free text question as a simple example:
 
@@ -261,7 +259,7 @@ In free text questions, the student simply has some free space in which to put t
 
 // toggle the following comment or pass `--input solution=true`
 // to produce a sample solution
-// #task-kinds.solution.update(true)
+// #solution.update(true)
 
 Write an answer.
 
@@ -333,6 +331,21 @@ Which of these answers are even?
   let module = tidy.parse-module(
     read("/src/grading.typ"),
     label-prefix: "grading.",
+    scope: scope,
+  )
+  tidy.show-module(
+    module,
+    sort-functions: none,
+    style: tidy.styles.minimal,
+  )
+}
+
+== `scrutinize.solution`
+
+#{
+  let module = tidy.parse-module(
+    read("/src/solution.typ"),
+    label-prefix: "solution.",
     scope: scope,
   )
   tidy.show-module(

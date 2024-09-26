@@ -1,47 +1,3 @@
-/// A boolean state storing whether solutions should currently be shown in the document.
-/// This can be set using the Typst CLI using `--input solution=true` (or `false`, which is already
-/// the default) or by updating the state:
-///
-/// ```typ
-/// #task-kinds.solution.update(true)
-/// ```
-///
-/// Additionally, @@with-solution() can be used to change the solution state temporarily.
-///
-/// -> state
-#let solution = state("scrutinize-solution", {
-  import "../utils/input.typ": boolean-input
-  boolean-input("solution")
-})
-
-#let _solution = solution
-
-/// Sets whether solutions are shown for a particular part of the document.
-///
-/// Example:
-///
-/// #example(
-///   mode: "markup",
-///   ratio: 1.8,
-///   scale-preview: 100%,
-///   ```typ
-///   Before: #context task-kinds.solution.get() \
-///   #task-kinds.with-solution(true)[
-///     Inside: #context task-kinds.solution.get() \
-///   ]
-///   After: #context task-kinds.solution.get()
-///   ```
-/// )
-///
-/// - solution (boolean): the solution state to apply for the body
-/// - body (content): the content to show
-/// -> content
-#let with-solution(solution, body) = context {
-  let orig-solution = _solution.get()
-  _solution.update(solution)
-  body
-  _solution.update(orig-solution)
-}
 
 /// An answer to a free text question. If the document is not in solution mode,
 /// the answer is hidden but the height of the element is preserved.
@@ -61,6 +17,8 @@
 /// - height (auto, relative): the height of the region where an answer can be written
 /// -> content
 #let free-text-answer(answer, height: auto) = context {
+  import "../solution.typ"
+
   let answer = block(inset: (x: 2em, y: 1em), height: height, answer)
   if (not solution.get()) {
     answer = hide(answer)
@@ -82,6 +40,8 @@
 /// - correct (boolean): whether the checkbox is of a correct answer
 /// -> content
 #let checkbox(correct) = context {
+  import "../solution.typ"
+
   if (solution.get() and correct) { sym.ballot.x } else { sym.ballot }
 }
 
