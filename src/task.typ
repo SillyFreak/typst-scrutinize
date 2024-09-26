@@ -50,7 +50,7 @@
   [#metadata((: ..args.named())) #_label]
 }
 
-#let _extract-tasks(tasks-headings, level, depth) = {
+#let _extract-tasks(tasks-headings, level, depth, top-level: false) = {
   let tasks = ()
   if depth == 0 { return tasks }
 
@@ -59,7 +59,15 @@
     // we want to only consider headings
     if h.func() != heading { continue }
     // if we leave the requested level, we're done
-    if h.level < level { break }
+    if h.level < level {
+      if top-level {
+        // we're enumerating top-level tasks; keep going but ignore this
+        continue
+      } else {
+        // we just exited the parent task; stop here
+        break
+      }
+    }
     // we want to only consider headings at the requested level
     if h.level > level { continue }
 
@@ -185,13 +193,12 @@
 /// to create grading keys etc. The return value is an array with elements as described in
 /// @@current().
 ///
-/// If `level` is specified, the searched region of the document should _not_ contain headings of a
-/// higher level, as this would mean the task nesting is not well-formed. If there still is one, the
-/// collection of tasks will stop at that heading.
+/// Headings of the specified `level` are treated as top-level tasks; any higher level headings,
+/// even if they have an associated @@t(), are ignored.
 ///
 /// This function is contextual and must appear within a ```typ context``` expression.
 ///
-/// Example:
+/// Examples:
 ///
 /// #{
 ///   import task: t
@@ -211,6 +218,30 @@
 ///     == A #t(points: 2)
 ///     == B #t(points: 3)
 ///     === B1 #t(points: 1)
+///     ```
+///   )
+/// }
+///
+/// #{
+///   import task: t
+///   set heading(numbering: none, outlined: false)
+///   show: task.scope
+///   example(
+///     mode: "markup",
+///     ratio: 1.8,
+///     scale-preview: 100%,
+///     scope: (t: t),
+///     ```typ
+///     #context [
+///       #let tasks = task.all(level: 3)
+///       Number of tasks: #tasks.len() \
+///       Total points: #tasks.map(t => t.data.points).sum()
+///     ]
+///     == Part 1
+///     === A #t(points: 2)
+///     === B #t(points: 3)
+///     == Part 2
+///     === C #t(points: 1)
 ///     ```
 ///   )
 /// }
@@ -244,5 +275,5 @@
 
   let tasks-headings = query(sel)
 
-  _extract-tasks(tasks-headings, level, depth)
+  _extract-tasks(tasks-headings, level, depth, top-level: true)
 }
