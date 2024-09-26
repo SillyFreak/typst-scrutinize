@@ -10,7 +10,7 @@
 ///
 /// -> state
 #let solution = state("scrutinize-solution", {
-  import "utils.typ": boolean-input
+  import "utils/input.typ": boolean-input
   boolean-input("solution")
 })
 
