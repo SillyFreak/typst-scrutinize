@@ -120,7 +120,7 @@ Let's start with a really basic example that doesn't really show any of the bene
 #lorem(20)
 ```)
 
-After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc t(points: 2)```: this adds some metadata to the task. Any metadata can be specified, but `points` is special insofar as it is used by the `grading` module.
+After importing the library's modules and aliasing an important function, we simply get the same output as if we didn't do anything. The one peculiar thing here is ```typc t(points: 2)```: this adds some metadata to the task. Any metadata can be specified, but `points` is special insofar as it is used by the `grading` module by default.
 
 A lot of scrutinize's features revolve around using that metadata, and we'll soon see how. A task's metadata is a dictionary with the following fields:
 

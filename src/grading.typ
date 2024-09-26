@@ -4,12 +4,13 @@
 /// - tasks (array): an array of task metadata dictionaries
 /// - filter (function): an optional filter function for determining which tasks to sum up. Subtasks
 ///   of tasks that didn't match are ignored.
+/// - field (string): the field in the metadata over which to calculate the sum
 /// -> integer, float
-#let total-points(tasks, filter: none) = {
+#let total-points(tasks, filter: none, field: "points") = {
   tasks.map(t => {
     let points = 0
     if filter == none or filter(t) {
-      points += t.at("data", default: (:)).at("points", default: 0)
+      points += t.at("data", default: (:)).at(field, default: 0)
       points += total-points(t.at("subtasks", default: ()))
     }
     points
