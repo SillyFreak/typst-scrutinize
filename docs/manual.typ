@@ -145,6 +145,41 @@ Let's now look at how to retrieve metadata. Let's say we want to show the points
 
 Here we're using the #ref-fn("task.current()") function to access the metadata of the current task. This function requires #link("https://typst.app/docs/reference/context/")[context] to know where in the document it is called, which a show rule already provides. The function documentation contains more details on how task metadata can be retrieved.
 
+== Subtasks
+
+Often, exams have not just multiple tasks, but those tasks are made up of several subtasks. Scrutinize supports this, and reuses Typst's heading hierarchy for subtask hierarchy.
+
+Let's say some task's points come from its subtasks points. This could be achieved like this:
+
+#example(lines: (6, 24), ```typ
+// you usually want to alias this, as you'll need it often
+#import task: t
+
+#show heading.where(level: 1): it => {
+  let t = task.current(level: 1, depth: 2)
+  block[#it.body #h(1fr) / #grading.total-points(t.subtasks) P.]
+}
+#show heading.where(level: 2): it => {
+  let t = task.current(level: 2)
+  block[#it.body #h(1fr) / #t.data.points P.]
+}
+
+= Task
+#lorem(20)
+
+== Subtask A
+#t(points: 2)
+#lorem(20)
+
+== Subtask B
+#t(points: 1)
+#lorem(20)
+```)
+
+In this example #ref-fn("task.current()") is used in conjunction with #ref-fn("grading.total-points()"), which recursively adds all points of a list of tasks and its subtasks. More about this function will be said in the next section, and of course in the function's reference.
+
+#pagebreak(weak: true)
+
 = Grading
 
 The next puzzle piece is grading. There are many different possibilities to grade an exam; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each task gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
@@ -179,8 +214,6 @@ The first step in creating a typical grading scheme is determining how many poin
 ```)
 
 Once we have the total points of the exam figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
-
-#pagebreak(weak: true)
 
 #example(lines: (13, 20), ```typ
 // you usually want to alias this, as you'll need it often
