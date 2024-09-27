@@ -44,7 +44,7 @@
 
 Write an answer.
 
-#free-form.plain(height: 4cm)[
+#free-form.lines(line-height: 12mm, count: 3)[
   An answer
 ]
 

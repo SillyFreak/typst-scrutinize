@@ -1,5 +1,5 @@
-/// A checkbox which can be ticked by the student.
-/// If the checkbox is a correct answer and the document is in solution mode, it will be ticked.
+/// A checkbox which can be ticked by the student. If the checkbox is a correct answer and the
+/// document is in solution mode, it will be ticked.
 ///
 /// Example:
 ///
@@ -17,8 +17,8 @@
   if (solution.get() and correct) { sym.ballot.x } else { sym.ballot }
 }
 
-/// A table with multiple options that can each be true or false.
-/// Each option is a tuple consisting of content and a boolean for whether the option is correct or not.
+/// A table with multiple options that can each be true or false. Each option is a tuple consisting
+/// of content and a boolean for whether the option is correct or not.
 ///
 /// Example:
 ///
@@ -44,8 +44,8 @@
   )
 }
 
-/// A table with multiple options of which one can be true or false.
-/// Each option is a content, and a second parameter specifies which option is correct.
+/// A table with multiple options of which one can be true or false. Each option is a content, and a
+/// second parameter specifies which option is correct.
 ///
 /// Example:
 ///

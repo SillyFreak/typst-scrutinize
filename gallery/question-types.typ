@@ -15,7 +15,7 @@
 
 Write an answer.
 
-#free-form.plain[
+#free-form.lines(line-height: 12mm)[
   An answer
 ]
 

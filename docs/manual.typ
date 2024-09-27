@@ -82,6 +82,7 @@
 
   #grid(
     columns: (1fr, 1fr),
+    column-gutter: 1em,
     solution.with(false, q),
     solution.with(true, q),
   )
