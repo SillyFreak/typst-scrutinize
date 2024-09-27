@@ -1,7 +1,7 @@
 // #import "@preview/scrutinize:0.2.0": grading, question, questions
 #import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
 #import task: t
-#import task-kinds: free-text-answer, single-choice, multiple-choice
+#import task-kinds: choice, free-form
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -15,7 +15,7 @@
 
 Write an answer.
 
-#free-text-answer[
+#free-form.plain[
   An answer
 ]
 
@@ -23,7 +23,7 @@ Write an answer.
 
 Which of these is the fourth answer?
 
-#single-choice(
+#choice.single(
   (
     [Answer 1],
     [Answer 2],
@@ -39,7 +39,7 @@ Which of these is the fourth answer?
 
 Which of these answers are even?
 
-#multiple-choice(
+#choice.multiple(
   (
     ([Answer 1], false),
     ([Answer 2], true),

@@ -1,7 +1,7 @@
 // #import "@preview/scrutinize:0.2.0": grading, question, questions
 #import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
 #import task: t
-#import task-kinds: free-text-answer, single-choice, multiple-choice
+#import task-kinds: choice, free-form
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -27,7 +27,7 @@
   #pad(x: 5%)[
     Which of these numbers are prime?
 
-    #multiple-choice(
+    #choice.multiple(
       (([1], false), ([2], true), ([3], true), ([4], false), ([5], true)),
     )
   ]
@@ -44,7 +44,7 @@
 
 Write an answer.
 
-#free-text-answer(height: 4cm)[
+#free-form.plain(height: 4cm)[
   An answer
 ]
 
@@ -54,7 +54,7 @@ Write an answer.
 Select the largest number:
 
 
-#single-choice(
+#choice.single(
   ([5], [20], [25], [10], [15]),
   2, // 0-based index
 )

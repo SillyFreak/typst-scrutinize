@@ -276,12 +276,12 @@ Additionally, the solution state can be set using the Typst CLI using `--input s
 
 Let's look at a free text question as a simple example:
 
-== Free text questions
+== Free form questions
 
-In free text questions, the student simply has some free space in which to put their answer:
+In free form questions, the student simply has some free space in which to put their answer:
 
 #task-example(```typ
-#import task-kinds: free-text-answer
+#import task-kinds: free-form
 
 // toggle the following comment or pass `--input solution=true`
 // to produce a sample solution
@@ -289,23 +289,23 @@ In free text questions, the student simply has some free space in which to put t
 
 Write an answer.
 
-#free-text-answer[An answer]
+#free-form.plain[An answer]
 
 Next question
 ```)
 
-Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("task-kinds.free-text-answer()"). The content of the answer is of course not limited to text.
+Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("task-kinds.free-form.plain()"). The content of the answer is of course not limited to text.
 
 == single and multiple choice questions
 
-These taks types allow making a mark next to one or multiple choices. See #ref-fn("task-kinds.single-choice()") and #ref-fn("task-kinds.multiple-choice()") for details.
+These taks types allow making a mark next to one or multiple choices. See #ref-fn("task-kinds.choice.single()") and #ref-fn("task-kinds.choice.multiple()") for details.
 
 #task-example(```typ
-#import task-kinds: single-choice, multiple-choice
+#import task-kinds: choice
 
 Which of these is the fourth answer?
 
-#single-choice(
+#choice.single(
   range(1, 6).map(i => [Answer #i]),
   // 0-based indexing
   3,
@@ -313,7 +313,7 @@ Which of these is the fourth answer?
 
 Which of these answers are even?
 
-#multiple-choice(
+#choice.multiple(
   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 )
 ```)
@@ -381,12 +381,27 @@ Which of these answers are even?
   )
 }
 
-== `scrutinize.task-kinds`
+== `scrutinize.task-kinds.choice`
 
 #{
   let module = tidy.parse-module(
-    read("/src/task-kinds/mod.typ"),
-    label-prefix: "task-kinds.",
+    read("/src/task-kinds/choice.typ"),
+    label-prefix: "task-kinds.choice.",
+    scope: scope,
+  )
+  tidy.show-module(
+    module,
+    sort-functions: none,
+    style: tidy.styles.minimal,
+  )
+}
+
+== `scrutinize.task-kinds.free-form`
+
+#{
+  let module = tidy.parse-module(
+    read("/src/task-kinds/free-form.typ"),
+    label-prefix: "task-kinds.free-form.",
     scope: scope,
   )
   tidy.show-module(
