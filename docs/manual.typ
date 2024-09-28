@@ -279,11 +279,11 @@ Write an answer.
 Next question
 ```)
 
-Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("task-kinds.free-form.plain()"). The content of the answer is of course not limited to text.
+Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("free-form.plain()"). The content of the answer is of course not limited to text.
 
 == single and multiple choice questions
 
-These taks types allow making a mark next to one or multiple choices. See #ref-fn("task-kinds.choice.single()") and #ref-fn("task-kinds.choice.multiple()") for details.
+These taks types allow making a mark next to one or multiple choices. See #ref-fn("choice.single()") and #ref-fn("choice.multiple()") for details.
 
 #task-example(```typ
 #import task-kinds: choice
@@ -369,7 +369,7 @@ Which of these answers are even?
 #{
   let module = tidy.parse-module(
     read("/src/task-kinds/choice.typ"),
-    label-prefix: "task-kinds.choice.",
+    label-prefix: "choice.",
     scope: scope,
   )
   tidy.show-module(
@@ -384,7 +384,7 @@ Which of these answers are even?
 #{
   let module = tidy.parse-module(
     read("/src/task-kinds/free-form.typ"),
-    label-prefix: "task-kinds.free-form.",
+    label-prefix: "free-form.",
     scope: scope,
   )
   tidy.show-module(
