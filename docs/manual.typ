@@ -33,7 +33,6 @@
     crudo.map(
       ```typ
       #import "@preview/NAME:VERSION": grading, task, solution, task-kinds
-
       ```,
       line => line.replace("NAME", package-meta.name).replace("VERSION", package-meta.version),
     ),
@@ -117,7 +116,7 @@ A lot of scrutinize's features revolve around using that metadata, and we'll soo
 
 Let's now look at how to retrieve metadata. Let's say we want to show the points in each task's header:
 
-#example(lines: "6-9", ```typ
+#example(lines: "5-8", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -139,7 +138,7 @@ Often, exams have not just multiple tasks, but those tasks are made up of severa
 
 Let's say some task's points come from its subtasks points. This could be achieved like this:
 
-#example(lines: "6-24", ```typ
+#example(lines: "5-23", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -174,7 +173,7 @@ The next puzzle piece is grading. There are many different possibilities to grad
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
 
-#example(lines: "13-26", ```typ
+#example(lines: "12-25", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -203,7 +202,7 @@ The first step in creating a typical grading scheme is determining how many poin
 
 Once we have the total points of the exam figured out, we need to define the grading key. Let's say the grades are in a three-grade system of "bad", "okay", and "good". We could define these grades like this:
 
-#example(lines: "13-20", ```typ
+#example(lines: "12-19", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -236,7 +235,7 @@ Obviously we would not want to render this representation as-is, but #ref-fn("gr
 
 One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
 
-#example(lines: "4-8", ```typ
+#example(lines: "3-7", ```typ
 #let total = 8
 #grading.grades(
   [bad],
@@ -276,9 +275,7 @@ In free form questions, the student simply has some free space in which to put t
 // #solution.update(true)
 
 Write an answer.
-
 #free-form.plain[An answer]
-
 Next question
 ```)
 
@@ -292,7 +289,6 @@ These taks types allow making a mark next to one or multiple choices. See #ref-f
 #import task-kinds: choice
 
 Which of these is the fourth answer?
-
 #choice.single(
   range(1, 6).map(i => [Answer #i]),
   // 0-based indexing
@@ -300,7 +296,6 @@ Which of these is the fourth answer?
 )
 
 Which of these answers are even?
-
 #choice.multiple(
   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 )

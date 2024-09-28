@@ -3,12 +3,11 @@
 ///
 /// Example:
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds.choice: checkbox
-///   Correct: #checkbox(true) -- Incorrect: #checkbox(false)
-///   ```
-/// )
+/// #task-example(lines: "2-3", ```typ
+/// #import task-kinds.choice: checkbox
+/// Correct: #checkbox(true) -- Incorrect: #checkbox(false)
+/// ```)
+///
 /// - correct (boolean): whether the checkbox is of a correct answer
 /// -> content
 #let checkbox(correct) = context {
@@ -22,14 +21,12 @@
 ///
 /// Example:
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds: choice
-///   #choice.multiple(
-///     range(1, 6).map(i => ([Answer #i], calc.even(i))),
-///   )
-///   ```
+/// #task-example(lines: "2-5", ```typ
+/// #import task-kinds: choice
+/// #choice.multiple(
+///   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 /// )
+/// ```)
 ///
 /// - options (array): an array of (option, correct) pairs
 /// -> content
@@ -49,16 +46,14 @@
 ///
 /// Example:
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds: choice
-///   #choice.single(
-///     range(1, 6).map(i => [Answer #i]),
-///     // 0-based indexing
-///     3,
-///   )
-///   ```
+/// #task-example(lines: "2-7", ```typ
+/// #import task-kinds: choice
+/// #choice.single(
+///   range(1, 6).map(i => [Answer #i]),
+///   // 0-based indexing
+///   3,
 /// )
+/// ```)
 ///
 /// - options (array): an array of contents
 /// - answer (integer): the index of the correct answer, zero-based

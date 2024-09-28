@@ -5,16 +5,14 @@
 ///
 /// Example:
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds: free-form
-///   Write an answer.
-///   #free-form.plain(pad(top: 1em, bottom: 1em)[
-///     an answer
-///   ])
-///   Next question
-///   ```
-/// )
+/// #task-example(lines: "2-7", ```typ
+/// #import task-kinds: free-form
+/// Write an answer.
+/// #free-form.plain(pad(top: 1em, bottom: 1em)[
+///   an answer
+/// ])
+/// Next question
+/// ```)
 ///
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the region where an answer can be written
@@ -42,14 +40,12 @@
 ///
 /// Example:
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds: free-form
-///   Write an answer.
-///   #free-form.lines(line-height: 1cm)[this answer takes \ more than one line]
-///   Next question
-///   ```
-/// )
+/// #task-example(lines: "2-5", ```typ
+/// #import task-kinds: free-form
+/// Write an answer.
+/// #free-form.lines(line-height: 1cm)[this answer takes \ more than one line]
+/// Next question
+/// ```)
 ///
 /// - answer (content): the answer to (maybe) display
 /// - count (auto, int): the number of lines to show; defaults to however many are needed for the
@@ -103,16 +99,14 @@
 /// grid has a 5mm raster, and occupies enough vertical space to contain the answer. The grid fits
 /// the available width; use padding or similar to make it more narrow.
 ///
-/// #task-example(
-///   ```typ
-///   #import task-kinds: free-form
-///   Draw a circle.
-///   #free-form.grid(height: 20mm, {
-///     place(dx: 15mm, dy: 5mm, circle(radius: 5mm))
-///   })
-///   Next question
-///   ```
-/// )
+/// #task-example(lines: "2-7", ```typ
+/// #import task-kinds: free-form
+/// Draw a circle.
+/// #free-form.grid(height: 20mm, {
+///   place(dx: 15mm, dy: 5mm, circle(radius: 5mm))
+/// })
+/// Next question
+/// ```)
 ///
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the grid region
