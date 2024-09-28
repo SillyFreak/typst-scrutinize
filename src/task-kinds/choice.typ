@@ -24,22 +24,43 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-5", ```typ
+/// #task-example(lines: "2-14", ```typ
 /// #import task-kinds: choice
 /// #choice.multiple(
 ///   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 /// )
+/// #set table(stroke: none, inset: (x, y) => (
+///   right: if calc.even(x) { 0pt } else { 0.8em },
+///   rest: 5pt,
+/// ))
+/// #choice.multiple(
+///   boxes: left,
+///   direction: ltr,
+///   range(1, 6).map(i => ([#i], calc.even(i))),
+/// )
 /// ```)
 ///
 /// - options (array): an array of (option, correct) pairs
+/// - boxes (alignment): `left` or `right`, specifying on which side of the option the checkbox
+///   should appear
+/// - direction (direction): `ttb` or `ltr`, specifying how options should be arranged
 /// -> content
-#let multiple(options) = {
+#let multiple(options, boxes: right, direction: ttb) = {
+  assert(boxes in (left, right))
+  assert(direction in (ltr, ttb))
+
+  let col-multiplier = if direction == ltr { options.len() } else { 1 }
+
   table(
-    columns: (auto, auto),
-    align: (col, row) => (left, center).at(col) + horizon,
+    columns: (auto, auto) * col-multiplier,
+    align: (col, row) => ((left, center) * col-multiplier).at(col) + horizon,
 
     ..for (option, correct) in options {
-      (option, checkbox(correct))
+      if boxes == left {
+        (checkbox(correct), option)
+      } else {
+        (option, checkbox(correct))
+      }
     }
   )
 }
@@ -49,18 +70,35 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-7", ```typ
+/// #task-example(lines: "2-17", ```typ
 /// #import task-kinds: choice
 /// #choice.single(
 ///   range(1, 6).map(i => [Answer #i]),
 ///   // 0-based indexing
 ///   3,
 /// )
+/// #set table(stroke: none, inset: (x, y) => (
+///   right: if calc.even(x) { 0pt } else { 0.8em },
+///   rest: 5pt,
+/// ))
+/// #choice.single(
+///   boxes: left,
+///   direction: ltr,
+///   range(1, 6).map(i => [#i]),
+///   3,
+/// )
 /// ```)
 ///
 /// - options (array): an array of contents
 /// - answer (integer): the index of the correct answer, zero-based
+/// - boxes (alignment): `left` or `right`, specifying on which side of the option the checkbox
+///   should appear
+/// - direction (direction): `ttb` or `ltr`, specifying how options should be arranged
 /// -> content
-#let single(options, answer) = {
-  multiple(options.enumerate().map(((i, option)) => (option, i == answer)))
+#let single(options, answer, boxes: right, direction: ttb) = {
+  multiple(
+    boxes: boxes,
+    direction: direction,
+    options.enumerate().map(((i, option)) => (option, i == answer)),
+  )
 }
