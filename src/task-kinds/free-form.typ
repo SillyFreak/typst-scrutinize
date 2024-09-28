@@ -5,7 +5,7 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-7", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
 /// #free-form.plain(stroke: 0.5pt, pad(x: 0.5em, y: 1em)[
@@ -40,7 +40,7 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-5", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
 /// #free-form.lines(line-height: 1cm)[this answer takes \ more than one line]
@@ -99,7 +99,7 @@
 /// grid has a 5mm raster, and occupies enough vertical space to contain the answer. The grid fits
 /// the available width; use padding or similar to make it more narrow.
 ///
-/// #task-example(lines: "2-7", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Draw a circle.
 /// #free-form.grid(height: 20mm, {

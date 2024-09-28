@@ -3,7 +3,7 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-3", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds.choice: checkbox
 /// Correct: #checkbox(true) -- Incorrect: #checkbox(false)
 /// ```)
@@ -24,7 +24,7 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-14", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds: choice
 /// #choice.multiple(
 ///   range(1, 6).map(i => ([Answer #i], calc.even(i))),
@@ -70,7 +70,7 @@
 ///
 /// Example:
 ///
-/// #task-example(lines: "2-17", ```typ
+/// #task-example(lines: "2-", ```typ
 /// #import task-kinds: choice
 /// #choice.single(
 ///   range(1, 6).map(i => [Answer #i]),

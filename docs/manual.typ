@@ -1,5 +1,5 @@
 #import "@preview/tidy:0.3.0"
-#import "@preview/crudo:0.1.0"
+#import "@preview/crudo:0.1.1"
 
 #import "template.typ": *
 
@@ -138,7 +138,7 @@ Often, exams have not just multiple tasks, but those tasks are made up of severa
 
 Let's say some task's points come from its subtasks points. This could be achieved like this:
 
-#example(lines: "5-23", ```typ
+#example(lines: "5-", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -173,7 +173,7 @@ The next puzzle piece is grading. There are many different possibilities to grad
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
 
-#example(lines: "12-25", ```typ
+#example(lines: "12-", ```typ
 // you usually want to alias this, as you'll need it often
 #import task: t
 
@@ -235,7 +235,7 @@ Obviously we would not want to render this representation as-is, but #ref-fn("gr
 
 One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
 
-#example(lines: "3-7", ```typ
+#example(lines: "3-", ```typ
 #let total = 8
 #grading.grades(
   [bad],
