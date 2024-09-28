@@ -12,8 +12,11 @@
 /// -> content
 #let checkbox(correct) = context {
   import "../solution.typ"
-
-  if (solution.get() and correct) { sym.ballot.x } else { sym.ballot }
+  box(height: 0.65em, {
+    show: move.with(dy: -0.1em)
+    set text(1.5em)
+    if (solution.get() and correct) { sym.ballot.x } else { sym.ballot }
+  })
 }
 
 /// A table with multiple options that can each be true or false. Each option is a tuple consisting
