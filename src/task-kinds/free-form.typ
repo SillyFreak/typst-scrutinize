@@ -8,7 +8,7 @@
 /// #task-example(lines: "2-7", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
-/// #free-form.plain(pad(top: 1em, bottom: 1em)[
+/// #free-form.plain(stroke: 0.5pt, pad(x: 0.5em, y: 1em)[
 ///   an answer
 /// ])
 /// Next question
@@ -17,7 +17,7 @@
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the region where an answer can be written
 /// -> content
-#let plain(answer, height: auto) = context {
+#let plain(answer, height: auto, stroke: none) = context {
   import "../solution.typ"
 
   let answer = answer
@@ -25,7 +25,7 @@
     answer = hide(answer)
   }
 
-  block(height: height, answer)
+  block(height: height, width: 100%, stroke: stroke, answer)
 }
 
 /// An answer to a free form question. If the document is not in solution mode, the answer is hidden
