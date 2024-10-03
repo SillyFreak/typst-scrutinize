@@ -16,6 +16,7 @@
 ///
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the region where an answer can be written
+/// - stroke (none, stroke): the stroke of the box to draw around the answer area
 /// -> content
 #let plain(answer, height: auto, stroke: none) = context {
   import "../solution.typ"
