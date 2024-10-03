@@ -393,3 +393,18 @@ Which of these answers are even?
     style: tidy.styles.minimal,
   )
 }
+
+== `scrutinize.task-kinds.gap`
+
+#{
+  let module = tidy.parse-module(
+    read("/src/task-kinds/gap.typ"),
+    label-prefix: "gap.",
+    scope: scope,
+  )
+  tidy.show-module(
+    module,
+    sort-functions: none,
+    style: tidy.styles.minimal,
+  )
+}
