@@ -29,7 +29,7 @@
   // eval can't access the filesystem, so no imports.
   // for displaying, we add the imports; for running, we have the imported entries in `scope`
   let code-to-display = crudo.join(
-    main: 1,
+    main: -1,
     crudo.map(
       ```typ
       #import "@preview/NAME:VERSION": grading, task, solution, task-kinds
