@@ -20,7 +20,7 @@
   margin: (x: 1.5cm, y: 2cm, top: 4cm),
   header-ascent: 20%,
   // header: locate(loc => {
-  //   if (calc.odd(loc.page())) {
+  //   if calc.odd(loc.page()) {
   //   }
   // }),
   header: {
