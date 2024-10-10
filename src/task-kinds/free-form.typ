@@ -8,7 +8,7 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
-/// #free-form.plain(stroke: 0.5pt, pad(x: 0.5em, y: 1em)[
+/// #free-form.plain(stroke: 0.5pt, stretch: 200%, [
 ///   an answer
 /// ])
 /// Next question
@@ -16,18 +16,37 @@
 ///
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the region where an answer can be written
+/// - stretch (ratio): the amount by which the height of the answer region should be stretched
+///     relative to the required height of the provided solution. Can only be set to a value other
+///     than 100% if `height == auto`.
 /// - stroke (none, stroke): the stroke of the box to draw around the answer area
 /// -> content
-#let plain(answer, height: auto, stroke: none) = context {
+#let plain(answer, height: auto, stretch: 100%, stroke: none) = layout(((width,)) => {
   import "../solution.typ"
+  let (answer, height) = (answer, height)
 
-  let answer = answer
+  assert(
+    height == auto or stretch == 100%,
+    message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
+  )
+
   if (not solution.get()) {
     answer = hide(answer)
   }
 
-  block(height: height, width: 100%, stroke: stroke, answer)
-}
+  let answer-block = block.with(
+    width: 100%,
+    outset: (x: 0.3em, y: 0.4em),
+    inset: (y: 0.3em),
+    stroke: stroke,
+    align(horizon, answer),
+  )
+
+  if stretch != 100% {
+    height = measure(answer-block(width: width)).height * stretch
+  }
+  answer-block(height: height)
+})
 
 /// An answer to a free form question. If the document is not in solution mode, the answer is hidden
 /// but the height of the element is preserved.
@@ -44,54 +63,81 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
-/// #free-form.lines(line-height: 1cm)[this answer takes \ more than one line]
+/// #free-form.lines(count: 150%, stretch: 200%)[
+///   this answer takes \ more than one line
+/// ]
 /// Next question
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
-/// - count (auto, int): the number of lines to show; defaults to however many are needed for the
-///   answer
-/// - line-height (relative): the line height; defaults to what printed lines naturally take
+/// - count (auto, int, ratio): the number of lines to show; defaults to however many are needed for
+///   the answer. If given as a ratio, the `auto` line number is multiplied by that and rounded up.
+/// - line-height (auto, relative): the line height; defaults to what printed lines naturally take
+/// - stretch (ratio): the amount by which the line height should be stretched relative to the
+///     regular line height. Can only be set to a value other than 100% if `line-height == auto`.
+/// - stroke (none, stroke): the stroke of the lines to draw
 /// -> content
-#let lines(answer, count: auto, line-height: auto) = context {
+#let lines(answer, count: auto, line-height: auto, stretch: 100%, stroke: 0.5pt) = layout(((width,)) => {
   import "../solution.typ"
+  let (answer, count, line-height) = (answer, count, line-height)
 
-  // the height advance of one line
-  let line-advance = measure[a\ a].height - measure[a].height
+  assert(
+    line-height == auto or stretch == 100%,
+    message: "a `stretch` value other than 100% is only allowed if `line-height == auto`.",
+  )
 
-  // if line-height is manually set, increase the leading by the discrepancy
-  set par(leading: par.leading + line-height - line-advance) if line-height != auto
-  // if line-height is not set, use the advance
-  let line-height = line-height
-  if line-height == auto {
-    line-height = line-advance
+  if (not solution.get()) {
+    answer = hide(answer)
   }
 
-  // layout starts a new context block so now we can measure using the new leading
-  layout(((width,)) => {
-    let lines = if count != auto {
-      count
-    } else {
-      // measure the height, then divide by the line height; round up
-      calc.ceil(measure(block(width: width, answer)).height / line-height)
-    }
+  // transform lines to be of the right height, and adjust the line height variable if necessary
+  show: {
+    // the height advance of one line
+    let line-advance = measure[a\ a].height - measure[a].height
 
-    let answer = answer
-    if (not solution.get()) {
-      answer = hide(answer)
+    if line-height != auto {
+      // explicit line height; don't adjust the value but adjust the leading
+      body => {
+        set par(leading: par.leading + line-height - line-advance)
+        body
+      }
+    } else if stretch == 100% {
+      // implicit line height; adjust the value but not the leading
+      line-height = line-advance
+
+      body => body
+    } else {
+      // stretched line height; adjust the value and the leading
+      line-height = line-advance * stretch
+
+      body => {
+        set par(leading: par.leading + line-height - line-advance)
+        body
+      }
+    }
+  }
+
+  // start a new context block so we can measure using the new leading
+  context {
+    let count = count
+    if type(count) != int {
+      let multiplier = if count == auto { 1 } else  { count / 100% }
+      // measure the height, then divide by the line height; round up
+      count = calc.ceil(measure(block(width: width, answer)).height / line-height)
+      count = calc.ceil(count * multiplier)
     }
 
     block({
       v(-0.3em)
       _grid(
         columns: (1fr,),
-        rows: (line-height,) * lines,
-        stroke: (bottom: 0.5pt),
+        rows: (line-height,) * count,
+        stroke: (bottom: stroke),
       )
       place(top, answer, dy: par.leading / 2)
     })
-  })
-}
+  }
+})
 
 /// An answer to a free form question. If the document is not in solution mode, the answer is hidden
 /// but the height of the element is preserved.
@@ -103,43 +149,49 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Draw a circle.
-/// #free-form.grid(height: 20mm, {
-///   place(dx: 15mm, dy: 5mm, circle(radius: 5mm))
+/// #free-form.grid(stretch: 125%, {
+///   pad(left: 15mm, y: 5mm, circle(radius: 5mm))
 /// })
 /// Next question
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the grid region
+/// - stretch (ratio): the amount by which the height of the answer region should be stretched
+///     relative to the required height of the provided solution. Can only be set to a value other
+///     than 100% if `height == auto`.
 /// - size (relative, dictionary): grid size, or a dictionary containing `width` and `height`
+/// - stroke (none, stroke): the stroke of the grid to draw
 /// -> content
-#let grid(answer, height: auto, size: 5mm) = layout(((width,)) => {
+#let grid(answer, height: auto, stretch: 100%, size: 5mm, stroke: 0.5pt+gray) = layout(((width,)) => {
   import "../solution.typ"
+  let (answer, height, size) = (answer, height, size)
 
-  let size = if type(size) == dictionary {
-    size
-  } else {
-    (width: size, height: size)
+  assert(
+    height == auto or stretch == 100%,
+    message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
+  )
+
+  if (not solution.get()) {
+    answer = hide(answer)
   }
 
-  let height = height
+  if type(size) != dictionary {
+    size = (width: size, height: size)
+  }
+
   if height == auto {
-    height = measure(block(width: width, answer)).height
+    height = measure(block(width: width, answer)).height * stretch
   }
 
   let columns = calc.floor(width / size.width)
   let rows = calc.ceil(height / size.height)
 
-  let answer = answer
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
-
   block({
     _grid(
       columns: (size.width,) * columns,
       rows: (size.height,) * rows,
-      stroke: 0.5pt+gray,
+      stroke: stroke,
     )
     place(top, answer)
   })

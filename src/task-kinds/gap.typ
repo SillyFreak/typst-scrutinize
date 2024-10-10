@@ -8,34 +8,51 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds.gap: gap
 /// #set par(leading: 1em)
-/// This is a #gap(width: 2cm)[difficult] question \
-/// and it has #gap(width: 1.2cm, stroke: "box")[two] lines.
+/// This is a #gap(stretch: 200%)[difficult] question \
+/// and it has #gap(width: 1cm, stroke: "box")[two] lines.
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
 /// - width (auto, relative): the width of the region where an answer can be written
+/// - stretch (ratio): the amount by which the width of the answer region should be stretched
+///     relative to the required width of the provided solution. Can only be set to a value other
+///     than 100% if `width == auto`.
 /// - stroke (none, string, stroke): the stroke with which to mark the answer area. The special
 ///   values `"underline"` or `"box"` may be given to draw one or four border lines with a default
 ///   stroke.
 /// -> content
-#let gap(answer, width: auto, stroke: "underline") = context {
+#let gap(answer, width: auto, stretch: 100%, stroke: "underline") = context {
   import "../solution.typ"
+  let (answer, width, stroke) = (answer, width, stroke)
 
-  let stroke = stroke
+  assert(
+    width == auto or stretch == 100%,
+    message: "a `stretch` value other than 100% is only allowed if `width == auto`.",
+  )
   assert(
     type(stroke) != str or stroke in ("underline", "box"),
     message: "for string values, only \"underline\" or \"box\" are allowed",
   )
+
+  if (not solution.get()) {
+    answer = hide(answer)
+  }
+
   if stroke == "underline" {
     stroke = (bottom: 0.5pt)
   } else if stroke == "box" {
     stroke = 0.5pt
   }
 
-  let answer = answer
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
+  let answer-box = box.with(
+    stroke: stroke,
+    outset: (y: 0.4em),
+    inset: (x: 0.4em),
+    align(center, answer),
+  )
 
-  box(width: width, stroke: stroke, outset: (y: 0.4em), align(center, answer))
+  if stretch != 100% {
+    width = measure(answer-box()).width * stretch
+  }
+  answer-box(width: width)
 }
