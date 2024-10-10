@@ -17,8 +17,8 @@
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the region where an answer can be written
 /// - stretch (ratio): the amount by which the height of the answer region should be stretched
-///     relative to the required height of the provided solution. Can only be set to a value other
-///     than 100% if `height == auto`.
+///   relative to the required height of the provided solution. Can only be set to a value other
+///   than 100% if `height == auto`.
 /// - stroke (none, stroke): the stroke of the box to draw around the answer area
 /// -> content
 #let plain(answer, height: auto, stretch: 100%, stroke: none) = layout(((width,)) => {
@@ -72,7 +72,7 @@
 ///   the answer. If given as a ratio, the `auto` line number is multiplied by that and rounded up.
 /// - line-height (auto, relative): the line height; defaults to what printed lines naturally take
 /// - stretch (ratio): the amount by which the line height should be stretched relative to the
-///     regular line height. Can only be set to a value other than 100% if `line-height == auto`.
+///   regular line height. Can only be set to a value other than 100% if `line-height == auto`.
 /// - stroke (none, stroke): the stroke of the lines to draw
 /// -> content
 #let lines(answer, count: auto, line-height: auto, stretch: 100%, stroke: 0.5pt) = layout(((width,)) => {
@@ -154,8 +154,8 @@
 /// - answer (content): the answer to (maybe) display
 /// - height (auto, relative): the height of the grid region
 /// - stretch (ratio): the amount by which the height of the answer region should be stretched
-///     relative to the required height of the provided solution. Can only be set to a value other
-///     than 100% if `height == auto`.
+///   relative to the required height of the provided solution. Can only be set to a value other
+///   than 100% if `height == auto`.
 /// - size (relative, dictionary): grid size, or a dictionary containing `width` and `height`
 /// - stroke (none, stroke): the stroke of the grid to draw
 /// -> content

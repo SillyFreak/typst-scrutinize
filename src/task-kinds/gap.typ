@@ -1,7 +1,7 @@
 #let _grid = grid
 
 /// An answer filled in a gap in a text. If the document is not in solution mode, the answer is
-/// hidden but the height of the element is preserved.
+/// hidden but the width of the element is preserved.
 ///
 /// Example:
 ///
@@ -15,8 +15,8 @@
 /// - answer (content): the answer to (maybe) display
 /// - width (auto, relative): the width of the region where an answer can be written
 /// - stretch (ratio): the amount by which the width of the answer region should be stretched
-///     relative to the required width of the provided solution. Can only be set to a value other
-///     than 100% if `width == auto`.
+///   relative to the required width of the provided solution. Can only be set to a value other
+///   than 100% if `width == auto`.
 /// - stroke (none, string, stroke): the stroke with which to mark the answer area. The special
 ///   values `"underline"` or `"box"` may be given to draw one or four border lines with a default
 ///   stroke.
