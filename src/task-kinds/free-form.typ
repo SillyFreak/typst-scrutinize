@@ -8,20 +8,28 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
-/// #free-form.plain(stroke: 0.5pt, stretch: 200%, [
+/// #free-form.plain(placeholder: [...], stroke: 0.5pt, stretch: 200%)[
 ///   an answer
-/// ])
+/// ]
 /// Next question
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
+/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
+///   layout of exam and solution to match, this needs to have the same height as the answer.
 /// - height (auto, relative): the height of the region where an answer can be written
 /// - stretch (ratio): the amount by which the height of the answer region should be stretched
 ///   relative to the required height of the provided solution. Can only be set to a value other
 ///   than 100% if `height == auto`.
 /// - stroke (none, stroke): the stroke of the box to draw around the answer area
 /// -> content
-#let plain(answer, height: auto, stretch: 100%, stroke: none) = layout(((width,)) => {
+#let plain(
+  answer,
+  placeholder: auto,
+  height: auto,
+  stretch: 100%,
+  stroke: none,
+) = layout(((width,)) => {
   import "../solution.typ"
   let (answer, height) = (answer, height)
 
@@ -30,7 +38,7 @@
     message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
   )
 
-  answer = solution.answer(answer)
+  answer = solution.answer(answer, placeholder: placeholder)
 
   let answer-block = block.with(
     width: 100%,
@@ -61,13 +69,15 @@
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
 /// Write an answer.
-/// #free-form.lines(count: 150%, stretch: 200%)[
+/// #free-form.lines(placeholder: [...\ ...], count: 150%, stretch: 200%)[
 ///   this answer takes \ more than one line
 /// ]
 /// Next question
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
+/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
+///   layout of exam and solution to match, this needs to have the same height as the answer.
 /// - count (auto, int, ratio): the number of lines to show; defaults to however many are needed for
 ///   the answer. If given as a ratio, the `auto` line number is multiplied by that and rounded up.
 /// - line-height (auto, relative): the line height; defaults to what printed lines naturally take
@@ -75,7 +85,14 @@
 ///   regular line height. Can only be set to a value other than 100% if `line-height == auto`.
 /// - stroke (none, stroke): the stroke of the lines to draw
 /// -> content
-#let lines(answer, count: auto, line-height: auto, stretch: 100%, stroke: 0.5pt) = layout(((width,)) => {
+#let lines(
+  answer,
+  placeholder: auto,
+  count: auto,
+  line-height: auto,
+  stretch: 100%,
+  stroke: 0.5pt,
+) = layout(((width,)) => {
   import "../solution.typ"
   let (answer, count, line-height) = (answer, count, line-height)
 
@@ -84,7 +101,7 @@
     message: "a `stretch` value other than 100% is only allowed if `line-height == auto`.",
   )
 
-  answer = solution.answer(answer)
+  answer = solution.answer(answer, placeholder: placeholder)
 
   // transform lines to be of the right height, and adjust the line height variable if necessary
   show: {
@@ -144,14 +161,19 @@
 ///
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
-/// Draw a circle.
+/// Draw a circle with the given diameter.
 /// #free-form.grid(stretch: 125%, {
-///   pad(left: 15mm, y: 5mm, circle(radius: 5mm))
+///   pad(left: 20mm, y: 5mm, line(end: (0mm, 10mm), stroke: green))
+///   place(top, pad(left: 15mm, y: 5mm, circle(radius: 5mm)))
+/// }, placeholder: {
+///   pad(left: 20mm, y: 5mm, line(end: (0mm, 10mm), stroke: green))
 /// })
 /// Next question
 /// ```)
 ///
 /// - answer (content): the answer to (maybe) display
+/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
+///   layout of exam and solution to match, this needs to have the same height as the answer.
 /// - height (auto, relative): the height of the grid region
 /// - stretch (ratio): the amount by which the height of the answer region should be stretched
 ///   relative to the required height of the provided solution. Can only be set to a value other
@@ -159,7 +181,14 @@
 /// - size (relative, dictionary): grid size, or a dictionary containing `width` and `height`
 /// - stroke (none, stroke): the stroke of the grid to draw
 /// -> content
-#let grid(answer, height: auto, stretch: 100%, size: 5mm, stroke: 0.5pt+gray) = layout(((width,)) => {
+#let grid(
+  answer,
+  placeholder: auto,
+  height: auto,
+  stretch: 100%,
+  size: 5mm,
+  stroke: 0.5pt+gray,
+) = layout(((width,)) => {
   import "../solution.typ"
   let (answer, height, size) = (answer, height, size)
 
@@ -168,7 +197,7 @@
     message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
   )
 
-  answer = solution.answer(answer)
+  answer = solution.answer(answer, placeholder: placeholder)
 
   if type(size) != dictionary {
     size = (width: size, height: size)
