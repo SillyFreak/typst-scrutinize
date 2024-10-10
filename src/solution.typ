@@ -18,15 +18,18 @@
 /// -> boolean
 #let get() = _state.get()
 
-/// Wraps an answer by concealing it using
-/// #link("https://typst.app/docs/reference/layout/hide/")[`hide()`]
-/// if @@get() returns false; otherwise, the answer is returned as-is.
+/// Puts an answer into the document if @@get() returns true. Otherwise, the answer is either
+/// concealed by using #link("https://typst.app/docs/reference/layout/hide/")[`hide()`], or replaced
+/// with the given placeholder.
 ///
 /// - answer (content): the answer to maybe hide
+/// - placeholder (auto, content): the placeholder to display instead of hiding the answer
 /// -> content
-#let answer(answer) = {
+#let answer(answer, placeholder: auto) = {
   if get() {
     answer
+  } else if placeholder != auto {
+    placeholder
   } else {
     hide(answer)
   }

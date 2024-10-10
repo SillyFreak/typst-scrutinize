@@ -15,7 +15,10 @@
   box(height: 0.65em, {
     show: move.with(dy: -0.1em)
     set text(1.5em)
-    if (solution.get() and correct) { sym.ballot.x } else { sym.ballot }
+    solution.answer(
+      if correct { sym.ballot.x } else { sym.ballot },
+      placeholder: sym.ballot,
+    )
   })
 }
 
