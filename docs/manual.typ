@@ -110,7 +110,7 @@ After importing the library's modules and aliasing an important function, we sim
 
 A lot of scrutinize's features revolve around using that metadata, and we'll soon see how. A task's metadata is a dictionary with the following fields:
 
-- `data`: he explicitly given metadata of the task, such as ```typc (points: 2)```.
+- `data`: the explicitly given metadata of the task, such as ```typc (points: 2)```.
 - `heading`: the heading that identifies the task, such as ```typ = Task```.
 - `subtasks`: an array of nested tasks, identified by nested headings. When getting task metadata, you can limit the depth; this is only present as long as the depth is not exceeded.
 
@@ -136,7 +136,7 @@ Here we're using the #ref-fn("task.current()") function to access the metadata o
 
 Often, exams have not just multiple tasks, but those tasks are made up of several subtasks. Scrutinize supports this, and reuses Typst's heading hierarchy for subtask hierarchy.
 
-Let's say some task's points come from its subtasks points. This could be achieved like this:
+Let's say some task's points come from its subtasks' points. This could be achieved like this:
 
 #example(lines: "5-", ```typ
 // you usually want to alias this, as you'll need it often
@@ -163,13 +163,13 @@ Let's say some task's points come from its subtasks points. This could be achiev
 #lorem(20)
 ```)
 
-In this example #ref-fn("task.current()") is used in conjunction with #ref-fn("grading.total-points()"), which recursively adds all points of a list of tasks and its subtasks. More about this function will be said in the next section, and of course in the function's reference.
+In this example, #ref-fn("task.current()") is used in conjunction with #ref-fn("grading.total-points()"), which recursively adds all points of a list of tasks and its subtasks. More about this function will be said in the next section, and of course in the function's reference.
 
 #pagebreak(weak: true)
 
 = Grading
 
-The next puzzle piece is grading. There are many different possibilities to grade an exam; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each task gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply use less of the related features.
+The next puzzle piece is grading. There are many different possibilities to grade an exam; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each task gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply ignore the related features.
 
 The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
 
@@ -233,7 +233,7 @@ Once we have the total points of the exam figured out, we need to define the gra
 
 Obviously we would not want to render this representation as-is, but #ref-fn("grading.grades()") gives us a convenient way to have all the necessary information, without assuming things like inclusive or exclusive point ranges. The `test.typ` example in the gallery has a more complete demonstration of a grading key.
 
-One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
+One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges; they're simply passed through. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
 
 #example(lines: "3-", ```typ
 #let total = 8
@@ -251,7 +251,7 @@ One thing to note is that #ref-fn("grading.grades()") does not process the limit
 With the test structure out of the way, the next step is to actually define tasks. There are endless ways of posing tasks, but some recurring formats come up regularly.
 
 #pad(x: 5%)[
-  _Note:_ customizing the styles is currently very limited/not possible. I would be interested in changing this, so if you have ideas on how to achieve this, contact me and/or open a pull request. Until then, feel free to "customize using copy/paste".
+  _Note:_ customizing the styles is currently very limited/not possible. I would be interested in changing this, so if you have ideas on how to achieve this, contact me and/or open a pull request. Until then, feel free to "customize using copy/paste". The MIT license allows you to do this.
 ]
 
 Tasks have a desired response, and producing sample solutions can be made very convenient if they are stored with the task right away. To facilitate this, this package provides
@@ -260,9 +260,9 @@ Tasks have a desired response, and producing sample solutions can be made very c
 - #ref-fn("solution.answer()"): this function uses the solution state to conditionally hide the provided answer.
 - #ref-fn("solution.with()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
 
-Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #solution.get()``` or ```typ #solution.answer()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
+Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default). Within context expressions, a task can use ```typ #solution.get()``` or ```typ #solution.answer()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
 
-Let's look at a free text question as a simple example:
+Let's look at a free form question as a simple example:
 
 == Free form questions
 
@@ -280,7 +280,59 @@ Write an answer.
 Next question
 ```)
 
-Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("free-form.plain()"). The content of the answer is of course not limited to text.
+Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("free-form.plain()").
+
+The content of the answer is of course not limited to text; for example, the task could be to complete a diagram. The `placeholder` parameter is particularly useful for that, and the `stretch` parameter can be used to give students more space to write their solution than a printed version woudl take:
+
+#task-example(lines: "8-", ```typ
+#import task-kinds: free-form
+
+// toggle the following comment or pass `--input solution=true`
+// to produce a sample solution
+// #solution.update(true)
+
+Connect the nodes.
+#free-form.plain(stretch: 200%, {
+  stack(dir: ltr, spacing: 1cm, circle(radius: 3mm), circle(radius: 3mm))
+  place(horizon, dx: 6mm, line(length: 1cm))
+}, placeholder: {
+  stack(dir: ltr, spacing: 1cm, circle(radius: 3mm), circle(radius: 3mm))
+})
+Next question
+```)
+
+There are also variations of the free-form question that use pre-printed lines or grids:
+
+#task-example(lines: "8-", ```typ
+#import task-kinds: free-form
+
+// toggle the following comment or pass `--input solution=true`
+// to produce a sample solution
+// #solution.update(true)
+
+Do something here.
+#grid(
+  columns: (1fr, 1fr),
+  column-gutter: 0.5em,
+  // 180% line height, 200% line count
+  free-form.lines(stretch: 180%, count: 200%, lorem(5)),
+  // solution needs four grid lines, six are printed
+  free-form.grid(stretch: 133%, pad(5mm, line(end: (10mm, 10mm)))),
+)
+Next question
+```)
+
+== fill-in-the-gap questions
+
+Related to free form questions are questions where the answer goes into a gap in the text. See #ref-fn("gap.gap()") for details.
+
+#task-example(```typ
+#import task-kinds.gap: gap
+
+This question is #gap(stretch: 180%)[easy].
+
+$ sin(0) = #gap(stroke: "box")[$0$] $
+```)
 
 == single and multiple choice questions
 
