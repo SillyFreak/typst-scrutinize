@@ -16,7 +16,13 @@
     show: move.with(dy: -0.1em)
     set text(1.5em)
     solution.answer(
-      if correct { sym.ballot.x } else { sym.ballot },
+      if not correct {
+        sym.ballot
+      } else if sys.version < version(0, 12, 0) {
+        sym.ballot.x
+      } else {
+        sym.ballot.cross
+      },
       placeholder: sym.ballot,
     )
   })
