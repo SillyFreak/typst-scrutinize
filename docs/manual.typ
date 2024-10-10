@@ -257,9 +257,10 @@ With the test structure out of the way, the next step is to actually define task
 Tasks have a desired response, and producing sample solutions can be made very convenient if they are stored with the task right away. To facilitate this, this package provides
 
 - #ref-fn("solution._state"): this boolean state controls whether solutions are currently shown in the document. Some methods have convenience functions on the module level to make accessing them easier: #ref-fn("solution.get()"), #ref-fn("solution.update()").
+- #ref-fn("solution.answer()"): this function uses the solution state to conditionally hide the provided answer.
 - #ref-fn("solution.with()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
 
-Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #solution.get()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
+Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default), or by regular state updates. Within context expressions, a question can use ```typ #solution.get()``` or ```typ #solution.answer()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
 
 Let's look at a free text question as a simple example:
 

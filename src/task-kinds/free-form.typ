@@ -30,9 +30,7 @@
     message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
   )
 
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
+  answer = solution.answer(answer)
 
   let answer-block = block.with(
     width: 100%,
@@ -86,9 +84,7 @@
     message: "a `stretch` value other than 100% is only allowed if `line-height == auto`.",
   )
 
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
+  answer = solution.answer(answer)
 
   // transform lines to be of the right height, and adjust the line height variable if necessary
   show: {
@@ -172,9 +168,7 @@
     message: "a `stretch` value other than 100% is only allowed if `height == auto`.",
   )
 
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
+  answer = solution.answer(answer)
 
   if type(size) != dictionary {
     size = (width: size, height: size)

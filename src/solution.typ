@@ -18,6 +18,20 @@
 /// -> boolean
 #let get() = _state.get()
 
+/// Wraps an answer by concealing it using
+/// #link("https://typst.app/docs/reference/layout/hide/")[`hide()`]
+/// if @@get() returns false; otherwise, the answer is returned as-is.
+///
+/// - answer (content): the answer to maybe hide
+/// -> content
+#let answer(answer) = {
+  if get() {
+    answer
+  } else {
+    hide(answer)
+  }
+}
+
 /// A direct wrapper around
 /// #link("https://typst.app/docs/reference/introspection/state/#definitions-update")[`state.update()`]
 /// for the solution state @@_state.

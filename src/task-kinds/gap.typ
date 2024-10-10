@@ -34,9 +34,7 @@
     message: "for string values, only \"underline\" or \"box\" are allowed",
   )
 
-  if (not solution.get()) {
-    answer = hide(answer)
-  }
+  answer = solution.answer(answer)
 
   if stroke == "underline" {
     stroke = (bottom: 0.5pt)
