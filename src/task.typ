@@ -247,7 +247,7 @@
 /// }
 ///
 /// - level (int): the level of heading to look up
-/// - depth (int): the depth to which to also fetch subtasks
+/// - depth (int, auto): the depth to which to also fetch subtasks
 /// - from (location, auto, none): the location at which to start looking;
 ///   `auto` means start of the enclosing @@scope(), `none` means start of the document
 /// - to (location, auto, none): the location at which to stop looking;
