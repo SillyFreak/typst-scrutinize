@@ -50,7 +50,7 @@
   [#metadata((: ..args.named())) #_label]
 }
 
-#let _extract-tasks(tasks-headings, level, depth, top-level: false) = {
+#let _extract-tasks(tasks-headings, level, depth, top-level: false, flatten: false) = {
   let tasks = ()
   if depth == 0 { return tasks }
 
@@ -80,11 +80,21 @@
       }
     }
 
-    if new-depth != 0 {
-      task.subtasks = _extract-tasks(tasks-headings.slice(i + 1), level + 1, new-depth)
+    if new-depth == 0 {
+      // the task is complete, push it
+      tasks.push(task)
+    } else {
+      let subtasks = _extract-tasks(tasks-headings.slice(i + 1), level + 1, new-depth)
+      if flatten {
+        // push the task and its subtasks separately
+        tasks.push(task)
+        tasks += subtasks
+      } else {
+        // push the task after adding the subtasks
+        task.subtasks = subtasks
+        tasks.push(task)
+      }
     }
-
-    tasks.push(task)
   }
 
   tasks
@@ -153,7 +163,7 @@
 /// }
 ///
 /// - level (int): the level of heading to look up
-/// - depth (int): the depth to which to also fetch subtasks
+/// - depth (int, auto): the depth to which to also fetch subtasks
 /// - from (location, auto, none): the location at which to start looking;
 ///   `auto` means start of the enclosing @@scope(), `none` means start of the document
 /// - to (location, auto, none): the location at which to stop looking;
@@ -191,7 +201,9 @@
 
 /// Locates all tasks in the document (or scope, or region of the document), which can then be used
 /// to create grading keys etc. The return value is an array with elements as described in
-/// @@current().
+/// @@current(), except: if `flatten` is true, there will never be subtasks and instead subtasks
+/// down to the specified depth will follow their parent. Note that even then, nesting information
+/// is present through `heading.level`.
 ///
 /// Headings of the specified `level` are treated as top-level tasks; any higher level headings,
 /// even if they have an associated @@t(), are ignored.
@@ -239,9 +251,32 @@
 ///     ]
 ///     == Part 1
 ///     === A #t(points: 2)
-///     === B #t(points: 3)
 ///     == Part 2
-///     === C #t(points: 1)
+///     === B #t(points: 3)
+///     ```
+///   )
+/// }
+///
+/// #{
+///   import task: t
+///   set heading(numbering: none, outlined: false)
+///   show: task.scope
+///   example(
+///     mode: "markup",
+///     ratio: 1.8,
+///     scale-preview: 100%,
+///     scope: (t: t),
+///     ```typ
+///     #context [
+///       #let tasks = task.all(level: 2, depth: auto,
+///           flatten: true)
+///       Number of tasks & subtasks: #tasks.len()
+///     ]
+///     == A
+///     === A1 #t(points: 2)
+///     === A1 #t(points: 3)
+///     == B
+///     === B1 #t(points: 1)
 ///     ```
 ///   )
 /// }
@@ -253,8 +288,9 @@
 /// - to (location, auto, none): the location at which to stop looking;
 ///   `auto` means end of the enclosing @@scope(), `none` means end of the document
 /// - loc (location, auto): the location at which to look; `auto` means `here()`
+/// - flatten (boolean): whether to flatten subtasks
 /// -> array
-#let all(level: 1, depth: 1, from: auto, to: auto, loc: auto) = {
+#let all(level: 1, depth: 1, from: auto, to: auto, loc: auto, flatten: true) = {
   import "utils/scope.typ": enclosing
 
   let (from, to, loc) = (from, to, loc)
@@ -275,5 +311,5 @@
 
   let tasks-headings = query(sel)
 
-  _extract-tasks(tasks-headings, level, depth, top-level: true)
+  _extract-tasks(tasks-headings, level, depth, top-level: true, flatten: flatten)
 }
