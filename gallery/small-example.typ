@@ -12,8 +12,7 @@
 #set table(stroke: 0.5pt)
 
 #context {
-  // There is a level 1 heading before the actual exam questions; ignore that
-  let ts = task.all(from: <begin-exam>)
+  let ts = task.all()
   let total = grading.total-points(ts)
 
   [The candidate achieved #h(3em) out of #total points.]
@@ -32,8 +31,6 @@
     )
   ]
 ]
-
-#metadata(none) <begin-exam>
 
 #show heading: it => [
   #it.body #h(1fr) / #task.current().data.points

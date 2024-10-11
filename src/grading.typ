@@ -10,7 +10,9 @@
   tasks.map(t => {
     let points = 0
     if filter == none or filter(t) {
-      points += t.at("data", default: (:)).at(field, default: 0)
+      if t.data != none {
+        points += t.data.at(field, default: 0)
+      }
       points += total-points(t.at("subtasks", default: ()))
     }
     points
