@@ -1,21 +1,15 @@
-/// Takes an array of task metadata and returns the sum of their points, recursivly including
-/// subtasks. Tasks without points count as zero points.
+/// Takes an array of _flattened_ task metadata and returns the sum of their points. Tasks without points count as zero points.
 ///
-/// - tasks (array): an array of task metadata dictionaries
-/// - filter (function): an optional filter function for determining which tasks to sum up. Subtasks
-///   of tasks that didn't match are ignored.
+/// - tasks (array): a flat array of task metadata dictionaries
 /// - field (string): the field in the metadata over which to calculate the sum
 /// -> integer, float
-#let total-points(tasks, filter: none, field: "points") = {
+#let total-points(tasks, field: "points") = {
   tasks.map(t => {
-    let points = 0
-    if filter == none or filter(t) {
-      if t.data != none {
-        points += t.data.at(field, default: 0)
-      }
-      points += total-points(t.at("subtasks", default: ()))
+    if t.data != none {
+      t.data.at(field, default: 0)
+    } else {
+      0
     }
-    points
   }).sum(default: 0)
 }
 

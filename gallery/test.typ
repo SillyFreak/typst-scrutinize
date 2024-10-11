@@ -18,10 +18,9 @@
 
 // for grading, we need to consider all questions
 #context {
-  let ts = task.all()
+  let ts = task.all(flatten: true)
   let total = grading.total-points(ts)
-  // the total-points function can also accept a filter function
-  let hard = grading.total-points(ts, filter: t => t.data.points >= 5)
+  let hard = grading.total-points(ts.filter(t => t.data.points >= 5))
 
   // create a grading key
   let grades = grading.grades([bad], total * 2/4, [okay], total * 3/4, [good])

@@ -171,7 +171,7 @@ In this example, #ref-fn("task.current()") is used in conjunction with #ref-fn("
 
 The next puzzle piece is grading. There are many different possibilities to grade an exam; Scrutinize tries not to be tied to specific grading strategies, but it does assume that each task gets assigned points and that the grade results from looking at some kinds of sums of these points. If your test does not fit that schema, you can simply ignore the related features.
 
-The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") to get access to the task metadata distributed throughout the document:
+The first step in creating a typical grading scheme is determining how many points can be achieved in total, using #ref-fn("grading.total-points()"). We also need to use #ref-fn("task.all()") (with the `flatten` parameter) to get access to the task metadata distributed throughout the document:
 
 #example(lines: "12-", ```typ
 // you usually want to alias this, as you'll need it often
@@ -185,9 +185,9 @@ The first step in creating a typical grading scheme is determining how many poin
 }
 
 #context [
-  #let ts = task.all()
+  #let ts = task.all(flatten: true)
   #let total = grading.total-points(ts)
-  #let hard = grading.total-points(ts, filter: t => t.data.points >= 5)
+  #let hard = grading.total-points(ts.filter(t => t.data.points >= 5))
   Total points: #total \ Points from hard tasks: #hard
 ]
 
@@ -214,7 +214,7 @@ Once we have the total points of the exam figured out, we need to define the gra
 }
 
 #context [
-  #let total = grading.total-points(task.all())
+  #let total = grading.total-points(task.all(flatten: true))
   #grading.grades(
     [bad],
     total * 2/4, [okay],

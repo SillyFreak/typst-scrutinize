@@ -12,7 +12,7 @@
 #set table(stroke: 0.5pt)
 
 #context {
-  let ts = task.all()
+  let ts = task.all(flatten: true)
   let total = grading.total-points(ts)
 
   [The candidate achieved #h(3em) out of #total points.]

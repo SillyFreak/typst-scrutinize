@@ -68,11 +68,10 @@
   set text(size: 10pt)
 
   let points(category, extended) = {
-    grading.total-points(ts, filter: t => {
+    grading.total-points(ts.filter(t => {
       t.data.category == category and t.data.at("extended", default: false) == extended
-    })
+    }))
   }
-  let category-points(category) = grading.total-points(ts, filter: t => t.data.category == category)
 
   let categories = categories.map((category) => {
     let gk = points(category.id, false)
