@@ -161,12 +161,12 @@
 ///
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: free-form
-/// Draw a circle with the given diameter.
+/// Draw a circle with the given center.
 /// #free-form.grid(stretch: 125%, {
-///   pad(left: 20mm, y: 5mm, line(end: (0mm, 10mm), stroke: green))
-///   place(top, pad(left: 15mm, y: 5mm, circle(radius: 5mm)))
+///   place(dx: 19.7mm, dy: 9.7mm, circle(radius: 0.3mm))
+///   pad(left: 15mm, y: 5mm, circle(radius: 5mm))
 /// }, placeholder: {
-///   pad(left: 20mm, y: 5mm, line(end: (0mm, 10mm), stroke: green))
+///   place(dx: 19.7mm, dy: 9.7mm, circle(radius: 0.3mm))
 /// })
 /// Next question
 /// ```)

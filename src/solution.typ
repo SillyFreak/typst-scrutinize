@@ -18,20 +18,42 @@
 /// -> boolean
 #let get() = _state.get()
 
-/// Puts an answer into the document if @@get() returns true. Otherwise, the answer is either
-/// concealed by using #link("https://typst.app/docs/reference/layout/hide/")[`hide()`], or replaced
-/// with the given placeholder.
+/// Puts an answer into the document if @@get() returns true, otherwise the answer is concealed by
+/// using #link("https://typst.app/docs/reference/layout/hide/")[`hide()`]. Optionally, a
+/// placeholder is displayed in the hidden answer's place. The placeholder should normally take less
+/// space than the actual answer and will not influence the layout.
+///
+/// #task-example(lines: "2-", ```typ
+/// practice cursive writing:
+///
+/// #let letter = text(2em, $cal(L)$)
+/// #letter #context solution.answer(
+///   ((letter,) * 5).join[ ],
+///   placeholder: [
+///     #text(gray, letter) #text(gray.lighten(50%), letter) \
+///     oops, the placeholder is \ bigger than the answer!
+///   ],
+/// )
+///
+/// Next exercise
+/// ```)
 ///
 /// - answer (content): the answer to maybe hide
-/// - placeholder (auto, content): the placeholder to display instead of hiding the answer
+/// - placeholder (auto, content): the placeholder to display in place of the hidden answer
+/// - place-args (none, arguments): additional arguments to
+///   #link("https://typst.app/docs/reference/layout/place/")[`place()`], given as an `arguments`
+///   value, e.g. ```typc arguments(horizon, dx: 10pt)```
 /// -> content
-#let answer(answer, placeholder: auto) = {
+#let answer(answer, placeholder: auto, place-args: none) = {
   if get() {
     answer
-  } else if placeholder != auto {
-    placeholder
   } else {
-    hide(answer)
+    box({
+      if placeholder != auto {
+        place(..place-args, placeholder)
+      }
+      hide(answer)
+    })
   }
 }
 

@@ -42,7 +42,7 @@
     message: "for string values, only \"underline\" or \"box\" are allowed",
   )
 
-  answer = solution.answer(answer, placeholder: placeholder)
+  answer = solution.answer(answer, placeholder: placeholder, place-args: arguments(center))
 
   if stroke == "underline" {
     stroke = (bottom: 0.5pt)

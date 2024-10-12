@@ -282,7 +282,7 @@ Next question
 
 Left is the unanswered version, right the answered one. Note that the answer occupies the same space regardless of whether it is displayed or not, and that the height can also be overridden - see #ref-fn("free-form.plain()").
 
-The content of the answer is of course not limited to text; for example, the task could be to complete a diagram. The `placeholder` parameter is particularly useful for that, and the `stretch` parameter can be used to give students more space to write their solution than a printed version woudl take:
+The content of the answer is of course not limited to text; for example, the task could be to complete a diagram. The `placeholder` parameter is particularly useful for that, and the `stretch` parameter can be used to give students more space to write their solution than a printed version would take:
 
 #task-example(lines: "8-", ```typ
 #import task-kinds: free-form
