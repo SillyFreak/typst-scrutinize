@@ -10,7 +10,7 @@ default:
 doc:
 	typst compile docs/manual.typ docs/manual.pdf
 	for f in $(find gallery -maxdepth 1 -name '*.typ'); do typst c "$f"; done
-	for f in question-types small-example; do typst c --input solution=true "gallery/$f.typ" "gallery/$f-solved.pdf"; done
+	for f in question-types small-example gk-ek-austria; do typst c --input solution=true "gallery/$f.typ" "gallery/$f-solved.pdf"; done
 
 # run test suite
 test *args:

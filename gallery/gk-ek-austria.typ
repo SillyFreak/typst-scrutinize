@@ -11,8 +11,8 @@
 #set text(lang: "de")
 
 #let categories = (
-  (id: "mt", body: [Anwendungsentwicklung -- Multithreading]),
-  (id: "sock", body: [Anwendungsentwicklung -- Sockets]),
+  (id: "a", body: [Kompetenz A]),
+  (id: "b", body: [Kompetenz B]),
 )
 
 #set page(
@@ -42,34 +42,37 @@
   },
 )
 
+#let t-data(t) = (points: none, category: none, extended: false, ..t.data)
+
 #set table(stroke: 0.5pt)
+#set table.hline(stroke: 0.5pt)
+#set table.vline(stroke: 0.5pt)
 
 #show heading.where(level: 2): set heading(
   supplement: [Frage],
   numbering: (..nums) => numbering("1", ..nums.pos().slice(1)),
 )
 #show heading.where(level: 2): it => {
+  let t = t-data(task.current(level: 2))
+
   show: block
-  let t = task.current(level: 2).data
   [#it.supplement #counter(heading).display()]
-  if it.body != [] {
-    [: #it.body]
-  }
-  if t.points != none {
-    [#h(1fr) #none / #t.points P.]
-  }
-  if t.at("extended", default: false) {
-    [ EK]
-  }
+  if (it.body != []) [: #it.body]
+  if t.points != none or t.extended { h(1fr) }
+  if t.points != none [#solution.answer[#t.points] / #t.points P.]
+  if t.extended [ EK]
 }
 
 #context {
+  set text(size: 9pt)
+  set table(stroke: none)
+
   let ts = task.all(level: 2)
-  set text(size: 10pt)
 
   let points(category, extended) = {
     grading.total-points(ts.filter(t => {
-      t.data.category == category and t.data.at("extended", default: false) == extended
+      let t = t-data(t)
+      t.category == category and t.extended == extended
     }))
   }
 
@@ -103,121 +106,184 @@
     }
   })
 
-  [
-    = Punkte nach Kompetenzbereichen
+  let points(pts) = [#solution.answer[#pts] / #pts]
 
-    #table(
-      columns: (3fr, ..(1fr,) * 3),
-      align: (col, row) =>
-        if col == 0 { left + horizon }
-        else { right + horizon },
+  table(
+    columns: (2fr, ..(1fr,) * 3),
+    align: (x, y) => horizon + {
+      if y == 0 { center }
+      else if x == 0 { left }
+      else { right }
+    },
 
-      [*Kompetenzbereich*], [*Punkte GK*], [*Punkte EK*], [*Punkte Gesamt*],
-      ..for (id, body, gk, ek) in categories {
-        (body, [#none / #gk], [#none / #ek], [#none / #(gk + ek)])
-      },
-      [Gesamt], [], [], [#none / #total],
-    )
+    table.header(
+      [*Kompetenzbereich*], [*Grundkompetenz*], [*Erweiterte Kompetenz*], [*Gesamtpunkte*],
+    ),
+    table.hline(),
+    ..for (id, body, gk, ek) in categories {
+      (table.cell(align: left, body), points(gk), points(ek), points(gk + ek))
+    },
+    table.hline(),
+    [], [], [], points[#total],
+  )
 
-    = Notenschlüssel
+  [= Notenschlüssel]
 
-    #table(
-      columns: (auto, ..(1fr,) * grades.len()),
-      align: (col, row) =>
-        if col == 0 { left + horizon }
-        else { center + horizon },
+  table(
+    columns: (auto, ..(1fr,) * grades.len()),
+    align: (col, row) => horizon + {
+      if col == 0 { left }
+      else { center }
+    },
 
-      [Punkte:],
-      ..grades.map(g => g.range),
+    [Punkte:],
+    ..grades.map(g => g.range),
 
-      [Note:],
-      ..grades.map(g => g.body),
-    )
-  ]
+    [Note:],
+    ..grades.map(g => g.body),
+  )
 }
 
-= Grundkompetenzen -- Theorieteil Multithreading
+= Grundkompetenzen -- Theorieteil A
 
-#lorem(50)
-
-==
-#t(category: "mt", points: 2)
 #lorem(40)
 
 ==
-#t(category: "mt", points: 2)
+#t(category: "a", points: 3)
+#lorem(30)
+
+#{
+  set text(1.4em)
+  let gaps = (
+    GAP1: "void",
+    GAP2: "String[]",
+  )
+
+  show regex(gaps.keys().join("|")): placeholder => {
+    let answer = gaps.at(placeholder.text)
+    task-kinds.gap.gap(raw(lang: "java", answer), stretch: 200%)
+  }
+
+  ```java
+  public static GAP1 main(GAP2 args) {
+      // ...
+  }
+  ```
+}
+
+= Grundkompetenzen -- Theorieteil B
+
 #lorem(40)
 
 ==
-#t(category: "mt", points: 2)
-#lorem(40)
+#t(category: "b", points: 3)
+#lorem(30)
+
+#task-kinds.free-form.lines(stretch: 180%, lorem(20))
 
 ==
-#t(category: "mt", points: 3)
-#lorem(40)
+#t(category: "b", points: 2)
+#lorem(30)
 
-= Grundkompetenzen -- Theorieteil Sockets
+#{
+  set align(center)
+  task-kinds.choice.multiple(
+    (
+      (lorem(3), true),
+      (lorem(5), true),
+      (lorem(4), false),
+    )
+  )
+}
 
-#lorem(50)
-
-==
-#t(category: "sock", points: 6)
-  #lorem(50)
-]
-
-==
-#t(category: "sock", points: 2)
-  #lorem(30)
-]
-
-= Grund- und erweiterte Kompetenzen -- Praktischer Teil Multithreading
+= Grund- und erweiterte Kompetenzen -- Praktischer Teil A
 
 #lorem(80)
 
 ==
-#t(category: "mt", points: 4)
-#lorem(40)
+#t(category: "a", points: 4)
+#lorem(30)
+
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "mt", points: 3)
-#lorem(40)
+#t(category: "a", points: 4)
+#lorem(30)
+
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "mt", points: 4)
-#lorem(40)
+#t(category: "a", points: 4)
+#lorem(30)
+
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "mt", points: 4)
+#t(category: "a", points: 5, extended: true)
 #lorem(40)
 
-==
-#t(category: "mt", points: 5, extended: true)
-#lorem(40)
+#{
+  import "@preview/fletcher:0.5.1" as fletcher: diagram, node, edge
 
-==
-#t(category: "mt", points: 3, extended: true)
-#lorem(40)
+  set align(center)
 
-= Grund- und erweiterte Kompetenzen -- Praktischer Teil Sockets
+  let automaton(solved) = {
+    show: pad.with(y: 1em)
+    diagram(
+      node-stroke: .5pt,
+      spacing: 3em,
+      {
+        let start = (-1, 0)
+        let a = (0, 0)
+        let b = (1, 0)
+        let c = (2, 0)
+        node(a, [a], radius: 1em)
+        node(b, [b], radius: 1em)
+        node(c, [c], radius: 1em, ..if solved { (extrude: (-4, 0)) })
+        edge(start, a, "-|>", label-pos: 0, label-side: center)
+
+        let stroke = if not solved { (stroke: white) }
+
+        edge(a, b, "-|>", ..stroke)
+        edge(b, c, "-|>", ..stroke)
+        edge(a, a, "--|>", ..stroke, bend: 130deg)
+        edge(a, c, "-|>", ..stroke, bend: -40deg)
+      }
+    )
+  }
+
+  task-kinds.free-form.plain(
+    automaton(true),
+    placeholder: automaton(false),
+  )
+}
+
+#pagebreak(weak: true)
+
+= Grund- und erweiterte Kompetenzen -- Praktischer Teil B
 
 #lorem(80)
 
 ==
-#t(category: "sock", points: 6)
+#t(category: "b", points: 6)
 #lorem(40)
 
-==
-#t(category: "sock", points: 4)
-#lorem(40)
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "sock", points: 6)
+#t(category: "b", points: 4)
 #lorem(40)
 
-==
-#t(category: "sock", points: 3, extended: true)
-#lorem(40)
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "sock", points: 5, extended: true)
+#t(category: "b", points: 3, extended: true)
 #lorem(40)
+
+#task-kinds.free-form.grid(stretch: 300%, lorem(20))
+
+==
+#t(category: "b", points: 2, extended: true)
+#lorem(40)
+
+#task-kinds.free-form.grid(stretch: 200%, lorem(20))
