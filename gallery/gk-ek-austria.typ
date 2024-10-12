@@ -6,14 +6,14 @@
 // make the PDF reproducible to ease version control
 #set document(date: none)
 
-#let title = "Praktische Leistungsfeststellung"
+#let title = "Exam"
 
 #set document(title: title)
 #set text(lang: "de")
 
 #let categories = (
-  (id: "a", body: [Kompetenz A]),
-  (id: "b", body: [Kompetenz B]),
+  (id: "a", body: [Topic A]),
+  (id: "b", body: [Topic B]),
 )
 
 #set page(
@@ -38,7 +38,7 @@
 
       [Name:],
       [],
-      [Datum: ],
+      [Date: ],
     )
   },
 )
@@ -50,7 +50,7 @@
 #set table.vline(stroke: 0.5pt)
 
 #show heading.where(level: 2): set heading(
-  supplement: [Frage],
+  supplement: [Task],
   numbering: (..nums) => numbering("1", ..nums.pos().slice(1)),
 )
 #show heading.where(level: 2): it => {
@@ -61,7 +61,7 @@
   if (it.body != []) [: #it.body]
   if t.points != none or t.extended { h(1fr) }
   if t.points != none [#solution.answer[#t.points] / #t.points P.]
-  if t.extended [ EK]
+  if t.extended [ (ext.)]
 }
 
 #context {
@@ -86,24 +86,24 @@
   let total = grading.total-points(ts)
 
   let grades = grading.grades(
-    [Nicht Genügend (5)],
-    4/8 * total,
-    [Genügend (4)],
-    5/8 * total,
-    [Befriedigend (3)],
-    6/8 * total,
-    [Gut (2)],
-    7/8 * total,
-    [Sehr Gut (1)],
+    [F],
+    0.6 * total,
+    [D],
+    0.7 * total,
+    [C],
+    0.8 * total,
+    [B],
+    0.9 * total,
+    [A],
   )
 
   let grades = grades.map(((body, lower-limit, upper-limit)) => {
     if lower-limit == none {
-      (body: body, range: [< #upper-limit P.])
+      (body: body, range: [< #(upper-limit - 0.5) P.])
     } else if upper-limit != none {
-      (body: body, range: [#(lower-limit + 0.5) - #upper-limit P.])
+      (body: body, range: [#lower-limit - #(upper-limit - 0.5) P.])
     } else {
-      (body: body, range: [#(lower-limit + 0.5) - #total P.])
+      (body: body, range: [#lower-limit - #total P.])
     }
   })
 
@@ -118,7 +118,7 @@
     },
 
     table.header(
-      [*Kompetenzbereich*], [*Grundkompetenz*], [*Erweiterte Kompetenz*], [*Gesamtpunkte*],
+      [*Topic*], [*Basic competency*], [*Extended competency*], [*Total*],
     ),
     table.hline(),
     ..for (id, body, gk, ek) in categories {
@@ -128,7 +128,7 @@
     [], [], [], points[#total],
   )
 
-  [= Notenschlüssel]
+  [= Grading key]
 
   table(
     columns: (auto, ..(1fr,) * grades.len()),
@@ -137,15 +137,15 @@
       else { center }
     },
 
-    [Punkte:],
+    [Points:],
     ..grades.map(g => g.range),
 
-    [Note:],
+    [Grade:],
     ..grades.map(g => g.body),
   )
 }
 
-= Grundkompetenzen -- Theorieteil A
+= Basic competencies -- theoretical part A
 
 #lorem(40)
 
@@ -172,12 +172,12 @@
   ```
 }
 
-= Grundkompetenzen -- Theorieteil B
+= Basic competencies -- theoretical part B
 
 #lorem(40)
 
-== Text schreiben
-#t(category: "b", points: 3)
+== Writing
+#t(category: "b", points: 4)
 #lorem(30)
 
 #free-form.lines(stretch: 180%, lorem(20))
@@ -195,7 +195,7 @@
   ))
 }
 
-= Grund- und erweiterte Kompetenzen -- Praktischer Teil A
+= Basic and extended competencies -- practical part A
 
 #lorem(80)
 
@@ -206,7 +206,7 @@
 #free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "a", points: 4)
+#t(category: "a", points: 5)
 #lorem(30)
 
 #free-form.grid(stretch: 200%, lorem(20))
@@ -217,8 +217,8 @@
 
 #free-form.grid(stretch: 200%, lorem(20))
 
-== Ein Diagramm fertigstellen, separate Punktekategorie
-#t(category: "a", points: 5, extended: true)
+== Complete a diagram, separate points category
+#t(category: "a", points: 4, extended: true)
 #lorem(40)
 
 #{
@@ -259,7 +259,7 @@
 
 #pagebreak(weak: true)
 
-= Grund- und erweiterte Kompetenzen -- Praktischer Teil B
+= Basic and extended competencies -- practical part B
 
 #lorem(80)
 
@@ -276,7 +276,7 @@
 #free-form.grid(stretch: 200%, lorem(20))
 
 ==
-#t(category: "b", points: 3, extended: true)
+#t(category: "b", points: 2, extended: true)
 #lorem(40)
 
 #free-form.grid(stretch: 300%, lorem(20))
