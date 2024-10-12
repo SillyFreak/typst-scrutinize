@@ -231,7 +231,7 @@ Once we have the total points of the exam figured out, we need to define the gra
 #lorem(20)
 ```)
 
-Obviously we would not want to render this representation as-is, but #ref-fn("grading.grades()") gives us a convenient way to have all the necessary information, without assuming things like inclusive or exclusive point ranges. The `test.typ` example in the gallery has a more complete demonstration of a grading key.
+Obviously we would not want to render this representation as-is, but #ref-fn("grading.grades()") gives us a convenient way to have all the necessary information, without assuming things like inclusive or exclusive point ranges. The example in the gallery has a more complete demonstration of a grading key.
 
 One thing to note is that #ref-fn("grading.grades()") does not process the limits of the grade ranges; they're simply passed through. If you prefer to ignore total points and instead show percentages, or want to use both, that is also possible:
 
@@ -258,7 +258,8 @@ Tasks have a desired response, and producing sample solutions can be made very c
 
 - #ref-fn("solution._state"): this boolean state controls whether solutions are currently shown in the document. Some methods have convenience functions on the module level to make accessing them easier: #ref-fn("solution.get()"), #ref-fn("solution.update()").
 - #ref-fn("solution.answer()"): this function uses the solution state to conditionally hide the provided answer.
-- #ref-fn("solution.with()"): this function sets the solution state temporarily, before switching back to the original state. The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
+- #ref-fn("solution.with()"): this function sets the solution state temporarily, before switching back to the original state.
+  // The `small-example.typ` example in the gallery uses this to show a solved example task at the beginning of the document.
 
 Additionally, the solution state can be set using the Typst CLI using `--input solution=true` (or `false`, which is already the default). Within context expressions, a task can use ```typ #solution.get()``` or ```typ #solution.answer()``` to find out whether solutions are shown. This is also used by Scrutinize's task templates.
 

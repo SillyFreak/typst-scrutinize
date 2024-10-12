@@ -29,10 +29,11 @@ See the [manual](docs/manual.pdf) for details.
 </tr>
 </table>
 
-This and more examples can be found in the [gallery](gallery/). Here are some excerpts from the shown example:
+This example can be found in the [gallery](gallery/). Here are some excerpts from it:
 
 ```typ
 #import "@preview/scrutinize:0.3.0" as scrutinize: grading, task, solution, task-kinds
+#import task-kinds: free-form, gap, choice
 #import task: t
 
 // ... document setup ...
@@ -42,15 +43,15 @@ This and more examples can be found in the [gallery](gallery/). Here are some ex
   let total = grading.total-points(ts)
 
   let grades = grading.grades(
-    [Nicht Genügend (5)],
-    4/8 * total,
-    [Genügend (4)],
-    5/8 * total,
-    [Befriedigend (3)],
-    6/8 * total,
-    [Gut (2)],
-    7/8 * total,
-    [Sehr Gut (1)],
+    [F],
+    0.6 * total,
+    [D],
+    0.7 * total,
+    [C],
+    0.8 * total,
+    [B],
+    0.9 * total,
+    [A],
   )
 
   // ... show the grading key ...
@@ -58,15 +59,15 @@ This and more examples can be found in the [gallery](gallery/). Here are some ex
 
 // ...
 
-= Grundkompetenzen -- Theorieteil B
+= Basic competencies -- theoretical part B
 
 #lorem(40)
 
-== Text schreiben
-#t(category: "b", points: 3)
+== Writing
+#t(category: "b", points: 4)
 #lorem(30)
 
-#task-kinds.free-form.lines(stretch: 180%, lorem(20))
+#free-form.lines(stretch: 180%, lorem(20))
 
 == Multiple Choice
 #t(category: "b", points: 2)
@@ -74,7 +75,7 @@ This and more examples can be found in the [gallery](gallery/). Here are some ex
 
 #{
   set align(center)
-  task-kinds.choice.multiple((
+  choice.multiple((
     (lorem(3), true),
     (lorem(5), true),
     (lorem(4), false),

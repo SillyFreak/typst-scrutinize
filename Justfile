@@ -9,8 +9,11 @@ default:
 # generate manual
 doc:
 	typst compile docs/manual.typ docs/manual.pdf
-	for f in $(find gallery -maxdepth 1 -name '*.typ'); do typst c "$f"; done
-	for f in question-types small-example example; do typst c --input solution=true "gallery/$f.typ" "gallery/$f-solved.pdf"; done
+	for f in $(find gallery -maxdepth 1 -name '*.typ'); do \
+		f="$(basename "$f" .typ)"; \
+		typst c "gallery/$f.typ"; \
+		typst c "gallery/$f.typ" "gallery/$f-solved.pdf" --input solution=true; \
+	done
 
 	mkdir -p tmp
 	typst c --ppi 250 "gallery/example.typ" "tmp/example{n}.png"
