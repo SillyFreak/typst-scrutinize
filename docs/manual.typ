@@ -7,7 +7,7 @@
 
 #let package-meta = toml("/typst.toml").package
 // #let date = none
-#let date = datetime(year: 2024, month: 3, day: 16)
+#let date = datetime(year: 2024, month: 10, day: 12)
 
 #show: project.with(
   title: "Scrutinize",

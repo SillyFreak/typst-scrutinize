@@ -1,4 +1,4 @@
-// #import "@preview/scrutinize:0.2.0": grading, question, questions
+// #import "@preview/scrutinize:0.3.0": grading, task, solution, task-kinds
 #import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
 #import task-kinds: free-form, gap, choice
 #import task: t
