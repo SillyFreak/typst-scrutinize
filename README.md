@@ -14,62 +14,70 @@ See the [manual](docs/manual.pdf) for details.
 
 ## Example
 
-A rendered version of this example can be found in the [gallery](gallery/).
+<table>
+<tr>
+  <td>
+    <a href="gallery/gk-ek-austria.typ">
+      <img src="thumbnail.png">
+    </a>
+  </td>
+  <td>
+    <a href="gallery/gk-ek-austria.typ">
+      <img src="thumbnail-solved.png">
+    </a>
+  </td>
+</tr>
+</table>
+
+This and more examples can be found in the [gallery](gallery/). Here are some excerpts from the shown example:
 
 ```typ
-#import "@preview/scrutinize:0.2.0": grading, question, questions
+#import "@preview/scrutinize:0.3.0" as scrutinize: grading, task, solution, task-kinds
+#import task: t
 
-#import question: q
-#import questions: free-text-answer, single-choice, multiple-choice, with-solution
+// ... document setup ...
 
-// toggle this comment or pass `--input solution=true` to produce a sample solution
-// #questions.solution.update(true)
+#context {
+  let ts = task.all(level: 2)
+  let total = grading.total-points(ts)
 
-#set table(stroke: 0.5pt)
-
-#context [
-  #let total = grading.total-points(question.all())
-
-  The candidate achieved #h(3em) out of #total points.
-]
-
-= Instructions
-
-#with-solution(true)[
-  Use a pen. For multiple choice questions, make a cross in the box, such as in this example:
-
-  #pad(x: 5%)[
-    Which of these numbers are prime?
-
-    #multiple-choice(
-      (([1], false), ([2], true), ([3], true), ([4], false), ([5], true)),
-    )
-  ]
-]
-
-#show heading: it => [
-  #it.body #h(1fr) / #question.current().points
-]
-
-#q(points: 2)[
-  = Question 1
-
-  Write an answer.
-
-  #free-text-answer(height: 4cm)[
-    An answer
-  ]
-]
-
-#q(points: 1)[
-  = Question 2
-
-  Select the largest number:
-
-
-  #single-choice(
-    ([5], [20], [25], [10], [15]),
-    2, // 0-based index
+  let grades = grading.grades(
+    [Nicht Genügend (5)],
+    4/8 * total,
+    [Genügend (4)],
+    5/8 * total,
+    [Befriedigend (3)],
+    6/8 * total,
+    [Gut (2)],
+    7/8 * total,
+    [Sehr Gut (1)],
   )
-]
+
+  // ... show the grading key ...
+}
+
+// ...
+
+= Grundkompetenzen -- Theorieteil B
+
+#lorem(40)
+
+== Text schreiben
+#t(category: "b", points: 3)
+#lorem(30)
+
+#task-kinds.free-form.lines(stretch: 180%, lorem(20))
+
+== Multiple Choice
+#t(category: "b", points: 2)
+#lorem(30)
+
+#{
+  set align(center)
+  task-kinds.choice.multiple((
+    (lorem(3), true),
+    (lorem(5), true),
+    (lorem(4), false),
+  ))
+}
 ```

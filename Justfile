@@ -12,6 +12,14 @@ doc:
 	for f in $(find gallery -maxdepth 1 -name '*.typ'); do typst c "$f"; done
 	for f in question-types small-example gk-ek-austria; do typst c --input solution=true "gallery/$f.typ" "gallery/$f-solved.pdf"; done
 
+	mkdir -p tmp
+	typst c --ppi 250 "gallery/gk-ek-austria.typ" "tmp/thumbnail{n}.png"
+	typst c --ppi 250 "gallery/gk-ek-austria.typ" "tmp/thumbnail-solved{n}.png" --input solution=true
+	mv tmp/thumbnail1.png thumbnail.png
+	mv tmp/thumbnail-solved1.png thumbnail-solved.png
+	rm tmp/thumbnail*.png
+	rmdir tmp
+
 # run test suite
 test *args:
 	typst-test run {{ args }}
