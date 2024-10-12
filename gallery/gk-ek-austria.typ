@@ -148,7 +148,7 @@
 
 #lorem(40)
 
-==
+== Java Code
 #t(category: "a", points: 3)
 #lorem(30)
 
@@ -175,25 +175,23 @@
 
 #lorem(40)
 
-==
+== Text schreiben
 #t(category: "b", points: 3)
 #lorem(30)
 
 #task-kinds.free-form.lines(stretch: 180%, lorem(20))
 
-==
+== Multiple Choice
 #t(category: "b", points: 2)
 #lorem(30)
 
 #{
   set align(center)
-  task-kinds.choice.multiple(
-    (
-      (lorem(3), true),
-      (lorem(5), true),
-      (lorem(4), false),
-    )
-  )
+  task-kinds.choice.multiple((
+    (lorem(3), true),
+    (lorem(5), true),
+    (lorem(4), false),
+  ))
 }
 
 = Grund- und erweiterte Kompetenzen -- Praktischer Teil A
@@ -218,7 +216,7 @@
 
 #task-kinds.free-form.grid(stretch: 200%, lorem(20))
 
-==
+== Ein Diagramm fertigstellen, separate Punktekategorie
 #t(category: "a", points: 5, extended: true)
 #lorem(40)
 
