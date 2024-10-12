@@ -1,5 +1,6 @@
 // #import "@preview/scrutinize:0.2.0": grading, question, questions
 #import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
+#import task-kinds: free-form, gap, choice
 #import task: t
 
 // make the PDF reproducible to ease version control
@@ -161,7 +162,7 @@
 
   show regex(gaps.keys().join("|")): placeholder => {
     let answer = gaps.at(placeholder.text)
-    task-kinds.gap.gap(raw(lang: "java", answer), stretch: 200%)
+    gap.gap(raw(lang: "java", answer), stretch: 200%)
   }
 
   ```java
@@ -179,7 +180,7 @@
 #t(category: "b", points: 3)
 #lorem(30)
 
-#task-kinds.free-form.lines(stretch: 180%, lorem(20))
+#free-form.lines(stretch: 180%, lorem(20))
 
 == Multiple Choice
 #t(category: "b", points: 2)
@@ -187,7 +188,7 @@
 
 #{
   set align(center)
-  task-kinds.choice.multiple((
+  choice.multiple((
     (lorem(3), true),
     (lorem(5), true),
     (lorem(4), false),
@@ -202,19 +203,19 @@
 #t(category: "a", points: 4)
 #lorem(30)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
 
 ==
 #t(category: "a", points: 4)
 #lorem(30)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
 
 ==
 #t(category: "a", points: 4)
 #lorem(30)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
 
 == Ein Diagramm fertigstellen, separate Punktekategorie
 #t(category: "a", points: 5, extended: true)
@@ -250,7 +251,7 @@
     )
   }
 
-  task-kinds.free-form.plain(
+  free-form.plain(
     automaton(true),
     placeholder: automaton(false),
   )
@@ -266,22 +267,22 @@
 #t(category: "b", points: 6)
 #lorem(40)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
 
 ==
 #t(category: "b", points: 4)
 #lorem(40)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
 
 ==
 #t(category: "b", points: 3, extended: true)
 #lorem(40)
 
-#task-kinds.free-form.grid(stretch: 300%, lorem(20))
+#free-form.grid(stretch: 300%, lorem(20))
 
 ==
 #t(category: "b", points: 2, extended: true)
 #lorem(40)
 
-#task-kinds.free-form.grid(stretch: 200%, lorem(20))
+#free-form.grid(stretch: 200%, lorem(20))
