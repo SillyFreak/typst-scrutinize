@@ -10,9 +10,9 @@ default:
 doc:
 	typst compile docs/manual.typ docs/manual.pdf
 	for f in $(find gallery -maxdepth 1 -name '*.typ'); do \
-		f="$(basename "$f" .typ)"; \
-		typst compile "gallery/$f.typ"; \
-		typst compile "gallery/$f.typ" "gallery/$f-solved.pdf" --input solution=true; \
+		f="$(dirname "$f")/$(basename "$f" .typ)"; \
+		typst compile "$f.typ"; \
+		typst compile "$f.typ" "$f-solved.pdf" --input solution=true; \
 	done
 
 	mkdir -p tmp
