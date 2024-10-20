@@ -1,15 +1,10 @@
-#import "@preview/tidy:0.3.0"
-#import "@preview/crudo:0.1.1"
-
-#import "template.typ": *
-
+#import "template.typ" as template: *
 #import "/src/lib.typ": grading, task, solution, task-kinds
 
 #let package-meta = toml("/typst.toml").package
-// #let date = none
 #let date = datetime(year: 2024, month: 10, day: 12)
 
-#show: project.with(
+#show: manual(
   title: "Scrutinize",
   // subtitle: "...",
   authors: package-meta.authors.map(a => a.split("<").at(0).trim()),
@@ -55,7 +50,7 @@
   [
     #code-to-display
 
-    #tidy-output-figure(eval(code-to-run, mode: "markup", scope: scope))
+    #preview-block(eval(code-to-run, mode: "markup", scope: scope))
   ]
 }
 
@@ -359,106 +354,51 @@ Which of these answers are even?
 
 = Module reference
 
-// == `scrutinize`
+// #module(
+//   "scrutinize",
+//   read("/src/lib.typ"),
+//   label-prefix: none,
+//   scope: scope,
+// )
 
-// #{
-//   let module = tidy.parse-module(
-//     read("/src/lib.typ"),
-//     scope: scope,
-//   )
-//   tidy.show-module(
-//     module,
-//     sort-functions: none,
-//     style: tidy.styles.minimal,
-//   )
-// }
+#module(
+  read("/src/task.typ"),
+  name: "scrutinize.task",
+  label-prefix: "task",
+  scope: scope,
+)
 
-== `scrutinize.task`
+#module(
+  read("/src/grading.typ"),
+  name: "scrutinize.grading",
+  label-prefix: "grading",
+  scope: scope,
+)
 
-#{
-  let module = tidy.parse-module(
-    read("/src/task.typ"),
-    label-prefix: "task.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
+#module(
+  read("/src/solution.typ"),
+  name: "scrutinize.solution",
+  label-prefix: "solution",
+  scope: scope,
+)
 
-== `scrutinize.grading`
+#module(
+  read("/src/task-kinds/choice.typ"),
+  name: "scrutinize.task-kinds.choice",
+  label-prefix: "choice",
+  scope: scope,
+)
 
-#{
-  let module = tidy.parse-module(
-    read("/src/grading.typ"),
-    label-prefix: "grading.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
+#module(
+  read("/src/task-kinds/free-form.typ"),
+  name: "scrutinize.task-kinds.free-form",
+  label-prefix: "free-form",
+  scope: scope,
+)
 
-== `scrutinize.solution`
-
-#{
-  let module = tidy.parse-module(
-    read("/src/solution.typ"),
-    label-prefix: "solution.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
-
-== `scrutinize.task-kinds.choice`
-
-#{
-  let module = tidy.parse-module(
-    read("/src/task-kinds/choice.typ"),
-    label-prefix: "choice.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
-
-== `scrutinize.task-kinds.free-form`
-
-#{
-  let module = tidy.parse-module(
-    read("/src/task-kinds/free-form.typ"),
-    label-prefix: "free-form.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
-
-== `scrutinize.task-kinds.gap`
-
-#{
-  let module = tidy.parse-module(
-    read("/src/task-kinds/gap.typ"),
-    label-prefix: "gap.",
-    scope: scope,
-  )
-  tidy.show-module(
-    module,
-    sort-functions: none,
-    style: tidy.styles.minimal,
-  )
-}
+#module(
+  read("/src/task-kinds/gap.typ"),
+  name: "scrutinize.task-kinds.gap",
+  label-prefix: "gap",
+  scope: scope,
+)

@@ -11,13 +11,13 @@ doc:
 	typst compile docs/manual.typ docs/manual.pdf
 	for f in $(find gallery -maxdepth 1 -name '*.typ'); do \
 		f="$(basename "$f" .typ)"; \
-		typst c "gallery/$f.typ"; \
-		typst c "gallery/$f.typ" "gallery/$f-solved.pdf" --input solution=true; \
+		typst compile "gallery/$f.typ"; \
+		typst compile "gallery/$f.typ" "gallery/$f-solved.pdf" --input solution=true; \
 	done
 
 	mkdir -p tmp
-	typst c --ppi 250 "gallery/example.typ" "tmp/example{n}.png"
-	typst c --ppi 250 "gallery/example.typ" "tmp/example-solved{n}.png" --input solution=true
+	typst compile --ppi 250 "gallery/example.typ" "tmp/example{n}.png"
+	typst compile --ppi 250 "gallery/example.typ" "tmp/example-solved{n}.png" --input solution=true
 	mv tmp/example1.png thumbnail.png
 	mv tmp/example-solved1.png thumbnail-solved.png
 	rm tmp/example*.png
