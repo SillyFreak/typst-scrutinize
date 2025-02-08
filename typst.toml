@@ -5,7 +5,7 @@ name = "scrutinize"
 version = "0.3.0"
 entrypoint = "src/lib.typ"
 authors = [
-	"Clemens Koza <https://github.com/SillyFreak/>"
+  "Clemens Koza <https://github.com/SillyFreak/>"
 ]
 license = "MIT"
 description = "A library for building exams, tests, etc. with Typst"
@@ -14,17 +14,19 @@ repository = "https://github.com/SillyFreak/typst-scrutinize"
 keywords = ["exam", "test", "school", "teaching"]
 categories = ["model", "scripting", "office"]
 disciplines = ["education"]
-compiler = "0.11.0"
+compiler = "0.12.0"
 exclude = [
-	".github",
-	"docs",
-	"gallery",
-	"scripts",
-	"tests",
-	".typstignore",
-	"Justfile",
-	"thumbnail.png",
-	"thumbnail-solved.png",
+  ".github",
+  "docs",
+  "gallery",
+  "scripts",
+  "tests",
+  ".typstignore",
+  "Justfile",
+  "thumbnail-dark.svg",
+  "thumbnail-dark-solved.svg",
+  "thumbnail-light.svg",
+  "thumbnail-light-solved.svg",
 ]
 
 # [template]

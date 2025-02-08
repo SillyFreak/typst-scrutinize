@@ -1,6 +1,8 @@
 #import "template.typ" as template: *
 #import "/src/lib.typ": grading, task, solution, task-kinds
 
+#import "@preview/crudo:0.1.1"
+
 #let package-meta = toml("/typst.toml").package
 #let date = datetime(year: 2024, month: 10, day: 12)
 

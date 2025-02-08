@@ -4,32 +4,28 @@ export TYPST_ROOT := root
 
 [private]
 default:
-	@just --list --unsorted
+  @just --list --unsorted
 
 # generate manual
 doc:
-	typst compile docs/manual.typ docs/manual.pdf
-	for f in $(find gallery -maxdepth 1 -name '*.typ'); do \
-		f="$(dirname "$f")/$(basename "$f" .typ)"; \
-		typst compile "$f.typ"; \
-		typst compile "$f.typ" "$f-solved.pdf" --input solution=true; \
-	done
-
-	mkdir -p tmp
-	typst compile --ppi 250 "gallery/example.typ" "tmp/example{n}.png"
-	typst compile --ppi 250 "gallery/example.typ" "tmp/example-solved{n}.png" --input solution=true
-	mv tmp/example1.png thumbnail.png
-	mv tmp/example-solved1.png thumbnail-solved.png
-	rm tmp/example*.png
-	rmdir tmp
+  typst compile docs/manual.typ docs/manual.pdf
+  typst compile --pages 1 gallery/example.typ thumbnail-light.svg
+  typst compile --pages 1 --input theme=dark gallery/example.typ thumbnail-dark.svg
+  typst compile --pages 1 --input solution=true gallery/example.typ thumbnail-light-solved.svg
+  typst compile --pages 1 --input solution=true --input theme=dark gallery/example.typ thumbnail-dark-solved.svg
+  for f in $(find gallery -maxdepth 1 -name '*.typ'); do \
+    f="$(dirname "$f")/$(basename "$f" .typ)"; \
+    typst compile "$f.typ"; \
+    typst compile "$f.typ" "$f-solved.pdf" --input solution=true; \
+  done
 
 # run test suite
 test *args:
-	typst-test run {{ args }}
+  tt run {{ args }}
 
 # update test cases
 update *args:
-	typst-test update {{ args }}
+  tt update {{ args }}
 
 # package the library into the specified destination folder
 package target:

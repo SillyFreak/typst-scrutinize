@@ -17,13 +17,19 @@ See the [manual](docs/manual.pdf) for details.
 <table>
 <tr>
   <td>
-    <a href="gallery/gk-ek-austria.typ">
-      <img src="thumbnail.png">
+    <a href="gallery/example.typ">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="./thumbnail-dark.svg">
+        <img src="./thumbnail-light.svg">
+      </picture>
     </a>
   </td>
   <td>
-    <a href="gallery/gk-ek-austria.typ">
-      <img src="thumbnail-solved.png">
+    <a href="gallery/example.typ">
+      <picture>
+        <source media="(prefers-color-scheme: dark)" srcset="./thumbnail-dark-solved.svg">
+        <img src="./thumbnail-light-solved.svg">
+      </picture>
     </a>
   </td>
 </tr>

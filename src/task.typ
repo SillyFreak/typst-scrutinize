@@ -32,9 +32,12 @@
 ///   )
 /// }
 ///
-/// - body (content): the scope's body
 /// -> content
-#let scope(body) = {
+#let scope(
+  /// the scope's body
+  /// -> content
+  body,
+) = {
   import "utils/scope.typ": scope
   scope(_start, _end, body)
 }
@@ -43,9 +46,12 @@
 /// subsequent calls won't do anything. The task metadata can later be accessed using the other
 /// functions in this module.
 ///
-/// - ..args (arguments): only named parameters: values to be added to the task's metadata
 /// -> content
-#let t(..args) = {
+#let t(
+  /// only named parameters: values to be added to the task's metadata
+  /// -> arguments
+  ..args,
+) = {
   assert(args.pos().len() == 0)
   [#metadata((: ..args.named())) #_label]
 }
@@ -162,15 +168,26 @@
 ///   )
 /// }
 ///
-/// - level (int): the level of heading to look up
-/// - depth (int, auto): the depth to which to also fetch subtasks
-/// - from (location, auto, none): the location at which to start looking;
-///   `auto` means start of the enclosing @@scope(), `none` means start of the document
-/// - to (location, auto, none): the location at which to stop looking;
-///   `auto` means end of the enclosing @@scope(), `none` means end of the document
-/// - loc (location, auto): the location at which to look; `auto` means `here()`
 /// -> dictionary
-#let current(level: 1, depth: 1, from: auto, to: auto, loc: auto) = {
+#let current(
+  /// the level of heading to look up
+  /// -> int
+  level: 1,
+  /// the depth to which to also fetch subtasks
+  /// -> int | auto
+  depth: 1,
+  /// the location at which to start looking; `auto` means start of the enclosing @@scope(), `none`
+  /// means start of the document
+  /// -> location | auto | none
+  from: auto,
+  /// the location at which to stop looking; `auto` means end of the enclosing @@scope(), `none`
+  /// means end of the document
+  /// -> location | auto | none
+  to: auto,
+  /// the location at which to look; `auto` means `here()`
+  /// -> location | auto
+  loc: auto,
+) = {
   import "utils/scope.typ": enclosing
 
   let (from, to, loc) = (from, to, loc)
@@ -281,16 +298,29 @@
 ///   )
 /// }
 ///
-/// - level (int): the level of heading to look up
-/// - depth (int, auto): the depth to which to also fetch subtasks
-/// - from (location, auto, none): the location at which to start looking;
-///   `auto` means start of the enclosing @@scope(), `none` means start of the document
-/// - to (location, auto, none): the location at which to stop looking;
-///   `auto` means end of the enclosing @@scope(), `none` means end of the document
-/// - loc (location, auto): the location at which to look; `auto` means `here()`
-/// - flatten (boolean): whether to flatten subtasks
 /// -> array
-#let all(level: 1, depth: 1, from: auto, to: auto, loc: auto, flatten: true) = {
+#let all(
+  /// the level of heading to look up
+  /// -> int
+  level: 1,
+  /// the depth to which to also fetch subtasks
+  /// -> int | auto
+  depth: 1,
+  /// the location at which to start looking; `auto` means start of the enclosing @@scope(), `none`
+  /// means start of the document
+  /// -> location | auto | none
+  from: auto,
+  /// the location at which to stop looking; `auto` means end of the enclosing @@scope(), `none`
+  /// means end of the document
+  /// -> location | auto | none
+  to: auto,
+  /// the location at which to look; `auto` means `here()`
+  /// -> location | auto
+  loc: auto,
+  /// whether to flatten subtasks
+  /// -> boolean
+  flatten: true,
+  ) = {
   import "utils/scope.typ": enclosing
 
   let (from, to, loc) = (from, to, loc)

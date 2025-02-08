@@ -1,7 +1,14 @@
 // #import "@preview/scrutinize:0.3.0": grading, task, solution, task-kinds
-#import "../src/lib.typ" as scrutinize: grading, task, solution, task-kinds
+#import "/src/lib.typ" as scrutinize: grading, task, solution, task-kinds
 #import task-kinds: free-form, gap, choice
 #import task: t
+
+#set page(fill: none)
+
+// style thumbnail for light and dark theme
+#let theme = sys.inputs.at("theme", default: "light")
+#set text(white) if theme == "dark"
+#let fg-stroke = if theme == "dark" { white } + 0.5pt
 
 // make the PDF reproducible to ease version control
 #set document(date: none)
@@ -45,9 +52,9 @@
 
 #let t-data(t) = (points: none, category: none, extended: false, ..t.data)
 
-#set table(stroke: 0.5pt)
-#set table.hline(stroke: 0.5pt)
-#set table.vline(stroke: 0.5pt)
+#set table(stroke: fg-stroke)
+#set table.hline(stroke: fg-stroke)
+#set table.vline(stroke: fg-stroke)
 
 #show heading.where(level: 2): set heading(
   supplement: [Task],
@@ -162,7 +169,7 @@
 
   show regex(gaps.keys().join("|")): placeholder => {
     let answer = gaps.at(placeholder.text)
-    gap.gap(raw(lang: "java", answer), stretch: 200%)
+    gap.gap(raw(lang: "java", answer), stretch: 200%, stroke: (bottom: fg-stroke))
   }
 
   ```java
@@ -180,7 +187,7 @@
 #t(category: "b", points: 4)
 #lorem(30)
 
-#free-form.lines(stretch: 180%, lorem(20))
+#free-form.lines(stretch: 180%, stroke: fg-stroke, lorem(20))
 
 == Multiple Choice
 #t(category: "b", points: 2)
@@ -229,7 +236,8 @@
   let automaton(solved) = {
     show: pad.with(y: 1em)
     diagram(
-      node-stroke: .5pt,
+      node-stroke: fg-stroke,
+      edge-stroke: fg-stroke,
       spacing: 3em,
       {
         let start = (-1, 0)
@@ -241,7 +249,7 @@
         node(c, [c], radius: 1em, ..if solved { (extrude: (-4, 0)) })
         edge(start, a, "-|>", label-pos: 0, label-side: center)
 
-        let stroke = if not solved { (stroke: white) }
+        let stroke = if not solved { (stroke: black.transparentize(100%)) }
 
         edge(a, b, "-|>", ..stroke)
         edge(b, c, "-|>", ..stroke)

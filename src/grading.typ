@@ -1,9 +1,14 @@
 /// Takes an array of _flattened_ task metadata and returns the sum of their points. Tasks without points count as zero points.
 ///
-/// - tasks (array): a flat array of task metadata dictionaries
-/// - field (string): the field in the metadata over which to calculate the sum
 /// -> integer, float
-#let total-points(tasks, field: "points") = {
+#let total-points(
+  /// a flat array of task metadata dictionaries
+  /// -> array
+  tasks,
+  /// the field in the metadata over which to calculate the sum
+  /// -> string
+  field: "points",
+) = {
   tasks.map(t => {
     if t.data != none {
       t.data.at(field, default: 0)
@@ -35,9 +40,12 @@
 ///   ```
 /// )
 ///
-/// - ..args (any): only positional: any number of grade names interspersed with scores
 /// -> array
-#let grades(..args) = {
+#let grades(
+  /// only positional: any number of grade names interspersed with scores
+  /// -> any
+  ..args,
+) = {
   assert(args.named().len() == 0)
   let args = args.pos()
   assert(calc.odd(args.len()))

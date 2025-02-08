@@ -14,20 +14,25 @@
 /// Next question
 /// ```)
 ///
-/// - answer (content): the answer to (maybe) display
-/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
-///   layout of exam and solution to match, this needs to have the same height as the answer.
-/// - height (auto, relative): the height of the region where an answer can be written
-/// - stretch (ratio): the amount by which the height of the answer region should be stretched
-///   relative to the required height of the provided solution. Can only be set to a value other
-///   than 100% if `height == auto`.
-/// - stroke (none, stroke): the stroke of the box to draw around the answer area
 /// -> content
 #let plain(
+    /// the answer to (maybe) display
+    /// -> content
   answer,
+    /// the placeholder to display instead of hiding the answer. For the layout of exam and solution
+    /// to match, this needs to have the same height as the answer.
+    /// -> auto | content
   placeholder: auto,
+    /// the height of the region where an answer can be written
+    /// -> auto | relative
   height: auto,
+    /// the amount by which the height of the answer region should be stretched relative to the
+    /// required height of the provided solution. Can only be set to a value other than 100% if
+    /// `height == auto`.
+    /// -> ratio
   stretch: 100%,
+    /// the stroke of the box to draw around the answer area
+    /// -> none | stroke
   stroke: none,
 ) = layout(((width,)) => {
   import "../solution.typ"
@@ -75,22 +80,28 @@
 /// Next question
 /// ```)
 ///
-/// - answer (content): the answer to (maybe) display
-/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
-///   layout of exam and solution to match, this needs to have the same height as the answer.
-/// - count (auto, int, ratio): the number of lines to show; defaults to however many are needed for
-///   the answer. If given as a ratio, the `auto` line number is multiplied by that and rounded up.
-/// - line-height (auto, relative): the line height; defaults to what printed lines naturally take
-/// - stretch (ratio): the amount by which the line height should be stretched relative to the
-///   regular line height. Can only be set to a value other than 100% if `line-height == auto`.
-/// - stroke (none, stroke): the stroke of the lines to draw
 /// -> content
 #let lines(
+  /// the answer to (maybe) display
+  /// -> content
   answer,
+  /// the placeholder to display instead of hiding the answer. For the layout of exam and solution
+  /// to match, this needs to have the same height as the answer.
+  /// -> auto | content
   placeholder: auto,
+  /// the number of lines to show; defaults to however many are needed for the answer. If given as a
+  /// ratio, the `auto` line number is multiplied by that and rounded up.
+  /// -> auto | int | ratio
   count: auto,
+  /// the line height; defaults to what printed lines naturally take
+  /// -> auto | relative
   line-height: auto,
+  /// the amount by which the line height should be stretched relative to the regular line height.
+  /// Can only be set to a value other than 100% if `line-height == auto`.
+  /// -> ratio
   stretch: 100%,
+  /// the stroke of the lines to draw
+  /// -> none | stroke
   stroke: 0.5pt,
 ) = layout(((width,)) => {
   import "../solution.typ"
@@ -171,22 +182,28 @@
 /// Next question
 /// ```)
 ///
-/// - answer (content): the answer to (maybe) display
-/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
-///   layout of exam and solution to match, this needs to have the same height as the answer.
-/// - height (auto, relative): the height of the grid region
-/// - stretch (ratio): the amount by which the height of the answer region should be stretched
-///   relative to the required height of the provided solution. Can only be set to a value other
-///   than 100% if `height == auto`.
-/// - size (relative, dictionary): grid size, or a dictionary containing `width` and `height`
-/// - stroke (none, stroke): the stroke of the grid to draw
 /// -> content
 #let grid(
+  /// the answer to (maybe) display
+  /// -> content
   answer,
+  /// the placeholder to display instead of hiding the answer. For the layout of exam and solution
+  /// to match, this needs to have the same height as the answer.
+  /// -> auto | content
   placeholder: auto,
+  /// the height of the grid region
+  /// -> auto | relative
   height: auto,
+  /// the amount by which the height of the answer region should be stretched relative to the
+  /// required height of the provided solution. Can only be set to a value other than 100% if
+  /// `height == auto`.
+  /// -> ratio
   stretch: 100%,
+  /// grid size, or a dictionary containing `width` and `height`
+  /// -> relative | dictionary
   size: 5mm,
+  /// the stroke of the grid to draw
+  /// -> none | stroke
   stroke: 0.5pt+gray,
 ) = layout(((width,)) => {
   import "../solution.typ"

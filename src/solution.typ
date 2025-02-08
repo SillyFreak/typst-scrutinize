@@ -38,13 +38,19 @@
 /// Next exercise
 /// ```)
 ///
-/// - answer (content): the answer to maybe hide
-/// - placeholder (auto, content): the placeholder to display in place of the hidden answer
-/// - place-args (none, arguments): additional arguments to
-///   #link("https://typst.app/docs/reference/layout/place/")[`place()`], given as an `arguments`
-///   value, e.g. ```typc arguments(horizon, dx: 10pt)```
 /// -> content
-#let answer(answer, placeholder: auto, place-args: none) = {
+#let answer(
+  /// the answer to maybe hide
+  /// -> content
+  answer,
+  /// the placeholder to display in place of the hidden answer
+  /// -> auto | content
+  placeholder: auto,
+  /// additional arguments to #link("https://typst.app/docs/reference/layout/place/")[`place()`],
+  /// given as an `arguments` value, e.g. ```typc arguments(horizon, dx: 10pt)```
+  /// -> none | arguments
+  place-args: none,
+) = {
   if get() {
     answer
   } else {
@@ -61,9 +67,12 @@
 /// #link("https://typst.app/docs/reference/introspection/state/#definitions-update")[`state.update()`]
 /// for the solution state @@_state.
 ///
-/// - value (boolean): the new solution state
 /// -> content
-#let update(value) = _state.update(value)
+#let update(
+  /// the new solution state
+  /// -> boolean
+  value,
+) = _state.update(value)
 
 /// Sets whether solutions are shown for a particular part of the document.
 ///
@@ -82,10 +91,15 @@
 ///   ```
 /// )
 ///
-/// - value (boolean): the solution state to apply for the body
-/// - body (content): the content to show
 /// -> content
-#let with(value, body) = context {
+#let with(
+  /// the solution state to apply for the body
+  /// -> boolean
+  value,
+  /// the content to show
+  /// -> content
+  body,
+) = context {
   let old-value = get()
   update(value)
   body

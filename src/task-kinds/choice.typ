@@ -8,9 +8,12 @@
 /// Correct: #checkbox(true) -- Incorrect: #checkbox(false)
 /// ```)
 ///
-/// - correct (boolean): whether the checkbox is of a correct answer
 /// -> content
-#let checkbox(correct) = context {
+#let checkbox(
+  /// whether the checkbox is of a correct answer
+  /// -> boolean
+  correct,
+) = context {
   import "../solution.typ"
   box(height: 0.65em, {
     show: move.with(dy: -0.1em)
@@ -49,12 +52,18 @@
 /// )
 /// ```)
 ///
-/// - options (array): an array of (option, correct) pairs
-/// - boxes (alignment): `left` or `right`, specifying on which side of the option the checkbox
-///   should appear
-/// - direction (direction): `ttb` or `ltr`, specifying how options should be arranged
 /// -> content
-#let multiple(options, boxes: right, direction: ttb) = {
+#let multiple(
+  /// an array of (option, correct) pairs
+  /// -> array
+  options,
+  /// `left` or `right`, specifying on which side of the option the checkbox should appear
+  /// -> alignment
+  boxes: right,
+  /// `ttb` or `ltr`, specifying how options should be arranged
+  /// -> direction
+  direction: ttb,
+  ) = {
   assert(boxes in (left, right))
   assert(direction in (ltr, ttb))
 
@@ -98,13 +107,21 @@
 /// )
 /// ```)
 ///
-/// - options (array): an array of contents
-/// - answer (integer): the index of the correct answer, zero-based
-/// - boxes (alignment): `left` or `right`, specifying on which side of the option the checkbox
-///   should appear
-/// - direction (direction): `ttb` or `ltr`, specifying how options should be arranged
 /// -> content
-#let single(options, answer, boxes: right, direction: ttb) = {
+#let single(
+  /// an array of contents
+  /// -> array
+  options,
+  /// the index of the correct answer, zero-based
+  /// -> integer
+  answer,
+  /// `left` or `right`, specifying on which side of the option the checkbox should appear
+  /// -> alignment
+  boxes: right,
+  /// `ttb` or `ltr`, specifying how options should be arranged
+  /// -> direction
+  direction: ttb,
+) = {
   multiple(
     boxes: boxes,
     direction: direction,

@@ -12,22 +12,26 @@
 /// and it has #gap(placeholder: [...], width: 1cm, stroke: "box")[two] lines.
 /// ```)
 ///
-/// - answer (content): the answer to (maybe) display
-/// - placeholder (auto, content): the placeholder to display instead of hiding the answer. For the
-///   layout of exam and solution to match, this needs to have the same width as the answer.
-/// - width (auto, relative): the width of the region where an answer can be written
-/// - stretch (ratio): the amount by which the width of the answer region should be stretched
-///   relative to the required width of the provided solution. Can only be set to a value other
-///   than 100% if `width == auto`.
-/// - stroke (none, string, stroke): the stroke with which to mark the answer area. The special
-///   values `"underline"` or `"box"` may be given to draw one or four border lines with a default
-///   stroke.
 /// -> content
 #let gap(
+  /// the answer to (maybe) display
+  /// -> content
   answer,
+  /// the placeholder to display instead of hiding the answer. For the layout of exam and solution
+  /// to match, this needs to have the same width as the answer.
+  /// -> auto | content
   placeholder: auto,
+  /// the width of the region where an answer can be written
+  /// -> auto | relative
   width: auto,
+  /// the amount by which the width of the answer region should be stretched relative to the
+  /// required width of the provided solution. Can only be set to a value other than 100% if
+  /// `width == auto`.
+  /// -> ratio
   stretch: 100%,
+  /// the stroke with which to mark the answer area. The special values `"underline"` or `"box"` may
+  /// be given to draw one or four border lines with a default stroke.
+  /// -> none | string | stroke
   stroke: "underline",
 ) = context {
   import "../solution.typ"
