@@ -18,8 +18,8 @@
   import "../elements/mod.typ": checkbox
 
   solution.answer(
-    checkbox(checked: correct),
-    placeholder: checkbox(checked: false),
+    checkbox(correct),
+    placeholder: checkbox(),
   )
 }
 

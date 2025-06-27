@@ -10,7 +10,7 @@
 ///   ```typ
 ///   >>>#import elements: checkbox
 ///   <<<#import scrutinize.elements: checkbox
-///   *Default*: #lorem(2) #checkbox()#checkbox(checked: true) #lorem(3)
+///   *Default*: #lorem(2) #checkbox()#checkbox(true) #lorem(3)
 ///   ```
 /// )
 ///
@@ -29,7 +29,7 @@
 ///       fill: if checked { black },
 ///     ))
 ///   })
-///   *Custom*: #lorem(2) #checkbox()#checkbox(checked: true) #lorem(3)
+///   *Custom*: #lorem(2) #checkbox()#checkbox(true) #lorem(3)
 ///   ```
 /// )
 ///
@@ -55,6 +55,6 @@
   },
 
   fields: (
-    e.field("checked", bool, doc: "Whether the textbox is checked."),
+    e.field("checked", bool, doc: "Whether the textbox is checked.", named: false),
   )
 )
