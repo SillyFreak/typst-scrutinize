@@ -7,9 +7,9 @@
 
 #import scrutinize: elembic as e, elements.checkbox
 #show: e.show_(checkbox, it => {
-  show: box.with(height: 0.65em)
   let (checked,) = e.fields(it)
-  circle(radius: text.size/3, stroke: 0.5pt, fill: if checked { black })
+  show: box.with(inset: (x: 1pt))
+  circle(radius: text.size / 3, stroke: 0.5pt, fill: if checked { black })
 })
 
 #set page(fill: none)

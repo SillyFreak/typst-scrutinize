@@ -402,3 +402,10 @@ Which of these answers are even?
   name: "scrutinize.task-kinds.gap",
   label-prefix: "gap",
 )
+
+#module(
+  read("/src/elements/checkbox.typ"),
+  name: "scrutinize.elements.checkbox",
+  label-prefix: "elements.checkbox",
+  scope: (style: man-style),
+)
