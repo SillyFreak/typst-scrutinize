@@ -5,29 +5,24 @@
 ///
 /// #example(
 ///   mode: "markup",
-///   ratio: 3,
+///   dir: ttb,
 ///   scale-preview: 100%,
 ///   ```typ
 ///   >>>#import elements: checkbox
 ///   <<<#import scrutinize.elements: checkbox
 ///   *Default*: #lorem(2) #checkbox()#checkbox(true) #lorem(3)
-///   ```
-/// )
 ///
-/// #example(
-///   mode: "markup",
-///   ratio: 3,
-///   scale-preview: 100%,
-///   ```typ
 ///   >>>#import elembic as e
-///   >>>#import elements: checkbox
 ///   <<<#import "@preview/elembic:1.1.0" as e
+///   // equivalent vanilla Typst show rule:
+///   // #show checkbox: it => {
+///   //   show: box.with(inset: (x: 1pt))
+///   //   circle(radius: text.size / 3, stroke: 0.5pt, fill: if it.checked { black })
+///   // }
 ///   #show: e.show_(checkbox, it => {
 ///     let (checked,) = e.fields(it)
-///     box(inset: (x: 1pt), circle(
-///       radius: text.size / 3, stroke: 0.5pt,
-///       fill: if checked { black },
-///     ))
+///     show: box.with(inset: (x: 1pt))
+///     circle(radius: text.size / 3, stroke: 0.5pt, fill: if checked { black })
 ///   })
 ///   *Custom*: #lorem(2) #checkbox()#checkbox(true) #lorem(3)
 ///   ```
