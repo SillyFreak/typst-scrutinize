@@ -15,20 +15,12 @@
   correct,
 ) = context {
   import "../solution.typ"
-  box(height: 0.65em, {
-    show: move.with(dy: -0.1em)
-    set text(1.5em)
-    solution.answer(
-      if not correct {
-        sym.ballot
-      } else if sys.version < version(0, 12, 0) {
-        sym.ballot.x
-      } else {
-        sym.ballot.cross
-      },
-      placeholder: sym.ballot,
-    )
-  })
+  import "../elements/mod.typ": checkbox
+
+  solution.answer(
+    checkbox(checked: correct),
+    placeholder: checkbox(checked: false),
+  )
 }
 
 /// A table with multiple options that can each be true or false. Each option is a tuple consisting

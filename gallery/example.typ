@@ -3,6 +3,15 @@
 #import task-kinds: free-form, gap, choice
 #import task: t
 
+// #solution.update(true)
+
+#import scrutinize: elembic as e, elements.checkbox
+#show: e.show_(checkbox, it => {
+  show: box.with(height: 0.65em)
+  let (checked,) = e.fields(it)
+  circle(radius: text.size/3, stroke: 0.5pt, fill: if checked { black })
+})
+
 #set page(fill: none)
 
 // style thumbnail for light and dark theme
