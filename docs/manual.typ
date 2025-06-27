@@ -1,42 +1,29 @@
 #import "template.typ" as template: *
-#import "/src/lib.typ": grading, task, solution, task-kinds
+#import "/src/lib.typ" as scrutinize
 
 #import "@preview/crudo:0.1.1"
 
-#let package-meta = toml("/typst.toml").package
-#let date = datetime(year: 2024, month: 10, day: 12)
-
-#show: manual(
-  title: "Scrutinize",
-  // subtitle: "...",
-  authors: package-meta.authors.map(a => a.split("<").at(0).trim()),
-  abstract: [
-    _Scrutinize_ is a library for building exams, tests, etc. with Typst.
-    It provides utilities for common task types and supports creating grading keys and sample solutions.
-  ],
-  url: package-meta.repository,
-  version: package-meta.version,
-  date: date,
-)
-
 // the scope for evaluating expressions and documentation
-#let scope = (grading: grading, task: task, solution: solution, task-kinds: task-kinds)
+#let scope = dictionary(scrutinize)
 
 #let example(code, lines: none, cheat: none) = {
   // eval can't access the filesystem, so no imports.
   // for displaying, we add the imports; for running, we have the imported entries in `scope`
-  let code-to-display = crudo.join(
-    main: -1,
-    crudo.map(
-      ```typ
-      #import "@preview/NAME:VERSION": grading, task, solution, task-kinds
-      ```,
-      line => line.replace("NAME", package-meta.name).replace("VERSION", package-meta.version),
-    ),
-    code,
-  )
-  if lines != none {
-    code-to-display = crudo.lines(code-to-display, lines)
+  let code-to-display = context {
+    let code-to-display = crudo.join(
+      main: -1,
+      crudo.map(
+        ```typ
+        #import "PACKAGE": grading, task, solution, task-kinds
+        ```,
+        l => l.replace("PACKAGE", package-import-spec()),
+      ),
+      code,
+    )
+    if lines != none {
+      code-to-display = crudo.lines(code-to-display, lines)
+    }
+    code-to-display
   }
 
   let code-to-run = if cheat == none {
@@ -47,7 +34,7 @@
   }
 
   set heading(numbering: none, outlined: false)
-  show: task.scope
+  show: scrutinize.task.scope
 
   [
     #code-to-display
@@ -79,6 +66,23 @@
 }
 
 #(scope.task-example = task-example)
+
+#show: manual(
+  package-meta: toml("/typst.toml").package,
+  title: "Scrutinize",
+  subtitle: [A library for building exams, tests, etc. with Typst],
+  date: datetime(year: 2024, month: 10, day: 12),
+
+  // logo: rect(width: 5cm, height: 5cm),
+  abstract: [
+    _Scrutinize_ is a library for building exams, tests, etc. with Typst.
+    It provides utilities for common task types and supports creating grading keys and sample solutions.
+    Right now, providing a styled template is not part of this package's scope.
+    Also, visual customization of the provided question templates is currently nonexistent.
+  ],
+
+  scope: scope,
+)
 
 = Introduction
 
@@ -153,11 +157,11 @@ Let's say some task's points come from its subtasks' points. This could be achie
 
 == Subtask A
 #t(points: 2)
-#lorem(20)
+#lorem(10)
 
 == Subtask B
 #t(points: 1)
-#lorem(20)
+#lorem(10)
 ```)
 
 In this example, #ref-fn("task.current()") is used in conjunction with #ref-fn("grading.total-points()"), which recursively adds all points of a list of tasks and its subtasks. More about this function will be said in the next section, and of course in the function's reference.
@@ -190,7 +194,7 @@ The first step in creating a typical grading scheme is determining how many poin
 
 = Hard Task
 #t(points: 6)
-#lorem(20)
+#lorem(30)
 
 = Task
 #t(points: 2)
@@ -221,7 +225,7 @@ Once we have the total points of the exam figured out, we need to define the gra
 
 = Hard Task
 #t(points: 6)
-#lorem(20)
+#lorem(30)
 
 = Task
 #t(points: 2)
@@ -367,40 +371,34 @@ Which of these answers are even?
   read("/src/task.typ"),
   name: "scrutinize.task",
   label-prefix: "task",
-  scope: scope,
 )
 
 #module(
   read("/src/grading.typ"),
   name: "scrutinize.grading",
   label-prefix: "grading",
-  scope: scope,
 )
 
 #module(
   read("/src/solution.typ"),
   name: "scrutinize.solution",
   label-prefix: "solution",
-  scope: scope,
 )
 
 #module(
   read("/src/task-kinds/choice.typ"),
   name: "scrutinize.task-kinds.choice",
   label-prefix: "choice",
-  scope: scope,
 )
 
 #module(
   read("/src/task-kinds/free-form.typ"),
   name: "scrutinize.task-kinds.free-form",
   label-prefix: "free-form",
-  scope: scope,
 )
 
 #module(
   read("/src/task-kinds/gap.typ"),
   name: "scrutinize.task-kinds.gap",
   label-prefix: "gap",
-  scope: scope,
 )
