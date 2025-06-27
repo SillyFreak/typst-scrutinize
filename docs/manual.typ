@@ -65,7 +65,7 @@
   example(task, lines: lines, cheat: cheat)
 }
 
-#(scope.task-example = task-example)
+#{ scope += (task-example: task-example, style: man-style) }
 
 #show: manual(
   package-meta: toml("/typst.toml").package,
@@ -338,7 +338,7 @@ $ sin(0) = #gap(stroke: "box")[$0$] $
 
 == single and multiple choice questions
 
-These taks types allow making a mark next to one or multiple choices. See #ref-fn("choice.single()") and #ref-fn("choice.multiple()") for details.
+These taks types allow making a mark next to one or multiple choices. See #ref-fn("choice.single()") and #ref-fn("choice.multiple") for details.
 
 #task-example(```typ
 #import task-kinds: choice
@@ -407,5 +407,4 @@ Which of these answers are even?
   read("/src/elements/checkbox.typ"),
   name: "scrutinize.elements.checkbox",
   label-prefix: "elements.checkbox",
-  scope: (style: man-style),
 )

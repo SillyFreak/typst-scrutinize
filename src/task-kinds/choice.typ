@@ -30,48 +30,66 @@
 ///
 /// #task-example(lines: "2-", ```typ
 /// #import task-kinds: choice
+/// #import "@preview/elembic:1.1.0" as e
+///
+/// // equivalent vanilla Typst show/set rules:
+/// // #show choice.multiple.where(direction: ltr): set choice.multiple(boxes: left)
+/// // #show choice.multiple.where(direction: ltr): set table(stroke: none, ...)
+/// #show: e.set_(choice.multiple.with(direction: ltr), boxes: left)
+/// #show: e.show_(choice.multiple.with(direction: ltr), it => {
+///   set table(stroke: none, inset: (x, y) => (
+///     right: if calc.even(x) { 0pt } else { 0.8em },
+///     rest: 5pt,
+///   ))
+///   it
+/// })
+///
 /// #choice.multiple(
 ///   range(1, 6).map(i => ([Answer #i], calc.even(i))),
 /// )
-/// #set table(stroke: none, inset: (x, y) => (
-///   right: if calc.even(x) { 0pt } else { 0.8em },
-///   rest: 5pt,
-/// ))
 /// #choice.multiple(
-///   boxes: left,
 ///   direction: ltr,
 ///   range(1, 6).map(i => ([#i], calc.even(i))),
 /// )
 /// ```)
 ///
-/// -> content
-#let multiple(
-  /// an array of (option, correct) pairs
-  /// -> array
-  options,
-  /// `left` or `right`, specifying on which side of the option the checkbox should appear
-  /// -> alignment
-  boxes: right,
-  /// `ttb` or `ltr`, specifying how options should be arranged
-  /// -> direction
-  direction: ttb,
-  ) = {
-  assert(boxes in (left, right))
-  assert(direction in (ltr, ttb))
+/// *Fields:*
+///
+/// `options` (#style.show-type("array")) -- an array of (option, correct) pairs
+///
+/// `boxes` (#style.show-type("alignment")) -- `left` or `right`, specifying on which side of the option the checkbox should appear
+///
+/// `direction` (#style.show-type("direction")) -- `ttb` or `ltr`, specifying how options should be arranged
+#let multiple = {
+  import "/src/elembic.typ" as e
 
-  let col-multiplier = if direction == ltr { options.len() } else { 1 }
+  e.element.declare(
+    "multiple",
+    doc: "A multiple choice question",
+    prefix: "@preview/scrutinize,v1",
 
-  table(
-    columns: (auto, auto) * col-multiplier,
-    align: (col, row) => ((left, center) * col-multiplier).at(col) + horizon,
+    display: it => {
+      let col-multiplier = if it.direction == ltr { it.options.len() } else { 1 }
 
-    ..for (option, correct) in options {
-      if boxes == left {
-        (checkbox(correct), option)
-      } else {
-        (option, checkbox(correct))
-      }
-    }
+      table(
+        columns: (auto, auto) * col-multiplier,
+        align: (col, row) => ((left, center) * col-multiplier).at(col) + horizon,
+
+        ..for (option, correct) in it.options {
+          if it.boxes == left {
+            (checkbox(correct), option)
+          } else {
+            (option, checkbox(correct))
+          }
+        }
+      )
+    },
+
+    fields: (
+      e.field("options", array, doc: "an array of (option, correct) pairs", required: true),
+      e.field("boxes", alignment, doc: "`left` or `right`, specifying on which side of the option the checkbox should appear", default: right),
+      e.field("direction", direction, doc: "`ttb` or `ltr`, specifying how options should be arranged", default: ttb),
+    )
   )
 }
 
