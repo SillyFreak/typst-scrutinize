@@ -229,7 +229,7 @@
 #lorem(40)
 
 #{
-  import "@preview/fletcher:0.5.4" as fletcher: diagram, node, edge
+  import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
 
   set align(center)
 
